@@ -1,9 +1,3 @@
-export interface User {
-  name: string;
-  email: string;
-  phone: string;
-  password: string;
-}
 export interface Customer {
   _id: string;
   image: string;
@@ -69,12 +63,38 @@ export interface Supplier {
   amount: string;
   status: string;
 }
-export interface RegisterData {
+export interface User {
+  _id: string;
   name: string;
+  email: string;
+  phone?: string;
+  password: string;
+  isEmailVerified: boolean;
+  provider: "local" | "google";
+  googleId?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface RegisterFormData {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+  confirmPassword: string;
+}
+export interface LoginFormData {
   email: string;
   password: string;
 }
-export interface LoginData {
-  email: string;
-  password: string;
+export interface VerifyEmailData {
+  token: string;
+}
+export interface RefreshTokenResponse {
+  accessToken: string;
+}
+export interface GoogleAuthResponse {
+  user: User;
+  accessToken: string;
+  refreshToken: string;
+  isNewUser: boolean;
 }

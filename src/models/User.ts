@@ -4,15 +4,13 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 export interface UserDocument extends Document {
   name: string;
   email: string;
-  phone: string;
+  phone?: string;
   password: string;
-  // phone?: string;
-  // password?: string;
   isEmailVerified: boolean;
   emailVerificationToken: string | null;
   refreshToken: string[];
-  // googleId: string | null;
-  // provider: "local" | "google";
+  googleId: string | null;
+  provider: "local" | "google";
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -63,15 +61,15 @@ const userSchema = new Schema<UserDocument>(
       type: [String],
       default: [],
     },
-    // googleId: {
-    //   type: String,
-    //   default: null,
-    // },
-    // provider: {
-    //   type: String,
-    //   enum: ["local", "google"],
-    //   default: "local",
-    // },
+    googleId: {
+      type: String,
+      default: null,
+    },
+    provider: {
+      type: String,
+      enum: ["local", "google"],
+      default: "local",
+    },
   },
   { timestamps: true }
 );
