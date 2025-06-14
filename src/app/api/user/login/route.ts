@@ -5,25 +5,24 @@ import { loginSchema } from "@/validation/validations";
 import { generateAccessToken, generateRefreshToken } from "@/jwt/jwt";
 import { ValidationError } from "yup";
 import { Types } from "mongoose";
+import { JWTPayload, UserResponse } from "@/types";
 
-interface JWTPayload {
-  userId: string;
-  email: string;
-  provider: "local" | "google";
-}
-
-interface UserResponse {
-  _id: Types.ObjectId;
-  name: string;
-  email: string;
-  phone?: string;
-  isEmailVerified: boolean;
-  googleId: string | null;
-  provider: "local" | "google";
-  createdAt: Date;
-  updatedAt: Date;
-}
-
+// interface JWTPayload {
+//   userId: string;
+//   email: string;
+//   provider: "local" | "google";
+// }
+// export interface UserResponse {
+//   _id: Types.ObjectId;
+//   name: string;
+//   email: string;
+//   phone?: string;
+//   isEmailVerified: boolean;
+//   googleId: string | null;
+//   provider: "local" | "google";
+//   createdAt: Date;
+//   updatedAt: Date;
+// }
 export async function POST(request: NextRequest) {
   try {
     await connectDB();
