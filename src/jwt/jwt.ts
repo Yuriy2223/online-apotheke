@@ -26,7 +26,7 @@ export const verifyRefreshToken = (token: string): JWTPayload => {
 
 export const generateEmailVerificationToken = (): string => {
   return jwt.sign({ type: "email_verification" }, JWT_SECRET, {
-    expiresIn: "24h",
+    expiresIn: "15m",
   });
 };
 

@@ -1,7 +1,9 @@
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  service: "Gmail",
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT),
+  secure: true,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
@@ -24,14 +26,12 @@ export const sendVerificationEmail = async (
         <h2>Підтвердження email адреси</h2>
         <p>Дякуємо за реєстрацію! Для завершення реєстрації підтвердіть вашу email адресу.</p>
         <div style="text-align: center; margin: 30px 0;">
-          <a href="${verificationUrl}" 
+          <a href="${verificationUrl}"
              style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">
             Підтвердити Email
           </a>
         </div>
-        <p>Або скопіюйте це посилання в ваш браузер:</p>
-        <p style="word-break: break-all; color: #666;">${verificationUrl}</p>
-        <p><small>Це посилання дійсне протягом 24 годин.</small></p>
+        <p><small>Це посилання дійсне протягом 15 хвилин.</small></p>
       </div>
     `,
   };
@@ -43,3 +43,5 @@ export const sendVerificationEmail = async (
     throw error;
   }
 };
+// <p>Або скопіюйте це посилання в ваш браузер:</p>
+// <p style="word-break: break-all; color: #666;">${verificationUrl}</p>
