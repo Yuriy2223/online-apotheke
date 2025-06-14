@@ -42,3 +42,5 @@ npm install -D @types/bcryptjs
 npm i yup
 npm install jsonwebtoken
 npm install --save-dev @types/jsonwebtoken
+npm install nodemailer
+npm install --save-dev @types/nodemailer

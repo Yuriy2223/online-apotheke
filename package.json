@@ -13,6 +13,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.2",
     "next": "15.3.3",
+    "nodemailer": "^7.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "yup": "^1.6.1"
@@ -23,6 +24,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^20",
+    "@types/nodemailer": "^6.4.17",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
