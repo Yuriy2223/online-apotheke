@@ -78,7 +78,6 @@ const userSchema = new Schema<UserDocument>(
   { timestamps: true }
 );
 
-userSchema.index({ email: 1 });
 userSchema.index({ googleId: 1 });
 
 userSchema.pre<UserDocument>("save", async function (next) {
