@@ -98,3 +98,10 @@ export interface GoogleAuthResponse {
   refreshToken: string;
   isNewUser: boolean;
 }
+export interface JWTPayload {
+  userId: string;
+  email: string;
+  provider: "local" | "google";
+  iat?: number;
+  exp?: number;
+}
