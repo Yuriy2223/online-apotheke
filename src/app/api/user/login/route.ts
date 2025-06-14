@@ -7,22 +7,6 @@ import { ValidationError } from "yup";
 import { Types } from "mongoose";
 import { JWTPayload, UserResponse } from "@/types";
 
-// interface JWTPayload {
-//   userId: string;
-//   email: string;
-//   provider: "local" | "google";
-// }
-// export interface UserResponse {
-//   _id: Types.ObjectId;
-//   name: string;
-//   email: string;
-//   phone?: string;
-//   isEmailVerified: boolean;
-//   googleId: string | null;
-//   provider: "local" | "google";
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
 export async function POST(request: NextRequest) {
   try {
     await connectDB();
@@ -112,17 +96,12 @@ export async function POST(request: NextRequest) {
     await user.save();
 
     const userObject = user.toObject();
-    const userResponse: UserResponse = {
-      _id: userObject._id,
-      name: userObject.name,
-      email: userObject.email,
-      phone: userObject.phone,
-      isEmailVerified: userObject.isEmailVerified,
-      googleId: userObject.googleId,
-      provider: userObject.provider,
-      createdAt: userObject.createdAt,
-      updatedAt: userObject.updatedAt,
-    };
+    delete userObject.password;
+    delete userObject.refreshToken;
+    delete userObject.emailVerificationToken;
+    userObject._id = userObject._id.toString();
+
+    const userResponse = userObject as UserResponse;
 
     return NextResponse.json(
       {

@@ -75,6 +75,17 @@ export interface User {
   createdAt: string;
   updatedAt: string;
 }
+export interface UserResponse {
+  _id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  isEmailVerified: boolean;
+  googleId: string | null;
+  provider: "local" | "google";
+  // createdAt: Date;
+  // updatedAt: Date;
+}
 export interface RegisterFormData {
   name: string;
   email: string;
