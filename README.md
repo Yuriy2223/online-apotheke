@@ -39,3 +39,4 @@ npx create-next-app@latest
 npm install mongoose
 npm i bcrypt
 npm install -D @types/bcryptjs
+npm i yup
