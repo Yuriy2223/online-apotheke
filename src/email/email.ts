@@ -1,15 +1,7 @@
 import nodemailer from "nodemailer";
 
-if (
-  !process.env.SMTP_USER ||
-  !process.env.SMTP_PASS ||
-  !process.env.CLIENT_URL
-) {
-  throw new Error("Email credentials and CLIENT_URL are required");
-}
-
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  service: "Gmail",
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
