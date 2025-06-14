@@ -22,7 +22,7 @@ const userSchema = new Schema<UserDocument>(
       type: String,
       required: true,
       trim: true,
-      minlength: 2,
+      minlength: 3,
       maxlength: 50,
     },
     email: {
@@ -38,13 +38,17 @@ const userSchema = new Schema<UserDocument>(
     },
     phone: {
       type: String,
-      required: true,
+      required(this: UserDocument) {
+        return this.provider === "local";
+      },
       trim: true,
       match: [/^\+?[1-9]\d{1,14}$/, "Invalid phone format"],
     },
     password: {
       type: String,
-      required: true,
+      required(this: UserDocument) {
+        return this.provider === "local";
+      },
       minlength: 6,
       maxlength: 32,
       select: false,
@@ -74,8 +78,11 @@ const userSchema = new Schema<UserDocument>(
   { timestamps: true }
 );
 
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+userSchema.index({ email: 1 });
+userSchema.index({ googleId: 1 });
+
+userSchema.pre<UserDocument>("save", async function (next) {
+  if (!this.isModified("password") || this.provider === "google") return next();
   this.password = await bcrypt.hash(this.password, 12);
   next();
 });
@@ -83,6 +90,7 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.comparePassword = async function (
   candidatePassword: string
 ): Promise<boolean> {
+  if (!this.password) throw new Error("Password not set on document");
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
