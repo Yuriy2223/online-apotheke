@@ -1,9 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
-import User from "@/models/User";
+import User, { UserDocument } from "@/models/User";
 import { connectDB } from "@/database/MongoDB";
 import { loginSchema } from "@/validation/validations";
 import { generateAccessToken, generateRefreshToken } from "@/jwt/jwt";
 import { ValidationError } from "yup";
+import { Types } from "mongoose";
+
+interface JWTPayload {
+  userId: string;
+  email: string;
+  provider: "local" | "google";
+}
+
+interface UserResponse {
+  _id: Types.ObjectId;
+  name: string;
+  email: string;
+  phone?: string;
+  isEmailVerified: boolean;
+  googleId: string | null;
+  provider: "local" | "google";
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -34,9 +53,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { email, password } = body;
+    const { email, password }: { email: string; password: string } = body;
 
-    const user = await User.findOne({ email }).select("+password");
+    const user = (await User.findOne({ email }).select(
+      "+password"
+    )) as UserDocument | null;
 
     if (!user) {
       return NextResponse.json(
@@ -79,8 +100,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const payload = {
-      userId: user._id.toString(),
+    const payload: JWTPayload = {
+      userId: (user._id as Types.ObjectId).toString(),
       email: user.email,
       provider: user.provider,
     };
@@ -91,10 +112,18 @@ export async function POST(request: NextRequest) {
     user.refreshToken.push(refreshToken);
     await user.save();
 
-    const userResponse = user.toObject();
-    delete userResponse.password;
-    delete userResponse.refreshToken;
-    delete userResponse.emailVerificationToken;
+    const userObject = user.toObject();
+    const userResponse: UserResponse = {
+      _id: userObject._id,
+      name: userObject.name,
+      email: userObject.email,
+      phone: userObject.phone,
+      isEmailVerified: userObject.isEmailVerified,
+      googleId: userObject.googleId,
+      provider: userObject.provider,
+      createdAt: userObject.createdAt,
+      updatedAt: userObject.updatedAt,
+    };
 
     return NextResponse.json(
       {
