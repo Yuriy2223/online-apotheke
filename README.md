@@ -40,3 +40,5 @@ npm install mongoose
 npm i bcrypt
 npm install -D @types/bcryptjs
 npm i yup
+npm install jsonwebtoken
+npm install --save-dev @types/jsonwebtoken
