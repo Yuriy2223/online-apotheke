@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/database/MongoDB";
 import User from "@/models/User";
-import { verifyEmailSchema } from "@/validation/validations";
+import { verifyEmailSchema } from "@/validation/users";
 import { verifyEmailVerificationToken } from "@/jwt/jwt";
 import { ValidationError } from "yup";
 

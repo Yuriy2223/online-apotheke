@@ -3,7 +3,7 @@ import User from "@/models/User";
 import { sendVerificationEmail } from "@/email/email";
 import { connectDB } from "@/database/MongoDB";
 import { generateEmailVerificationToken } from "@/jwt/jwt";
-import { registerSchema } from "@/validation/validations";
+import { registerSchema } from "@/validation/users";
 import { ValidationError } from "yup";
 import mongoose from "mongoose";
 

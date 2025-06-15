@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ValidationError } from "yup";
 import { connectDB } from "@/database/MongoDB";
 import User, { UserDocument } from "@/models/User";
-import { refreshTokenSchema } from "@/validation/validations";
+import { refreshTokenSchema } from "@/validation/users";
 import { verifyRefreshToken, generateAccessToken } from "@/jwt/jwt";
 import { RefreshTokenResponse, JWTPayload } from "@/types";
 import { Types } from "mongoose";

@@ -1,18 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/database/MongoDB";
 import Product from "@/models/Product";
-
-interface GetProductsQuery {
-  search?: string;
-  category?: string;
-  minPrice?: string;
-  maxPrice?: string;
-  supplier?: string;
-  page?: string;
-  limit?: string;
-  sortBy?: string;
-  sortOrder?: string;
-}
+import { GetProductsQuery } from "@/types/products";
 
 export async function GET(request: NextRequest) {
   try {
@@ -32,8 +21,8 @@ export async function GET(request: NextRequest) {
       sortOrder: searchParams.get("sortOrder") || "desc",
     };
 
-    const page = Math.max(1, parseInt(query.page, 10));
-    const limit = Math.min(50, Math.max(1, parseInt(query.limit, 10)));
+    const page = Math.max(1, parseInt(query.page!, 10));
+    const limit = Math.min(50, Math.max(1, parseInt(query.limit!, 10)));
     const skip = (page - 1) * limit;
 
     const filter: Record<string, unknown> = {};
@@ -86,8 +75,9 @@ export async function GET(request: NextRequest) {
       "updatedAt",
     ];
 
-    if (validSortFields.includes(query.sortBy)) {
-      sortOptions[query.sortBy] = query.sortOrder === "asc" ? 1 : -1;
+    const sortBy = query.sortBy!;
+    if (validSortFields.includes(sortBy)) {
+      sortOptions[sortBy] = query.sortOrder === "asc" ? 1 : -1;
     } else {
       sortOptions.createdAt = -1;
     }
