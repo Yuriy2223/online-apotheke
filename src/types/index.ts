@@ -104,7 +104,8 @@ export interface RefreshTokenResponse {
   accessToken: string;
 }
 export interface GoogleAuthResponse {
-  user: User;
+  message: string;
+  user: UserResponse;
   accessToken: string;
   refreshToken: string;
   isNewUser: boolean;

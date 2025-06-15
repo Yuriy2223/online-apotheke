@@ -50,7 +50,8 @@ const userSchema = new Schema<UserDocument>(
         return this.provider === "local";
       },
       minlength: 6,
-      maxlength: 32,
+      // maxlength: 32,
+      maxlength: 128,
       select: false,
     },
     isEmailVerified: {
@@ -75,7 +76,7 @@ const userSchema = new Schema<UserDocument>(
       default: "local",
     },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 
 userSchema.index({ googleId: 1 });

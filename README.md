@@ -44,3 +44,6 @@ npm install jsonwebtoken
 npm install --save-dev @types/jsonwebtoken
 npm install nodemailer
 npm install --save-dev @types/nodemailer
+npm install google-auth-library
+
+npm install lucide-react
