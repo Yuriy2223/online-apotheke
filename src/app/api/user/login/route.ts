@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import User, { UserDocument } from "@/models/User";
 import { connectDB } from "@/database/MongoDB";
-import { loginSchema } from "@/validation/validations";
+import { loginSchema } from "@/validation/users";
 import { generateAccessToken, generateRefreshToken } from "@/jwt/jwt";
 import { ValidationError } from "yup";
 import { Types } from "mongoose";
