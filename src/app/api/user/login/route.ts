@@ -7,6 +7,8 @@ import { ValidationError } from "yup";
 import { Types } from "mongoose";
 import { JWTPayload, UserResponse } from "@/types";
 
+const MAX_REFRESH_TOKENS = 5;
+
 export async function POST(request: NextRequest) {
   try {
     await connectDB();
@@ -20,7 +22,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: "Validation error",
+            error: "Помилка валідації",
             details: validationError.errors,
           },
           { status: 400 }
@@ -42,35 +44,25 @@ export async function POST(request: NextRequest) {
       "+password"
     )) as UserDocument | null;
 
+    const invalidCredentialsResponse = NextResponse.json(
+      {
+        success: false,
+        error: "Невірні дані для входу",
+      },
+      { status: 401 }
+    );
+
     if (!user) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Невірний email або пароль",
-        },
-        { status: 401 }
-      );
+      return invalidCredentialsResponse;
     }
 
     if (user.provider !== "local") {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Цей акаунт використовує Google вхід",
-        },
-        { status: 400 }
-      );
+      return invalidCredentialsResponse;
     }
 
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Невірний email або пароль",
-        },
-        { status: 401 }
-      );
+      return invalidCredentialsResponse;
     }
 
     if (!user.isEmailVerified) {
@@ -92,8 +84,14 @@ export async function POST(request: NextRequest) {
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
 
-    user.refreshToken.push(refreshToken);
-    await user.save();
+    await User.findByIdAndUpdate(user._id, {
+      $push: {
+        refreshToken: {
+          $each: [refreshToken],
+          $slice: -MAX_REFRESH_TOKENS,
+        },
+      },
+    });
 
     const userObject = user.toObject();
     delete userObject.password;

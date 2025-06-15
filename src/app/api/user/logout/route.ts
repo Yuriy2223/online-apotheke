@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import User, { UserDocument } from "@/models/User";
+import User from "@/models/User";
 import { verifyAuth } from "@/auth/auth";
 import { JWTPayload } from "@/types";
 import { connectDB } from "@/database/MongoDB";
@@ -23,12 +23,12 @@ export async function POST(request: NextRequest) {
 
     const { refreshToken }: { refreshToken?: string } = await request.json();
 
-    const user = (await User.findById(decoded.userId)) as UserDocument | null;
-    if (user && refreshToken) {
-      user.refreshToken = user.refreshToken.filter(
-        (token) => token !== refreshToken
+    if (refreshToken) {
+      await User.findByIdAndUpdate(
+        decoded.userId,
+        { $pull: { refreshToken } },
+        { new: true }
       );
-      await user.save();
     }
 
     return NextResponse.json(

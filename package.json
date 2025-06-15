@@ -11,7 +11,9 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
+    "google-auth-library": "^10.1.0",
     "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.515.0",
     "mongoose": "^8.15.2",
     "next": "15.3.3",
     "nodemailer": "^7.0.3",

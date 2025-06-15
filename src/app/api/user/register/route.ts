@@ -5,11 +5,13 @@ import { connectDB } from "@/database/MongoDB";
 import { generateEmailVerificationToken } from "@/jwt/jwt";
 import { registerSchema } from "@/validation/validations";
 import { ValidationError } from "yup";
+import mongoose from "mongoose";
 
 export async function POST(request: NextRequest) {
   try {
     await connectDB();
 
+    const session = await mongoose.startSession();
     const body = await request.json();
 
     try {
@@ -19,7 +21,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: "Validation error",
+            error: "Помилка валідації",
             details: validationError.errors,
           },
           { status: 400 }
@@ -37,13 +39,16 @@ export async function POST(request: NextRequest) {
 
     const { name, email, phone, password } = body;
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({
+      $or: [{ email }, ...(phone ? [{ phone }] : [])],
+    });
 
     if (existingUser) {
+      await session.endSession();
       return NextResponse.json(
         {
           success: false,
-          error: "Користувач з таким email вже існує",
+          error: "Користувач з такими даними вже існує",
         },
         { status: 409 }
       );
@@ -51,39 +56,50 @@ export async function POST(request: NextRequest) {
 
     const emailVerificationToken = generateEmailVerificationToken();
 
-    const newUser = new User({
-      name,
-      email,
-      phone,
-      password,
-      provider: "local",
-      isEmailVerified: false,
-      emailVerificationToken,
+    await session.withTransaction(async () => {
+      const newUser = new User({
+        name,
+        email,
+        phone: phone || null,
+        password,
+        provider: "local",
+        isEmailVerified: false,
+        emailVerificationToken,
+      });
+
+      await newUser.save({ session });
+
+      try {
+        await sendVerificationEmail(email, emailVerificationToken);
+      } catch (emailError) {
+        console.error("Помилка при відправці email:", emailError);
+        throw new Error("Не вдалося відправити email підтвердження");
+      }
     });
 
-    await newUser.save();
-
-    try {
-      await sendVerificationEmail(email, emailVerificationToken);
-    } catch (emailError) {
-      console.error("Помилка при відправці email:", emailError);
-    }
+    await session.endSession();
 
     return NextResponse.json(
       {
         success: true,
         data: {
-          message: "Перевірте email для підтвердження",
+          message: "Реєстрація успішна. Перевірте email для підтвердження",
         },
       },
       { status: 201 }
     );
   } catch (error) {
     console.error("Помилка реєстрації:", error);
+
+    const errorMessage =
+      error instanceof Error && error.message.includes("email")
+        ? "Помилка відправки email підтвердження"
+        : "Помилка сервера";
+
     return NextResponse.json(
       {
         success: false,
-        error: "Помилка сервера",
+        error: errorMessage,
       },
       { status: 500 }
     );
