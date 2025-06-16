@@ -4,7 +4,7 @@ import { connectDB } from "@/database/MongoDB";
 import User, { UserDocument } from "@/models/User";
 import { refreshTokenSchema } from "@/validation/users";
 import { verifyRefreshToken, generateAccessToken } from "@/jwt/jwt";
-import { RefreshTokenResponse, JWTPayload } from "@/types";
+import { RefreshTokenResponse, JWTPayload } from "@/types/users";
 import { Types } from "mongoose";
 
 export async function POST(request: NextRequest) {

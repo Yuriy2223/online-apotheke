@@ -5,7 +5,7 @@ import { loginSchema } from "@/validation/users";
 import { generateAccessToken, generateRefreshToken } from "@/jwt/jwt";
 import { ValidationError } from "yup";
 import { Types } from "mongoose";
-import { JWTPayload, UserResponse } from "@/types";
+import { JWTPayload, UserResponse } from "@/types/users";
 
 const MAX_REFRESH_TOKENS = 5;
 

@@ -1,4 +1,4 @@
-import { JWTPayload } from "@/types";
+import { JWTPayload } from "@/types/users";
 import jwt from "jsonwebtoken";
 
 if (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) {

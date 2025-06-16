@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/database/MongoDB";
 import User, { UserDocument } from "@/models/User";
 import { verifyAuth } from "@/auth/auth";
-import { JWTPayload, UserResponse } from "@/types";
+import { JWTPayload, UserResponse } from "@/types/users";
 
 export async function GET(request: NextRequest) {
   try {

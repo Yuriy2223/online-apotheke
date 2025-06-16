@@ -4,7 +4,7 @@ import { connectDB } from "@/database/MongoDB";
 import User, { UserDocument } from "@/models/User";
 import { getGoogleAuthUrl, getGoogleUserInfo } from "@/auth/google";
 import { generateAccessToken, generateRefreshToken } from "@/jwt/jwt";
-import { GoogleAuthResponse, JWTPayload, UserResponse } from "@/types";
+import { GoogleAuthResponse, JWTPayload, UserResponse } from "@/types/users";
 
 const MAX_REFRESH_TOKENS = 5;
 

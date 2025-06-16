@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/database/MongoDB";
-import Review from "@/models/Review";
+import Pharmacie from "@/models/Pharmacie";
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,6 +16,8 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit;
 
     const search = searchParams.get("search");
+    const city = searchParams.get("city");
+    const minRating = searchParams.get("minRating");
     const sortBy = searchParams.get("sortBy") || "createdAt";
     const sortOrder = searchParams.get("sortOrder") || "desc";
 
@@ -24,12 +26,30 @@ export async function GET(request: NextRequest) {
     if (search) {
       filter.$or = [
         { name: { $regex: search, $options: "i" } },
-        { testimonial: { $regex: search, $options: "i" } },
+        { address: { $regex: search, $options: "i" } },
+        { city: { $regex: search, $options: "i" } },
       ];
     }
 
+    if (city) {
+      filter.city = { $regex: city, $options: "i" };
+    }
+
+    if (minRating) {
+      const rating = parseFloat(minRating);
+      if (!isNaN(rating)) {
+        filter.rating = { $gte: rating.toString() };
+      }
+    }
+
     const sortOptions: Record<string, 1 | -1> = {};
-    const validSortFields = ["name", "createdAt", "updatedAt"];
+    const validSortFields = [
+      "name",
+      "city",
+      "rating",
+      "createdAt",
+      "updatedAt",
+    ];
 
     if (validSortFields.includes(sortBy)) {
       sortOptions[sortBy] = sortOrder === "asc" ? 1 : -1;
@@ -37,9 +57,9 @@ export async function GET(request: NextRequest) {
       sortOptions.createdAt = -1;
     }
 
-    const [reviews, totalCount] = await Promise.all([
-      Review.find(filter).sort(sortOptions).skip(skip).limit(limit).lean(),
-      Review.countDocuments(filter),
+    const [pharmacies, totalCount] = await Promise.all([
+      Pharmacie.find(filter).sort(sortOptions).skip(skip).limit(limit).lean(),
+      Pharmacie.countDocuments(filter),
     ]);
 
     const totalPages = Math.ceil(totalCount / limit);
@@ -50,7 +70,7 @@ export async function GET(request: NextRequest) {
       {
         success: true,
         data: {
-          reviews,
+          pharmacies,
           pagination: {
             currentPage: page,
             totalPages,
@@ -59,17 +79,22 @@ export async function GET(request: NextRequest) {
             hasNextPage,
             hasPrevPage,
           },
+          filters: {
+            search,
+            city,
+            minRating,
+          },
         },
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Помилка при отриманні відгуків:", error);
+    console.error("Помилка при отриманні списку аптек:", error);
 
     return NextResponse.json(
       {
         success: false,
-        error: "Помилка сервера при отриманні відгуків",
+        error: "Помилка сервера при отриманні списку аптек",
       },
       { status: 500 }
     );
