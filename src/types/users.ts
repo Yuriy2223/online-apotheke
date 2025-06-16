@@ -40,15 +40,15 @@ export interface Pharmacie {
   phone: string;
   rating: string;
 }
-export interface Product {
-  _id: string;
-  photo: string;
-  name: string;
-  suppliers: string;
-  stock: string;
-  price: string;
-  category: string;
-}
+// export interface Product {
+//   _id: string;
+//   photo: string;
+//   name: string;
+//   suppliers: string;
+//   stock: string;
+//   price: string;
+//   category: string;
+// }
 export interface Review {
   _id: string;
   name: string;
@@ -63,6 +63,7 @@ export interface Supplier {
   amount: string;
   status: string;
 }
+
 export interface User {
   _id: string;
   name: string;

@@ -30,6 +30,7 @@ export interface CreateProductData {
 }
 // export interface UpdateProductData extends Partial<CreateProductData> {}
 export type UpdateProductData = Partial<CreateProductData>;
+
 export interface ProductSearchParams {
   search?: string;
   category?: string;
@@ -76,8 +77,3 @@ export interface GetProductResponse {
     product: Product;
   };
 }
-// export interface ApiError {
-//   success: false;
-//   error: string;
-//   details?: string[];
-// }

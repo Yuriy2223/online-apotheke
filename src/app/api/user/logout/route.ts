@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import User from "@/models/User";
 import { verifyAuth } from "@/auth/auth";
-import { JWTPayload } from "@/types";
+import { JWTPayload } from "@/types/users";
 import { connectDB } from "@/database/MongoDB";
 
 export async function POST(request: NextRequest) {
