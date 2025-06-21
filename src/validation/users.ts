@@ -22,7 +22,8 @@ export const registerSchema = yup.object({
     .string()
     .required("Пароль обовʼязковий")
     .min(6, "Пароль повинен містити мінімум 6 символів")
-    .max(32, "Пароль не повинен перевищувати 32 символи"),
+    .max(32, "Пароль не повинен перевищувати 32 символи")
+    .trim(),
   confirmPassword: yup
     .string()
     .required("Підтвердження пароля обовʼязкове")
@@ -33,11 +34,15 @@ export const loginSchema = yup.object({
   email: yup
     .string()
     .required("Email обовʼязковий")
-    .email("Невалідний формат email"),
+    .email("Невалідний формат email")
+    .lowercase()
+    .trim(),
   password: yup
     .string()
     .required("Пароль обовʼязковий")
-    .min(1, "Пароль не може бути пустим"),
+    .min(6, "Пароль повинен містити мінімум 6 символів")
+    .max(32, "Пароль не повинен перевищувати 32 символи")
+    .trim(),
 });
 
 export const verifyEmailSchema = yup.object({

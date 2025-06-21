@@ -45,5 +45,92 @@ npm install --save-dev @types/jsonwebtoken
 npm install nodemailer
 npm install --save-dev @types/nodemailer
 npm install google-auth-library
+npm install redux-persist
+npm install @reduxjs/toolkit react-redux
+npm install react-hook-form yup @hookform/resolvers
 
 npm install lucide-react
+npm install react-toastify
+npm i clsx
+
+/** @type {import('tailwindcss').Config} \*/
+module.exports = {
+content: [
+"./pages/**/_.{js,ts,jsx,tsx,mdx}",
+"./components/\*\*/_.{js,ts,jsx,tsx,mdx}",
+"./app/\*_/_.{js,ts,jsx,tsx,mdx}",
+],
+theme: {
+extend: {
+colors: {
+// Ваші точні кольори з семантичними назвами
+primary: {
+100: '#dcfce7', // green-100 — дуже світло-зелений
+500: '#22c55e', // green-500 — середньо-зелений
+600: '#16a34a', // темніший для hover
+700: '#15803d', // для active
+},
+
+        danger: {
+          500: '#ef4444',  // red-500 — насичений червоний
+          600: '#dc2626',  // для hover
+          700: '#b91c1c',  // для active
+        },
+
+        accent: {
+          100: '#ffe4e6',  // rose-100 — дуже світло-рожевий
+          300: '#fcd34d',  // amber-300
+          400: '#fbbf24',  // amber-400
+          500: '#facc15',  // yellow-400
+          600: '#eab308',  // для hover
+        },
+
+        neutral: {
+          50: '#f9fafb',   // gray-50 — майже білий сірий
+          300: '#d1d5db',  // gray-300 — світло-сірий
+          500: '#6b7280',  // додатковий
+          600: '#4b5563',  // додатковий
+          700: '#374151',  // додатковий
+          800: '#1f2937',  // додатковий
+          900: '#18181b',  // zinc-900 — майже чорний
+        },
+
+        // Ваші точні кольори для прямого використання
+        'surface': '#ffffff',      // white — білий
+        'background': '#f9fafb',   // gray-50
+        'foreground': '#18181b',   // zinc-900
+        'border': '#d1d5db',       // gray-300
+        'muted': '#6b7280',        // додатковий сірий для тексту
+
+        // Або використовуйте оригінальні Tailwind назви
+        rose: {
+          100: '#ffe4e6',  // rose-100 — дуже світло-рожевий
+        },
+        red: {
+          500: '#ef4444',  // red-500 — насичений червоний
+        },
+        gray: {
+          50: '#f9fafb',   // gray-50 — майже білий сірий
+          300: '#d1d5db',  // gray-300 — світло-сірий
+        },
+        green: {
+          100: '#dcfce7',  // green-100 — дуже світло-зелений
+          500: '#22c55e',  // green-500 — середньо-зелений
+        },
+        zinc: {
+          900: '#18181b',  // zinc-900 — майже чорний
+        },
+        yellow: {
+          400: '#facc15',  // yellow-400
+        },
+        amber: {
+          300: '#fcd34d',  // amber-300
+          400: '#fbbf24',  // amber-400
+        },
+        white: '#ffffff',    // white — білий
+      }
+    },
+
+},
+plugins: [],
+}

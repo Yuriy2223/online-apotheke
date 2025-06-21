@@ -39,19 +39,51 @@ export async function POST(request: NextRequest) {
 
     const { name, email, phone, password } = body;
 
-    const existingUser = await User.findOne({
-      $or: [{ email }, ...(phone ? [{ phone }] : [])],
-    });
+    const existingUserByEmail = await User.findOne({ email });
 
-    if (existingUser) {
+    if (existingUserByEmail) {
       await session.endSession();
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Користувач з такими даними вже існує",
-        },
-        { status: 409 }
-      );
+
+      if (existingUserByEmail.provider === "google") {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Акаунт з цим email вже існує через Google",
+            details: [
+              "Цей email вже зареєстрований через Google. Використайте кнопку 'Увійти через Google' для входу.",
+            ],
+          },
+          { status: 409 }
+        );
+      }
+
+      if (existingUserByEmail.provider === "local") {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Акаунт з цим email вже існує",
+            details: [
+              "Користувач з цим email вже зареєстрований. Спробуйте увійти або відновити пароль.",
+            ],
+          },
+          { status: 409 }
+        );
+      }
+    }
+
+    if (phone) {
+      const existingUserByPhone = await User.findOne({ phone });
+      if (existingUserByPhone) {
+        await session.endSession();
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Користувач з цим номером телефону вже існує",
+            details: ["Цей номер телефону вже зареєстрований в системі."],
+          },
+          { status: 409 }
+        );
+      }
     }
 
     const emailVerificationToken = generateEmailVerificationToken();
