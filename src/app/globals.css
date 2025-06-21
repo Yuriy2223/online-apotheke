@@ -1,32 +1,94 @@
 @import "tailwindcss";
 
+/* rose-100    — дуже світло-рожевий  
+red-500     — насичений червоний  
+gray-50     — майже білий сірий  
+gray-300    — світло-сірий  
+green-500   — середньо-зелений  
+green-100   — дуже світло-зелений  
+white       — білий  
+zinc-900    — майже чорний
+yellow-400 або amber-300/400 */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --font-inter: "Inter", sans-serif;
+  --font-roboto: "Roboto", sans-serif;
 }
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
-  --font-mono: var(--font-geist-mono);
-  --font-alt: var(--font-roboto);
+  --color-body: #f7f8fa;
+  --color-black-true: #1d1e21;
+  --color-white-true: #ffffff;
+  --color-green-soft: #e6f1e9;
+  --color-green-light: #59b17a;
+  --color-green-dark: #3f945f;
+  --color-gray-light: #f7f8fa;
+  --color-gray-dark: #6a6a6f;
+  --color-red-light: #f6e8e9;
+  --color-red-dark: #e85050;
+  --color-yellow-dark: #ffc531;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
   font-family: var(--font-inter), sans-serif;
+  background: var(--bg-body);
+  font-size: 14px;
+  line-height: 1.29;
+  font-weight: 400;
 }
 
-code,
-pre {
-  font-family: var(--font-geist-mono), monospace;
+@media (min-width: 768px) {
+  body {
+    font-size: 16px;
+    line-height: 1.5;
+  }
 }
+/* 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  font-family: inherit;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input,
+textarea {
+  font-family: inherit;
+  outline: none;
+} */

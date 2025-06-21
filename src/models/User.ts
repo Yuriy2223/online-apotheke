@@ -11,6 +11,7 @@ export interface UserDocument extends Document {
   refreshToken: string[];
   googleId: string | null;
   provider: "local" | "google";
+  resetPasswordToken: string | null;
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -74,6 +75,10 @@ const userSchema = new Schema<UserDocument>(
       type: String,
       enum: ["local", "google"],
       default: "local",
+    },
+    resetPasswordToken: {
+      type: String,
+      default: null,
     },
   },
   { timestamps: true, versionKey: false }

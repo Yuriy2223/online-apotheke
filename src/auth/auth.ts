@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { verifyAccessToken } from "@/jwt/jwt";
 import { JWTPayload } from "@/types/users";
+import jwt from "jsonwebtoken";
 
 export const getTokenFromHeader = (request: NextRequest): string | null => {
   const authHeader = request.headers.get("authorization");
@@ -22,10 +23,6 @@ export const verifyAuth = (request: NextRequest): JWTPayload => {
     throw new Error("Invalid token");
   }
 };
-
-/******************************************************************* */
-
-import jwt from "jsonwebtoken";
 
 export async function getUserId(request: NextRequest): Promise<string | null> {
   try {

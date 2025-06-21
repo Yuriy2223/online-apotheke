@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, Roboto, Geist_Mono } from "next/font/google";
+import { Inter, Roboto } from "next/font/google";
+// import { Providers } from "@/providers/Providers";
 import "./globals.css";
 
 const inter = Inter({
@@ -11,12 +12,6 @@ const inter = Inter({
 const roboto = Roboto({
   subsets: ["latin"],
   variable: "--font-roboto",
-  weight: ["400", "500", "600", "700"],
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
   weight: ["400", "500", "600", "700"],
 });
 
@@ -32,10 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.variable} ${roboto.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${inter.variable} ${roboto.variable} antialiased`}>
+        {/* <Providers> */}
         {children}
+        {/* </Providers> */}
       </body>
     </html>
   );

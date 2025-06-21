@@ -56,15 +56,28 @@ export async function POST(request: NextRequest) {
     let isNewUser = false;
 
     if (user) {
-      if (user.provider === "local" && !user.googleId) {
-        await User.findByIdAndUpdate(user._id, {
-          $set: {
-            googleId: googleUser.googleId,
-            provider: "google",
-            isEmailVerified: true,
+      if (user.provider === "local") {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Акаунт з цим email вже існує",
+            details: [
+              "Цей email вже зареєстрований в системі з паролем. Будь ласка, увійдіть використовуючи ваш пароль, або скористайтеся відновленням пароля.",
+            ],
           },
-        });
-        user = (await User.findById(user._id)) as UserDocument;
+          { status: 409 }
+        );
+      }
+
+      if (user.provider === "google") {
+        if (!user.googleId || user.googleId !== googleUser.googleId) {
+          await User.findByIdAndUpdate(user._id, {
+            $set: {
+              googleId: googleUser.googleId,
+            },
+          });
+          user = (await User.findById(user._id)) as UserDocument;
+        }
       }
     } else {
       user = new User({

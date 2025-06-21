@@ -13,7 +13,7 @@ export default function NotFound() {
           Сторінка не знайдена
         </h2>
         <p className="text-gray-600 mb-8 text-lg">
-          Вибачте, сторінка, яку ви шукаєте, не існує або була переміщена.
+          Вибачте, сторінка, яку ви шукаєте, не існує.
         </p>
 
         <div className="space-y-4">

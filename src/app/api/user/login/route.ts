@@ -44,25 +44,48 @@ export async function POST(request: NextRequest) {
       "+password"
     )) as UserDocument | null;
 
-    const invalidCredentialsResponse = NextResponse.json(
-      {
-        success: false,
-        error: "Невірні дані для входу",
-      },
-      { status: 401 }
-    );
-
     if (!user) {
-      return invalidCredentialsResponse;
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Невірні дані для входу",
+        },
+        { status: 401 }
+      );
+    }
+
+    if (user.provider === "google") {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Цей акаунт зареєстрований через Google",
+          details: [
+            "Будь ласка, використайте кнопку 'Увійти через Google' для входу в акаунт.",
+          ],
+        },
+        { status: 401 }
+      );
     }
 
     if (user.provider !== "local") {
-      return invalidCredentialsResponse;
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Невірні дані для входу",
+        },
+        { status: 401 }
+      );
     }
 
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
-      return invalidCredentialsResponse;
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Невірні дані для входу",
+        },
+        { status: 401 }
+      );
     }
 
     if (!user.isEmailVerified) {
@@ -70,6 +93,9 @@ export async function POST(request: NextRequest) {
         {
           success: false,
           error: "Підтвердіть email перед входом",
+          details: [
+            "Перевірте вашу електронну пошту та перейдіть за посиланням для підтвердження акаунту.",
+          ],
         },
         { status: 403 }
       );
