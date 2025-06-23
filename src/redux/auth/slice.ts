@@ -1,117 +1,181 @@
-import { createSlice, isAnyOf, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "@/types/users";
+import { createSlice } from "@reduxjs/toolkit";
 import {
   registerUser,
   loginUser,
   logoutUser,
-  refreshToken,
-  requestPasswordReset,
+  forgotPassword,
   resetPassword,
+  verifyEmail,
 } from "./operations";
+import { User } from "@/types/users";
 
-interface AuthState {
+export interface AuthState {
   user: User | null;
-  isLoggedIn: boolean;
+  token: string | null;
+  isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
+
+  forgotPasswordLoading: boolean;
+  forgotPasswordSent: boolean;
+  resetPasswordLoading: boolean;
+  resetPasswordSuccess: boolean;
+  verifyEmailLoading: boolean;
+  verifyEmailSuccess: boolean;
 }
 
 const initialState: AuthState = {
   user: null,
-  isLoggedIn: false,
+  token: null,
+  isAuthenticated: false,
   loading: false,
   error: null,
-};
 
-const handlePending = (state: AuthState) => {
-  state.loading = true;
-  state.error = null;
-};
-
-const handleRejected = (
-  state: AuthState,
-  action: PayloadAction<string | undefined>
-) => {
-  state.loading = false;
-  state.error = action.payload ?? "Something went wrong";
+  forgotPasswordLoading: false,
+  forgotPasswordSent: false,
+  resetPasswordLoading: false,
+  resetPasswordSuccess: false,
+  verifyEmailLoading: false,
+  verifyEmailSuccess: false,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    resetAuthError(state) {
+    clearError: (state) => {
       state.error = null;
     },
-    clearAuthState(state) {
-      state.user = null;
-      state.isLoggedIn = false;
-      state.error = null;
+    setLoading: (state, action: { payload: boolean }) => {
+      state.loading = action.payload;
+    },
+    updateUser: (state, action: { payload: Partial<User> }) => {
+      if (state.user) {
+        state.user = { ...state.user, ...action.payload };
+      }
+    },
+    resetForgotPasswordState: (state) => {
+      state.forgotPasswordLoading = false;
+      state.forgotPasswordSent = false;
+    },
+    resetResetPasswordState: (state) => {
+      state.resetPasswordLoading = false;
+      state.resetPasswordSuccess = false;
+    },
+    resetVerifyEmailState: (state) => {
+      state.verifyEmailLoading = false;
+      state.verifyEmailSuccess = false;
     },
   },
   extraReducers: (builder) => {
     builder
+      // --- Register ---
+      .addCase(registerUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(registerUser.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.isLoggedIn = true;
         state.loading = false;
+        // if (action.payload.accessToken) {
+        state.user = action.payload.user;
+        state.token = action.payload.accessToken;
+        state.isAuthenticated = true;
+        // }
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Помилка реєстрації";
+      })
+
+      // --- Login ---
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.isLoggedIn = true;
         state.loading = false;
-        state.error = null;
+        state.user = action.payload.user;
+        state.token = action.payload.accessToken;
+        state.isAuthenticated = true;
       })
-      .addCase(refreshToken.fulfilled, (state) => {
-        state.isLoggedIn = true;
+      .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = null;
+        state.error = action.payload || "Помилка входу";
+      })
+
+      // --- Logout ---
+      .addCase(logoutUser.pending, (state) => {
+        state.loading = true;
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
-        state.isLoggedIn = false;
+        state.token = null;
+        state.isAuthenticated = false;
         state.loading = false;
         state.error = null;
       })
-      .addCase(requestPasswordReset.fulfilled, (state) => {
+      .addCase(logoutUser.rejected, (state) => {
+        state.user = null;
+        state.token = null;
+        state.isAuthenticated = false;
         state.loading = false;
         state.error = null;
+      })
+
+      // --- Forgot Password ---
+      .addCase(forgotPassword.pending, (state) => {
+        state.forgotPasswordLoading = true;
+        state.error = null;
+        state.forgotPasswordSent = false;
+      })
+      .addCase(forgotPassword.fulfilled, (state) => {
+        state.forgotPasswordLoading = false;
+        state.forgotPasswordSent = true;
+      })
+      .addCase(forgotPassword.rejected, (state, action) => {
+        state.forgotPasswordLoading = false;
+        state.error = action.payload || "Помилка при надсиланні листа";
+      })
+
+      // --- Reset Password ---
+      .addCase(resetPassword.pending, (state) => {
+        state.resetPasswordLoading = true;
+        state.error = null;
+        state.resetPasswordSuccess = false;
       })
       .addCase(resetPassword.fulfilled, (state) => {
-        state.loading = false;
+        state.resetPasswordLoading = false;
+        state.resetPasswordSuccess = true;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.resetPasswordLoading = false;
+        state.error = action.payload || "Помилка при зміні пароля";
+      })
+
+      // --- Verify Email ---
+      .addCase(verifyEmail.pending, (state) => {
+        state.verifyEmailLoading = true;
         state.error = null;
+        state.verifyEmailSuccess = false;
       })
-      .addCase(refreshToken.rejected, (state, action) => {
-        state.user = null;
-        state.isLoggedIn = false;
-        state.loading = false;
-        state.error = action.payload ?? "Session expired";
+      .addCase(verifyEmail.fulfilled, (state) => {
+        state.verifyEmailLoading = false;
+        state.verifyEmailSuccess = true;
       })
-      .addMatcher(
-        isAnyOf(
-          registerUser.pending,
-          loginUser.pending,
-          logoutUser.pending,
-          refreshToken.pending,
-          requestPasswordReset.pending,
-          resetPassword.pending
-        ),
-        handlePending
-      )
-      .addMatcher(
-        isAnyOf(
-          registerUser.rejected,
-          loginUser.rejected,
-          logoutUser.rejected,
-          refreshToken.rejected,
-          requestPasswordReset.rejected,
-          resetPassword.rejected
-        ),
-        handleRejected
-      );
+      .addCase(verifyEmail.rejected, (state, action) => {
+        state.verifyEmailLoading = false;
+        state.error = action.payload || "Помилка верифікації";
+      });
   },
 });
 
-export const { resetAuthError, clearAuthState } = authSlice.actions;
+// export const { clearError, setLoading, updateUser } = authSlice.actions;
+export const {
+  clearError,
+  setLoading,
+  updateUser,
+  resetForgotPasswordState,
+  resetResetPasswordState,
+  resetVerifyEmailState,
+} = authSlice.actions;
 export const authReducer = authSlice.reducer;

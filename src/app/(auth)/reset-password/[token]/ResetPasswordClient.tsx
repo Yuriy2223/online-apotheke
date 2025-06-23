@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "@/redux/store";
 import {
   Lock,
   Eye,
@@ -13,85 +15,69 @@ import {
   AlertCircle,
   Loader2,
 } from "lucide-react";
-import Link from "next/link";
+import {
+  selectAuthError,
+  selectResetPasswordLoading,
+  selectResetPasswordSuccess,
+} from "@/redux/auth/selectors";
+import { schemaResetPassword } from "@/validation/users";
+import { clearError, resetResetPasswordState } from "@/redux/auth/slice";
+import { resetPassword } from "@/redux/auth/operations";
+import { ResetPasswordData } from "@/types/users";
 
-interface FormData {
-  password: string;
-  confirmPassword: string;
-}
-
-interface ResetPasswordClientProps {
+export interface ResetPasswordProps {
   token: string;
 }
 
-const schema = yup.object().shape({
-  password: yup
-    .string()
-    .required("Обов'язкове поле")
-    .min(8, "Мінімум 8 символів")
-    .max(128, "Максимум 128 символів"),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("password")], "Паролі не співпадають")
-    .required("Підтвердження обов'язкове"),
-});
-
-export default function ResetPasswordClient({
-  token,
-}: ResetPasswordClientProps) {
+export default function ResetPasswordClient({ token }: ResetPasswordProps) {
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const isSubmitting = useSelector(selectResetPasswordLoading);
+  const success = useSelector(selectResetPasswordSuccess);
+  const error = useSelector(selectAuthError);
 
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors, touchedFields, isValid },
-  } = useForm<FormData>({
-    resolver: yupResolver(schema),
+  } = useForm<ResetPasswordData>({
+    resolver: yupResolver(schemaResetPassword),
     mode: "onChange",
   });
 
   const values = watch();
 
-  const onSubmit = async (data: FormData) => {
+  useEffect(() => {
+    dispatch(clearError());
+
+    return () => {
+      dispatch(resetResetPasswordState());
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        router.push("/login");
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [success, router]);
+
+  const onSubmit = async (data: ResetPasswordData) => {
     if (!token) {
-      setError("Токен не знайдено. Перейдіть за посиланням з листа.");
       return;
     }
 
-    setIsSubmitting(true);
-    setError(null);
-
-    try {
-      const response = await fetch("/api/user/reset-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          token: token,
-          password: data.password,
-        }),
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        setSuccess(true);
-        setTimeout(() => router.push("/login"), 3000);
-      } else {
-        setError(result.error || "Помилка при зміні пароля");
-      }
-    } catch (err) {
-      console.error("Reset password error:", err);
-      setError("Помилка мережі. Спробуйте пізніше.");
-    } finally {
-      setIsSubmitting(false);
-    }
+    dispatch(
+      resetPassword({
+        token: token,
+        password: data.password,
+      })
+    );
   };
 
   if (!token) {
