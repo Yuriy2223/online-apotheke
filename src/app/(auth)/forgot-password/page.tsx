@@ -1,67 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { useAppDispatch } from "@/redux/store";
 import { Mail, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
-import Link from "next/link";
-
-interface FormData {
-  email: string;
-}
-
-const schema = yup.object().shape({
-  email: yup
-    .string()
-    .required("Обов'язкове поле")
-    .email("Некоректний email")
-    .max(100, "Максимум 100 символів"),
-});
+import { schemaForgotPassword } from "@/validation/users";
+import { clearError, resetForgotPasswordState } from "@/redux/auth/slice";
+import { forgotPassword } from "@/redux/auth/operations";
+import { ForgotPasswordData } from "@/types/users";
+import {
+  selectForgotPasswordLoading,
+  selectForgotPasswordSent,
+  selectAuthError,
+} from "@/redux/auth/selectors";
 
 export default function ForgotPasswordPage() {
-  const [submitted, setSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
+  const dispatch = useAppDispatch();
+  const isLoading = useSelector(selectForgotPasswordLoading);
+  const submitted = useSelector(selectForgotPasswordSent);
+  const error = useSelector(selectAuthError);
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, touchedFields },
     watch,
-  } = useForm<FormData>({
-    resolver: yupResolver(schema),
+  } = useForm<ForgotPasswordData>({
+    resolver: yupResolver(schemaForgotPassword),
     mode: "onChange",
   });
 
   const values = watch();
 
-  const onSubmit = async (data: FormData) => {
-    setIsLoading(true);
-    setError(null);
+  useEffect(() => {
+    dispatch(clearError());
 
-    try {
-      const response = await fetch("/api/user/forgot-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: data.email }),
-      });
+    return () => {
+      dispatch(resetForgotPasswordState());
+    };
+  }, [dispatch]);
 
-      const result = await response.json();
-
-      if (result.success) {
-        setSubmitted(true);
-      } else {
-        setError(result.error || "Помилка при надсиланні листа");
-      }
-    } catch (err) {
-      console.error("Forgot password error:", err);
-      setError("Помилка мережі. Спробуйте пізніше.");
-    } finally {
-      setIsLoading(false);
-    }
+  const onSubmit = async (data: ForgotPasswordData) => {
+    dispatch(forgotPassword({ email: data.email }));
   };
 
   return (

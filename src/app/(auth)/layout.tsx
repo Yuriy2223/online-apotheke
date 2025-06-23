@@ -8,8 +8,8 @@ export default function AuthLayout({
 }) {
   return (
     <>
-      <header>
-        <Container>
+      <header className="bg-gray-light ">
+        <Container className="flex items-center justify-start sm:h-[84px] md:h-[100px]">
           <Logo variant="green" />
         </Container>
       </header>

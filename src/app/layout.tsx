@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Roboto } from "next/font/google";
-// import { Providers } from "@/providers/Providers";
+import { Providers } from "@/providers/Providers";
 import "./globals.css";
 
 const inter = Inter({
@@ -28,9 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${roboto.variable} antialiased`}>
-        {/* <Providers> */}
-        {children}
-        {/* </Providers> */}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

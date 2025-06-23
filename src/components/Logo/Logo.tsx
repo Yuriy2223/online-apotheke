@@ -14,29 +14,32 @@ export const Logo: React.FC<LogoProps> = ({
   variant = "green",
 }) => {
   const isWhite = variant === "white";
+  const logoSrc = isWhite
+    ? "/images/logo-white.webp"
+    : "/images/logo-green.webp";
 
   return (
     <Link
       href="/"
       scroll={false}
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       className={clsx(
-        "flex items-center justify-center gap-2 cursor-pointer",
+        "flex items-center justify-center max-tablet:gap-2 tablet:gap-3",
         className
       )}
-      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
     >
       <Image
-        src={isWhite ? "/images/logo-white.webp" : "/images/logo-green.webp"}
+        src={logoSrc}
         alt="E-Pharmacy Logo"
         width={44}
         height={44}
-        sizes="(max-width: 767px) 32px, (max-width: 1440px) 44px"
-        className=" h-auto"
+        sizes="(max-width: 767px) 32px, 44px"
+        className="w-[32px] tablet:w-[44px] h-auto"
         priority
       />
       <span
         className={clsx(
-          "text-base font-semibold transition-colors",
+          "text-base tablet:text-xl font-semibold transition-colors  ",
           isWhite ? "text-white-true" : "text-green-dark"
         )}
       >

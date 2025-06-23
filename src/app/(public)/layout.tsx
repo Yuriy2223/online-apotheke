@@ -1,3 +1,4 @@
+import { Header } from "@/components/Header/Header";
 import { Logo } from "@/components/Logo/Logo";
 import { Container } from "@/shared/Container";
 
@@ -8,10 +9,8 @@ export default function PublicLayout({
 }) {
   return (
     <>
-      <header className="bg-green-light flex items-center justify-between">
-        <Container>
-          <Logo variant="white" />
-        </Container>
+      <header className="bg-green-light">
+        <Header />
       </header>
       <main>{children}</main>
       <footer className="bg-green-light">

@@ -8,19 +8,18 @@ interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
 export const Container: React.FC<ContainerProps> = ({
   children,
   className = "",
-  ...rest
+  // ...rest
 }) => {
   return (
     <div
-      {...rest}
+      // {...rest}
       className={clsx(
-        // "w-full max-w-[374px] mx-auto px-2.5",
-        // "w-full",
         "border border-red-500" /**потім видали */,
-        "max-w-[374px] mx-auto",
-        "sm:max-w-[375px] sm:px-4",
-        "md:max-w-[768px] md:px-5",
-        "xl:max-w-[1440px] xl:px-5 xl:py-10",
+        "w-full mx-auto",
+        "max-mobile:max-w-[374px] max-mobile:px-2",
+        "mobile:max-w-[375px] mobile:px-4",
+        "tablet:max-w-[768px] tablet:px-8",
+        "desktop:max-w-[1440px] desktop:px-[50px]",
         className
       )}
     >

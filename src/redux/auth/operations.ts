@@ -1,105 +1,186 @@
-import { AxiosError } from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { extractErrorMessage } from "../../utils/errorUtils";
-import {
-  LoginData,
-  RegisterData,
-  RequestResetData,
-  ResetPasswordData,
-  User,
-} from "@/types/users";
-import {
-  loginUserApi,
-  logoutApi,
-  refreshTokenApi,
-  registerUserApi,
-  requestPasswordResetApi,
-  resetPasswordApi,
-} from "../../services/authApi";
+import { toast } from "react-toastify";
+import { LoginFormData, RegisterFormData, User } from "@/types/users";
 
+interface AuthResponse {
+  user: User;
+  accessToken: string;
+}
+
+// --- Register ---
 export const registerUser = createAsyncThunk<
-  User,
-  RegisterData,
+  AuthResponse,
+  RegisterFormData,
   { rejectValue: string }
->("auth/register", async (data, { rejectWithValue }) => {
+>("auth/register", async (userData, { rejectWithValue }) => {
   try {
-    const { user } = await registerUserApi(data);
-    return user;
+    const res = await fetch("/api/user/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData),
+    });
+
+    const result = await res.json();
+
+    if (!res.ok || !result.success) {
+      toast.error(result.error || "Помилка реєстрації");
+      return rejectWithValue(result.error || "Помилка реєстрації");
+    }
+
+    if (result.data === null) {
+      toast.success(result.message || "Перевірте пошту для підтвердження");
+      throw new Error("Email not confirmed");
+    }
+
+    toast.success("Реєстрація успішна!");
+    return result.data;
   } catch (error) {
-    return rejectWithValue(extractErrorMessage(error, "Registration failed"));
+    if (error instanceof Error && error.message === "Email not confirmed") {
+      return rejectWithValue("Підтвердьте email для завершення реєстрації");
+    }
+
+    console.error("Register error:", error);
+    toast.error("Помилка з'єднання з сервером");
+    return rejectWithValue("Помилка з'єднання з сервером");
   }
 });
 
+// --- Login ---
 export const loginUser = createAsyncThunk<
-  User,
-  LoginData,
+  AuthResponse,
+  LoginFormData,
   { rejectValue: string }
->("auth/login", async (data, { rejectWithValue }) => {
+>("auth/login", async (credentials, { rejectWithValue }) => {
   try {
-    const { user } = await loginUserApi(data);
-    return user;
+    const response = await fetch("/api/user/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(credentials),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      toast.error(result.error || "Помилка входу");
+      return rejectWithValue(result.error || "Помилка входу");
+    }
+
+    toast.success(`Вітаємо, ${result.data.user.name}!`);
+    return result.data;
   } catch (error) {
-    return rejectWithValue(extractErrorMessage(error, "Login failed"));
+    console.error("Login error:", error);
+    toast.error("Помилка з'єднання з сервером");
+    return rejectWithValue("Помилка з'єднання з сервером");
   }
 });
 
+// --- Logout ---
 export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
   "auth/logout",
   async (_, { rejectWithValue }) => {
     try {
-      await logoutApi();
-    } catch {
-      return rejectWithValue("Logout failed");
+      const response = await fetch("/api/user/logout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        console.warn("Server logout failed");
+      }
+
+      toast.success("Ви вийшли з акаунту");
+      return;
+    } catch (error) {
+      console.warn("Logout error:", error);
+      toast.success("Ви вийшли з акаунту");
+      return rejectWithValue("Помилка при виході");
     }
   }
 );
 
-export const refreshToken = createAsyncThunk<
-  boolean,
-  void,
+// --- Forgot Password ---
+export const forgotPassword = createAsyncThunk<
+  { message: string },
+  { email: string },
   { rejectValue: string }
->("auth/refresh", async (_, { rejectWithValue }) => {
+>("auth/forgotPassword", async ({ email }, { rejectWithValue }) => {
   try {
-    await refreshTokenApi();
+    const response = await fetch("/api/user/forgot-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
 
-    return true;
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      toast.error(result.error || "Помилка при надсиланні листа");
+      return rejectWithValue(result.error || "Помилка при надсиланні листа");
+    }
+
+    toast.success("Лист відправлено на вашу пошту");
+    return { message: result.message || "Лист відправлено" };
   } catch (error) {
-    const err = error as AxiosError;
-
-    if (err.response?.status === 401) {
-      return rejectWithValue("Session expired");
-    }
-
-    if (err.response?.status === 403) {
-      return rejectWithValue("Invalid or expired refresh token");
-    }
-
-    return rejectWithValue("Failed to refresh session");
+    console.error("Forgot password error:", error);
+    toast.error("Помилка мережі. Спробуйте пізніше.");
+    return rejectWithValue("Помилка мережі. Спробуйте пізніше.");
   }
 });
 
-export const requestPasswordReset = createAsyncThunk<
-  string,
-  RequestResetData,
-  { rejectValue: string }
->("auth/requestReset", async (data, { rejectWithValue }) => {
-  try {
-    const { message } = await requestPasswordResetApi(data);
-    return message;
-  } catch (error) {
-    return rejectWithValue(extractErrorMessage(error, "Request failed"));
-  }
-});
-
+// --- Reset Password ---
 export const resetPassword = createAsyncThunk<
-  string,
-  ResetPasswordData,
+  { message: string },
+  { token: string; password: string },
   { rejectValue: string }
->("auth/resetPassword", async (data, { rejectWithValue }) => {
+>("auth/resetPassword", async ({ token, password }, { rejectWithValue }) => {
   try {
-    const { message } = await resetPasswordApi(data);
-    return message;
+    const response = await fetch("/api/user/reset-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token, password }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      toast.error(result.error || "Помилка при зміні пароля");
+      return rejectWithValue(result.error || "Помилка при зміні пароля");
+    }
+
+    toast.success("Пароль успішно змінено");
+    return { message: result.message || "Пароль змінено" };
   } catch (error) {
-    return rejectWithValue(extractErrorMessage(error, "Reset failed"));
+    console.error("Reset password error:", error);
+    toast.error("Помилка мережі. Спробуйте пізніше.");
+    return rejectWithValue("Помилка мережі. Спробуйте пізніше.");
+  }
+});
+
+// --- Verify Email ---
+export const verifyEmail = createAsyncThunk<
+  { message: string },
+  { token: string },
+  { rejectValue: string }
+>("auth/verifyEmail", async ({ token }, { rejectWithValue }) => {
+  try {
+    const response = await fetch("/api/user/verify-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      toast.error(result.error || "Помилка верифікації");
+      return rejectWithValue(result.error || "Помилка верифікації");
+    }
+
+    toast.success("Email успішно підтверджено!");
+    return { message: result.message || "Email підтверджено" };
+  } catch (error) {
+    console.error("Verify email error:", error);
+    toast.error("Помилка мережі");
+    return rejectWithValue("Помилка мережі");
   }
 });

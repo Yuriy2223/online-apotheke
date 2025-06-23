@@ -12,7 +12,7 @@ export default function PrivateLayout({
     <>
       {/* <AppGuard> */}
       <header>
-        <Container>
+        <Container className="flex items-center justify-between sm:h-[84px] md:h-[100px]">
           <Logo variant="green" />
         </Container>
       </header>

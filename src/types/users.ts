@@ -63,7 +63,7 @@ export interface Supplier {
   amount: string;
   status: string;
 }
-
+/************************************************************* */
 export interface User {
   _id: string;
   name: string;
@@ -84,8 +84,6 @@ export interface UserResponse {
   isEmailVerified: boolean;
   googleId: string | null;
   provider: "local" | "google";
-  // createdAt: Date;
-  // updatedAt: Date;
 }
 export interface RegisterFormData {
   name: string;
@@ -100,6 +98,13 @@ export interface LoginFormData {
 }
 export interface VerifyEmailData {
   token: string;
+}
+export interface ForgotPasswordData {
+  email: string;
+}
+export interface ResetPasswordData {
+  password: string;
+  confirmPassword: string;
 }
 export interface RefreshTokenResponse {
   accessToken: string;
