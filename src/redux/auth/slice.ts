@@ -6,12 +6,12 @@ import {
   forgotPassword,
   resetPassword,
   verifyEmail,
+  checkAuthStatus,
 } from "./operations";
 import { User } from "@/types/users";
 
 export interface AuthState {
   user: User | null;
-  token: string | null;
   isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
@@ -26,7 +26,6 @@ export interface AuthState {
 
 const initialState: AuthState = {
   user: null,
-  token: null,
   isAuthenticated: false,
   loading: false,
   error: null,
@@ -66,9 +65,32 @@ const authSlice = createSlice({
       state.verifyEmailLoading = false;
       state.verifyEmailSuccess = false;
     },
+    // ---- httpOnly cookies----
+    setAuthFromServer: (
+      state,
+      action: { payload: { user: User; isAuthenticated: boolean } }
+    ) => {
+      state.user = action.payload.user;
+      state.isAuthenticated = action.payload.isAuthenticated;
+    },
+    clearAuth: (state) => {
+      state.user = null;
+      state.isAuthenticated = false;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
+      // ---- httpOnly cookies----
+      .addCase(checkAuthStatus.fulfilled, (state, action) => {
+        if (action.payload?.user) {
+          state.user = action.payload.user;
+          state.isAuthenticated = true;
+        } else {
+          state.user = null;
+          state.isAuthenticated = false;
+        }
+      })
       // --- Register ---
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
@@ -76,11 +98,8 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
-        // if (action.payload.accessToken) {
         state.user = action.payload.user;
-        state.token = action.payload.accessToken;
         state.isAuthenticated = true;
-        // }
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
@@ -95,7 +114,6 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
-        state.token = action.payload.accessToken;
         state.isAuthenticated = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -109,14 +127,12 @@ const authSlice = createSlice({
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
-        state.token = null;
         state.isAuthenticated = false;
         state.loading = false;
         state.error = null;
       })
       .addCase(logoutUser.rejected, (state) => {
         state.user = null;
-        state.token = null;
         state.isAuthenticated = false;
         state.loading = false;
         state.error = null;
@@ -169,7 +185,6 @@ const authSlice = createSlice({
   },
 });
 
-// export const { clearError, setLoading, updateUser } = authSlice.actions;
 export const {
   clearError,
   setLoading,
@@ -177,5 +192,8 @@ export const {
   resetForgotPasswordState,
   resetResetPasswordState,
   resetVerifyEmailState,
+  setAuthFromServer,
+  clearAuth,
 } = authSlice.actions;
+
 export const authReducer = authSlice.reducer;

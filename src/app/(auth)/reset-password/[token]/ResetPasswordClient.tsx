@@ -7,6 +7,10 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "@/redux/store";
+import { schemaResetPassword } from "@/validation/users";
+import { clearError, resetResetPasswordState } from "@/redux/auth/slice";
+import { resetPassword } from "@/redux/auth/operations";
+import { ResetPasswordData } from "@/types/users";
 import {
   Lock,
   Eye,
@@ -20,10 +24,6 @@ import {
   selectResetPasswordLoading,
   selectResetPasswordSuccess,
 } from "@/redux/auth/selectors";
-import { schemaResetPassword } from "@/validation/users";
-import { clearError, resetResetPasswordState } from "@/redux/auth/slice";
-import { resetPassword } from "@/redux/auth/operations";
-import { ResetPasswordData } from "@/types/users";
 
 export interface ResetPasswordProps {
   token: string;

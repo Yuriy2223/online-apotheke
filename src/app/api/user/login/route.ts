@@ -127,18 +127,34 @@ export async function POST(request: NextRequest) {
 
     const userResponse = userObject as UserResponse;
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       {
         success: true,
         data: {
           message: "Ласкаво просимо!",
           user: userResponse,
-          accessToken,
-          refreshToken,
         },
       },
       { status: 200 }
     );
+
+    response.cookies.set("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 15 * 60,
+      path: "/",
+    });
+
+    response.cookies.set("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60,
+      path: "/",
+    });
+
+    return response;
   } catch (error) {
     console.error("Login error:", error);
     return NextResponse.json(

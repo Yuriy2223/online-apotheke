@@ -4,7 +4,6 @@ import { LoginFormData, RegisterFormData, User } from "@/types/users";
 
 interface AuthResponse {
   user: User;
-  accessToken: string;
 }
 
 // --- Register ---
@@ -18,6 +17,7 @@ export const registerUser = createAsyncThunk<
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData),
+      credentials: "include",
     });
 
     const result = await res.json();
@@ -27,18 +27,14 @@ export const registerUser = createAsyncThunk<
       return rejectWithValue(result.error || "Помилка реєстрації");
     }
 
-    if (result.data === null) {
-      toast.success(result.message || "Перевірте пошту для підтвердження");
-      throw new Error("Email not confirmed");
-    }
-
-    toast.success("Реєстрація успішна!");
-    return result.data;
-  } catch (error) {
-    if (error instanceof Error && error.message === "Email not confirmed") {
+    if (!result.data.user) {
+      toast.success(result.data.message || "Перевірте пошту для підтвердження");
       return rejectWithValue("Підтвердьте email для завершення реєстрації");
     }
 
+    toast.success("Реєстрація успішна!");
+    return { user: result.data.user };
+  } catch (error) {
     console.error("Register error:", error);
     toast.error("Помилка з'єднання з сервером");
     return rejectWithValue("Помилка з'єднання з сервером");
@@ -56,6 +52,7 @@ export const loginUser = createAsyncThunk<
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(credentials),
+      credentials: "include",
     });
 
     const result = await response.json();
@@ -66,7 +63,7 @@ export const loginUser = createAsyncThunk<
     }
 
     toast.success(`Вітаємо, ${result.data.user.name}!`);
-    return result.data;
+    return { user: result.data.user };
   } catch (error) {
     console.error("Login error:", error);
     toast.error("Помилка з'єднання з сервером");
@@ -82,6 +79,7 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
       const response = await fetch("/api/user/logout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -97,6 +95,35 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
     }
   }
 );
+
+// --- Check Auth Status ---
+export const checkAuthStatus = createAsyncThunk<
+  AuthResponse | null,
+  void,
+  { rejectValue: string }
+>("auth/checkStatus", async () => {
+  try {
+    const response = await fetch("/api/user/me", {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const result = await response.json();
+
+    if (!result.success) {
+      return null;
+    }
+
+    return { user: result.data.user };
+  } catch (error) {
+    console.error("Auth check error:", error);
+    return null;
+  }
+});
 
 // --- Forgot Password ---
 export const forgotPassword = createAsyncThunk<
@@ -156,7 +183,7 @@ export const resetPassword = createAsyncThunk<
   }
 });
 
-// --- Verify Email ---
+// // --- Verify Email ---
 export const verifyEmail = createAsyncThunk<
   { message: string },
   { token: string },

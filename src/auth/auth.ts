@@ -89,3 +89,18 @@ export function withAuth(
     return handler(request, userId);
   };
 }
+
+export function getAuthenticatedUser(request: NextRequest) {
+  const accessToken = request.cookies.get("accessToken")?.value;
+
+  if (!accessToken) {
+    throw new Error("Access token відсутній");
+  }
+
+  try {
+    const decoded = verifyAccessToken(accessToken);
+    return decoded;
+  } catch {
+    throw new Error("Недійсний access token");
+  }
+}
