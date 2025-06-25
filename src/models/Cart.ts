@@ -41,7 +41,7 @@ const cartSchema = new Schema(
   }
 );
 
-cartSchema.index({ userId: 1 });
+// cartSchema.index({ userId: 1 });
 
 cartSchema.pre("save", function (this: CartDocument) {
   const seen = new Set<string>();

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/database/MongoDB";
 import User from "@/models/User";
-import { verify, JwtPayload } from "jsonwebtoken";
+import { verify } from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-      verify(token, JWT_SECRET) as JwtPayload;
+      verify(token, JWT_SECRET);
     } catch {
       return NextResponse.json(
         { success: false, error: "Недійсний або прострочений токен" },

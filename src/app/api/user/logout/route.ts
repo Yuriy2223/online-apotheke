@@ -1,51 +1,76 @@
 import { NextRequest, NextResponse } from "next/server";
 import User from "@/models/User";
-import { verifyAuth } from "@/auth/auth";
-import { JWTPayload } from "@/types/users";
 import { connectDB } from "@/database/MongoDB";
 
 export async function POST(request: NextRequest) {
   try {
     await connectDB();
 
-    let decoded: JWTPayload;
-    try {
-      decoded = verifyAuth(request);
-    } catch {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Необхідна авторизація",
-        },
-        { status: 401 }
-      );
-    }
-
-    const { refreshToken }: { refreshToken?: string } = await request.json();
+    const refreshToken = request.cookies.get("refreshToken")?.value;
 
     if (refreshToken) {
-      await User.findByIdAndUpdate(
-        decoded.userId,
-        { $pull: { refreshToken } },
-        { new: true }
-      );
+      try {
+        await User.updateMany(
+          { refreshToken: refreshToken },
+          { $pull: { refreshToken } }
+        );
+      } catch (error) {
+        console.error("Error removing refresh token from DB:", error);
+      }
     }
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       {
         success: true,
         data: { message: "Успішний вихід" },
       },
       { status: 200 }
     );
+
+    response.cookies.set("accessToken", "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      expires: new Date(0),
+      path: "/",
+    });
+
+    response.cookies.set("refreshToken", "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      expires: new Date(0),
+      path: "/",
+    });
+
+    return response;
   } catch (error) {
     console.error("Logout error:", error);
-    return NextResponse.json(
+
+    const response = NextResponse.json(
       {
         success: false,
         error: "Помилка сервера",
       },
       { status: 500 }
     );
+
+    response.cookies.set("accessToken", "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      expires: new Date(0),
+      path: "/",
+    });
+
+    response.cookies.set("refreshToken", "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      expires: new Date(0),
+      path: "/",
+    });
+
+    return response;
   }
 }

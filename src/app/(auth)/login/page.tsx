@@ -10,11 +10,12 @@ import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { LoginFormData } from "@/types/users";
 import { loginUser } from "@/redux/auth/operations";
 import { useAppDispatch } from "@/redux/store";
+import GoogleAuthButton from "@/components/GoogleAuthButton/GoogleAuthButton";
 import {
   selectAuthLoading,
   selectIsAuthenticated,
 } from "@/redux/auth/selectors";
-import GoogleAuthButton from "@/components/GoogleAuthButton/GoogleAuthButton";
+import { useUrlErrorHandler } from "@/hooks/useUrlErrorHandler";
 
 export default function LoginPage() {
   const dispatch = useAppDispatch();
@@ -22,6 +23,8 @@ export default function LoginPage() {
   const router = useRouter();
   const loading = useSelector(selectAuthLoading);
   const isAuthenticated = useSelector(selectIsAuthenticated);
+
+  useUrlErrorHandler();
 
   const {
     register,

@@ -1,42 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ValidationError } from "yup";
 import { connectDB } from "@/database/MongoDB";
 import User, { UserDocument } from "@/models/User";
-import { refreshTokenSchema } from "@/validation/users";
 import { verifyRefreshToken, generateAccessToken } from "@/jwt/jwt";
-import { RefreshTokenResponse, JWTPayload } from "@/types/users";
+import { JWTPayload } from "@/types/users";
 import { Types } from "mongoose";
 
 export async function POST(request: NextRequest) {
   try {
     await connectDB();
 
-    const body = await request.json();
+    const refreshToken = request.cookies.get("refreshToken")?.value;
 
-    try {
-      await refreshTokenSchema.validate(body, { abortEarly: false });
-    } catch (validationError) {
-      if (validationError instanceof ValidationError) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: "Помилка валідації",
-            details: validationError.errors,
-          },
-          { status: 400 }
-        );
-      }
-
+    if (!refreshToken) {
       return NextResponse.json(
         {
           success: false,
-          error: "Невідома помилка валідації",
+          error: "Refresh token не знайдено",
         },
-        { status: 400 }
+        { status: 401 }
       );
     }
-
-    const { refreshToken } = body;
 
     let decoded: JWTPayload;
     try {
@@ -85,13 +68,23 @@ export async function POST(request: NextRequest) {
 
     const accessToken = generateAccessToken(payload);
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       {
         success: true,
-        data: { accessToken } as RefreshTokenResponse,
+        data: { message: "Token оновлено" },
       },
       { status: 200 }
     );
+
+    response.cookies.set("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 15 * 60,
+      path: "/",
+    });
+
+    return response;
   } catch (error) {
     console.error("Refresh token error:", error);
     return NextResponse.json(

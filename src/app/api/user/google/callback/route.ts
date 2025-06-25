@@ -1,44 +1,73 @@
 import { NextRequest, NextResponse } from "next/server";
+import { connectDB } from "@/database/MongoDB";
+import { processGoogleAuth } from "@/auth/googleAuthService";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const code = searchParams.get("code");
   const error = searchParams.get("error");
+  const baseUrl = process.env.CLIENT_URL!;
 
   if (error) {
-    return NextResponse.redirect(
-      `${process.env.CLIENT_URL}/login?error=google_auth_failed`
-    );
+    return NextResponse.redirect(`${baseUrl}/login?error=google_auth_failed`);
   }
 
   if (!code) {
-    return NextResponse.redirect(
-      `${process.env.CLIENT_URL}/login?error=no_auth_code`
-    );
+    return NextResponse.redirect(`${baseUrl}/login?error=no_auth_code`);
   }
 
   try {
-    const response = await fetch(`${process.env.CLIENT_URL}/api/user/google`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ code }),
-    });
+    await connectDB();
 
-    const data = await response.json();
+    const authResult = await processGoogleAuth(code);
 
-    if (data.success) {
-      return NextResponse.redirect(`${process.env.CLIENT_URL}/dashboard`);
+    if (authResult.success && authResult.data) {
+      const redirectResponse = NextResponse.redirect(`${baseUrl}/dashboard`);
+
+      redirectResponse.cookies.set("accessToken", authResult.data.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 15 * 60,
+        path: "/",
+      });
+
+      redirectResponse.cookies.set(
+        "refreshToken",
+        authResult.data.refreshToken,
+        {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax",
+          maxAge: 7 * 24 * 60 * 60,
+          path: "/",
+        }
+      );
+
+      return redirectResponse;
     } else {
+      let errorType = "auth_failed";
+      let errorMessage = authResult.error || "Помилка авторизації";
+
+      if (authResult.statusCode === 409) {
+        errorType = "email_exists_local";
+        if (authResult.details) {
+          errorMessage = authResult.details;
+        }
+      }
+
       return NextResponse.redirect(
-        `${process.env.CLIENT_URL}/login?error=auth_failed`
+        `${baseUrl}/login?error=${errorType}&message=${encodeURIComponent(
+          errorMessage
+        )}`
       );
     }
   } catch (error) {
-    console.error("Callback error:", error);
+    console.error("Google OAuth callback error:", error);
     return NextResponse.redirect(
-      `${process.env.CLIENT_URL}/login?error=server_error`
+      `${baseUrl}/login?error=server_error&message=${encodeURIComponent(
+        "Помилка сервера"
+      )}`
     );
   }
 }

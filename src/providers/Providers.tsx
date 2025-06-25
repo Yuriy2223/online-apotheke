@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import { PersistGate } from "redux-persist/integration/react";
+import "react-toastify/dist/ReactToastify.css";
 
 interface LoadingScreenProps {
   message?: string;
@@ -33,7 +34,7 @@ export function Providers({ children }: { children: ReactNode }) {
         <ToastContainer
           // position="top-center"
           position="top-right"
-          autoClose={4000}
+          autoClose={3000}
           // hideProgressBar={false}
           hideProgressBar
           closeOnClick

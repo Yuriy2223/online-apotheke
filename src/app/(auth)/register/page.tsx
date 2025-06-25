@@ -11,6 +11,7 @@ import { registerUser } from "@/redux/auth/operations";
 import { RegisterFormData } from "@/types/users";
 import { User, Mail, Phone, Lock, Eye, EyeOff } from "lucide-react";
 import GoogleAuthButton from "@/components/GoogleAuthButton/GoogleAuthButton";
+import { useUrlErrorHandler } from "@/hooks/useUrlErrorHandler";
 import {
   selectIsAuthenticated,
   selectAuthLoading,
@@ -24,11 +25,14 @@ export default function RegisterPage() {
   const loading = useSelector(selectAuthLoading);
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
+  useUrlErrorHandler();
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     watch,
+    reset,
   } = useForm<RegisterFormData>();
 
   const password = watch("password");
@@ -36,16 +40,30 @@ export default function RegisterPage() {
   useEffect(() => {
     if (isAuthenticated) {
       toast.success("Ласкаво просимо!");
-      router.push("/");
+      router.push("/login");
     }
   }, [isAuthenticated, router]);
 
-  const onSubmit = (data: RegisterFormData) => {
+  const onSubmit = async (data: RegisterFormData) => {
     if (data.password !== data.confirmPassword) {
       toast.error("Паролі не співпадають");
       return;
     }
-    dispatch(registerUser(data));
+
+    try {
+      const result = await dispatch(registerUser(data));
+
+      if (registerUser.rejected.match(result)) {
+        if (result.payload === "Підтвердьте email для завершення реєстрації") {
+          reset();
+          setTimeout(() => {
+            router.push("/login");
+          }, 2000);
+        }
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+    }
   };
 
   const handleGoogleError = (error: string) => {
@@ -70,7 +88,7 @@ export default function RegisterPage() {
               <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 {...register("name", {
-                  required: "Ім&apos;я обов&apos;язкове",
+                  required: "Ім'я обов'язкове",
                 })}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Введіть ваше ім'я"
@@ -89,7 +107,7 @@ export default function RegisterPage() {
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 {...register("email", {
-                  required: "Email обов&apos;язковий",
+                  required: "Email обов'язковий",
                   pattern: {
                     value: /^\S+@\S+$/i,
                     message: "Невірний формат email",
@@ -115,7 +133,7 @@ export default function RegisterPage() {
               <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 {...register("phone", {
-                  required: "Телефон обов&apos;язковий",
+                  required: "Телефон обов'язковий",
                 })}
                 type="tel"
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -137,7 +155,7 @@ export default function RegisterPage() {
               <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 {...register("password", {
-                  required: "Пароль обов&apos;язковий",
+                  required: "Пароль обов'язковий",
                   minLength: {
                     value: 6,
                     message: "Пароль має бути мінімум 6 символів",
