@@ -5,7 +5,6 @@ import { ReactNode } from "react";
 import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import { PersistGate } from "redux-persist/integration/react";
-import "react-toastify/dist/ReactToastify.css";
 
 interface LoadingScreenProps {
   message?: string;
@@ -34,7 +33,7 @@ export function Providers({ children }: { children: ReactNode }) {
         <ToastContainer
           // position="top-center"
           position="top-right"
-          autoClose={3000}
+          autoClose={4000}
           // hideProgressBar={false}
           hideProgressBar
           closeOnClick
@@ -43,7 +42,7 @@ export function Providers({ children }: { children: ReactNode }) {
           limit={3}
           theme="light"
           // theme="colored"
-          toastClassName="text-sm"
+          toastClassName="border-2 border-green-dark"
         />
       </PersistGate>
     </Provider>

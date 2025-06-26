@@ -5,8 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useSelector } from "react-redux";
-import { useAppDispatch } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { schemaResetPassword } from "@/validation/users";
 import { clearError, resetResetPasswordState } from "@/redux/auth/slice";
 import { resetPassword } from "@/redux/auth/operations";
@@ -33,9 +32,9 @@ export default function ResetPasswordClient({ token }: ResetPasswordProps) {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  const isSubmitting = useSelector(selectResetPasswordLoading);
-  const success = useSelector(selectResetPasswordSuccess);
-  const error = useSelector(selectAuthError);
+  const isSubmitting = useAppSelector(selectResetPasswordLoading);
+  const success = useAppSelector(selectResetPasswordSuccess);
+  const error = useAppSelector(selectAuthError);
 
   const {
     register,

@@ -4,9 +4,8 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { registerUser } from "@/redux/auth/operations";
 import { RegisterFormData } from "@/types/users";
 import { User, Mail, Phone, Lock, Eye, EyeOff } from "lucide-react";
@@ -22,8 +21,8 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
-  const loading = useSelector(selectAuthLoading);
-  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const loading = useAppSelector(selectAuthLoading);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
   useUrlErrorHandler();
 
