@@ -1,5 +1,4 @@
-import { Logo } from "@/components/Logo/Logo";
-import { Container } from "@/shared/Container";
+import { Header } from "@/components/Header/Header";
 
 export default function PrivateLayout({
   children,
@@ -8,17 +7,12 @@ export default function PrivateLayout({
 }) {
   return (
     <>
-      <header>
-        <Container className="flex items-center justify-between sm:h-[84px] md:h-[100px]">
-          <Logo variant="green" />
-        </Container>
+      <header className="bg-green-light">
+        <Header />
       </header>
+
       <main>{children}</main>
-      <footer>
-        <Container>
-          <Logo variant="green" />
-        </Container>
-      </footer>
+      <footer className="bg-green-light"></footer>
     </>
   );
 }
