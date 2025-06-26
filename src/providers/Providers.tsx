@@ -33,7 +33,7 @@ export function Providers({ children }: { children: ReactNode }) {
         <ToastContainer
           // position="top-center"
           position="top-right"
-          autoClose={3000}
+          autoClose={4000}
           // hideProgressBar={false}
           hideProgressBar
           closeOnClick
@@ -42,7 +42,7 @@ export function Providers({ children }: { children: ReactNode }) {
           limit={3}
           theme="light"
           // theme="colored"
-          toastClassName="text-sm"
+          toastClassName="border-2 border-green-dark"
         />
       </PersistGate>
     </Provider>
