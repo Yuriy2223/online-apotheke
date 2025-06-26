@@ -7,11 +7,15 @@ import { NavBar } from "./NavBar";
 import { UserBar } from "./UserBar";
 import { Logo } from "../Logo/Logo";
 import { BurgerMenu } from "./BurgerMenu";
+import { UserCartAndIcon } from "./UserCartAndIcon";
+import { selectIsAuthenticated } from "@/redux/auth/selectors";
+import { useAppSelector } from "@/redux/store";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const closeMenu = () => setIsMenuOpen(false);
   const openMenu = () => setIsMenuOpen(true);
+  const isLoggedIn = useAppSelector(selectIsAuthenticated);
 
   return (
     <>
@@ -23,14 +27,16 @@ export const Header = () => {
         <div className="hidden desktop:block">
           <UserBar />
         </div>
-
-        <button
-          onClick={openMenu}
-          className="desktop:hidden transition-transform duration-200 hover:scale-110 "
-          aria-label="Open menu"
-        >
-          <Menu className="w-8 h-8 text-white transition-transform duration-300 ease-in-out hover:rotate-360 hover:scale-110 active:scale-95" />
-        </button>
+        <div className="flex items-center gap-4 desktop:hidden">
+          {isLoggedIn && <UserCartAndIcon />}
+          <button
+            onClick={openMenu}
+            className="desktop:hidden transition-transform duration-200 hover:scale-110 "
+            aria-label="Open menu"
+          >
+            <Menu className="w-8 h-8 text-white transition-transform duration-300 ease-in-out hover:rotate-360 hover:scale-110 active:scale-95" />
+          </button>
+        </div>
       </Container>
       {isMenuOpen && <BurgerMenu onClose={closeMenu} />}
     </>

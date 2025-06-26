@@ -1,9 +1,9 @@
 import React from "react";
 import Link from "next/link";
-import { useSelector } from "react-redux";
 import { selectIsAuthenticated } from "@/redux/auth/selectors";
-import { useAppDispatch } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { logoutUser } from "@/redux/auth/operations";
+import { UserCartAndIcon } from "./UserCartAndIcon";
 
 interface UserBarProps {
   isMobile?: boolean;
@@ -14,8 +14,8 @@ export const UserBar: React.FC<UserBarProps> = ({
   isMobile = false,
   onItemClick,
 }) => {
-  const isLoggedIn = useSelector(selectIsAuthenticated);
   const dispatch = useAppDispatch();
+  const isLoggedIn = useAppSelector(selectIsAuthenticated);
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -60,6 +60,7 @@ export const UserBar: React.FC<UserBarProps> = ({
   if (isLoggedIn) {
     return (
       <div className="hidden tablet:flex items-center space-x-4">
+        <UserCartAndIcon />
         <button
           onClick={handleLogout}
           className="px-6 py-2 text-green-dark bg-white border border-white rounded-full hover:bg-gray-100 transition-colors"

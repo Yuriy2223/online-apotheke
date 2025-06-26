@@ -4,9 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { useSelector } from "react-redux";
 import { Loader2 } from "lucide-react";
-import { useAppDispatch } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { clearError, resetVerifyEmailState } from "@/redux/auth/slice";
 import { verifyEmail } from "@/redux/auth/operations";
 import {
@@ -17,11 +16,11 @@ import {
 
 export default function VerifyEmailPage() {
   const dispatch = useAppDispatch();
-  const router = useRouter();
-  const isLoading = useSelector(selectVerifyEmailLoading);
-  const success = useSelector(selectVerifyEmailSuccess);
-  const error = useSelector(selectAuthError);
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const isLoading = useAppSelector(selectVerifyEmailLoading);
+  const success = useAppSelector(selectVerifyEmailSuccess);
+  const error = useAppSelector(selectAuthError);
   const token = searchParams.get("token");
   const hasInitialized = useRef(false);
 

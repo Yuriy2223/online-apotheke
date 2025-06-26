@@ -1,11 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useAppDispatch } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { Mail, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { schemaForgotPassword } from "@/validation/users";
 import { clearError, resetForgotPasswordState } from "@/redux/auth/slice";
@@ -19,9 +18,9 @@ import {
 
 export default function ForgotPasswordPage() {
   const dispatch = useAppDispatch();
-  const isLoading = useSelector(selectForgotPasswordLoading);
-  const submitted = useSelector(selectForgotPasswordSent);
-  const error = useSelector(selectAuthError);
+  const isLoading = useAppSelector(selectForgotPasswordLoading);
+  const submitted = useAppSelector(selectForgotPasswordSent);
+  const error = useAppSelector(selectAuthError);
   const {
     register,
     handleSubmit,

@@ -1,36 +1,36 @@
-// "use client";
+"use client";
 
-// import { useSelector } from "react-redux";
-// import { useEffect } from "react";
-// import { useAppDispatch } from "@/redux/store";
-// // import { selectLoggedIn } from "@/redux/auth/selectors";
-// // import { selectProfile, selectLoading } from "@/redux/profile/selectors";
-// import { Loader } from "@/components/Loader/Loader";
-// // import { refreshToken } from "@/redux/auth/operations";
-// // import { fetchProfile } from "@/redux/profile/operations";
-// // import { Loader } from "../Loader/Loader";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useAppSelector } from "@/redux/store";
+import {
+  selectIsAuthenticated,
+  selectAuthLoading,
+} from "@/redux/auth/selectors";
+import { Loader } from "@/components/Loader/Loader";
 
-// export function AppGuard({ children }: { children: React.ReactNode }) {
-//   const dispatch = useAppDispatch();
-//   const profile = useSelector(selectProfile);
-//   const loading = useSelector(selectLoading);
-//   // const isLoggedIn = useSelector(selectLoggedIn);
+interface Props {
+  children: React.ReactNode;
+}
 
-//   // useEffect(() => {
-//   //   if (isLoggedIn) {
-//   //     dispatch(refreshToken());
-//   //   }
-//   // }, [dispatch, isLoggedIn]);
+export const AppGuard = ({ children }: Props) => {
+  const router = useRouter();
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const loading = useAppSelector(selectAuthLoading);
 
-//   useEffect(() => {
-//     if (!profile && !loading) {
-//       dispatch(fetchProfile());
-//     }
-//   }, [dispatch, profile, loading]);
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      router.replace("/login");
+    }
+  }, [loading, isAuthenticated, router]);
 
-//   if (loading || !profile) {
-//     return <Loader />;
-//   }
+  if (loading) {
+    return <Loader />;
+  }
 
-//   return <>{children}</>;
-// }
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  return <>{children}</>;
+};
