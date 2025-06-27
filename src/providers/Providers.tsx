@@ -1,10 +1,13 @@
 "use client";
 
-import { store, persistor } from "@/redux/store";
+import {
+  store,
+  // persistor
+} from "@/redux/store";
 import { ReactNode } from "react";
 import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
-import { PersistGate } from "redux-persist/integration/react";
+// import { PersistGate } from "redux-persist/integration/react";
 
 // interface LoadingScreenProps {
 //   message?: string;
@@ -24,27 +27,27 @@ import { PersistGate } from "redux-persist/integration/react";
 export function Providers({ children }: { children: ReactNode }) {
   return (
     <Provider store={store}>
-      <PersistGate
-        loading={null}
+      {/* <PersistGate
+        // loading={null}
         // loading={<LoadingScreen message="Відновлення сесії..." />}
         persistor={persistor}
-      >
-        {children}
-        <ToastContainer
-          // position="top-center"
-          position="top-right"
-          autoClose={4000}
-          // hideProgressBar={false}
-          hideProgressBar
-          closeOnClick
-          pauseOnHover
-          draggable
-          limit={3}
-          theme="light"
-          // theme="colored"
-          toastClassName="border-2 border-green-dark"
-        />
-      </PersistGate>
+      > */}
+      {children}
+      <ToastContainer
+        // position="top-center"
+        position="top-right"
+        autoClose={4000}
+        // hideProgressBar={false}
+        hideProgressBar
+        closeOnClick
+        pauseOnHover
+        draggable
+        limit={3}
+        theme="light"
+        // theme="colored"
+        toastClassName="border-2 border-green-dark"
+      />
+      {/* </PersistGate> */}
     </Provider>
   );
 }
