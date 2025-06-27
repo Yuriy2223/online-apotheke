@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -13,7 +14,7 @@ export const NavBar: React.FC<NavBarProps> = ({ isMobile, onItemClick }) => {
 
   const navItems = [
     { href: "/", label: "Home" },
-    { href: "/medicine-store", label: "Medicine store" },
+    { href: "/pharmacies", label: "Pharmacies" },
     { href: "/medicine", label: "Medicine" },
     { href: "/dashboard", label: "Dashboard" },
   ];
@@ -23,13 +24,12 @@ export const NavBar: React.FC<NavBarProps> = ({ isMobile, onItemClick }) => {
       {navItems.map((item) => {
         const isActive = pathname === item.href;
 
-        const baseClass = "rounded-full transition-colors";
-        const activeMobile = "text-green-light bg-white";
+        const baseClass = "relative transition-colors duration-300";
+        const activeMobile = "text-green-light bg-white-true";
         const inactiveMobile =
-          "text-white border border-white hover:bg-white/20";
+          "text-white-true border border-white-true hover:bg-white-true/20";
 
-        const activeDesktop = "bg-white/20 text-white";
-        const inactiveDesktop = "text-white hover:bg-white/20";
+        const desktopText = "text-white-true mx-6";
 
         return (
           <Link
@@ -38,15 +38,31 @@ export const NavBar: React.FC<NavBarProps> = ({ isMobile, onItemClick }) => {
             onClick={onItemClick}
             className={`${
               isMobile
-                ? `w-full max-w-xs px-8 py-3 text-center ${baseClass} ${
+                ? `w-full max-w-xs px-8 py-3 text-center rounded-full ${baseClass} ${
                     isActive ? activeMobile : inactiveMobile
                   }`
-                : `px-6 py-2 ${baseClass} ${
-                    isActive ? activeDesktop : inactiveDesktop
-                  }`
+                : `${desktopText} ${baseClass} group`
             }`}
           >
-            {item.label}
+            <span
+              className={`relative z-10 ${
+                !isMobile && isActive ? "font-semibold" : ""
+              }`}
+            >
+              {item.label}
+            </span>
+            {!isMobile && (
+              <span
+                className={`
+                  absolute left-0 bottom-[-12px] h-[3px] w-full bg-white-true
+                  scale-x-0 origin-right
+                  transition-transform duration-400 ease-out
+                  hover:scale-x-100 hover:origin-left
+                  group-hover:scale-x-100 group-hover:origin-left
+                  ${isActive ? "scale-x-100 origin-left" : ""}
+                `}
+              />
+            )}
           </Link>
         );
       })}
