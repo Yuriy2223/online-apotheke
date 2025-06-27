@@ -97,6 +97,34 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
 );
 
 // --- Check Auth Status ---
+// export const checkAuthStatus = createAsyncThunk<
+//   AuthResponse | null,
+//   void,
+//   { rejectValue: string }
+// >("auth/checkStatus", async () => {
+//   try {
+//     const response = await fetch("/api/user/me", {
+//       method: "GET",
+//       credentials: "include",
+//     });
+
+//     if (!response.ok) {
+//       return null;
+//     }
+
+//     const result = await response.json();
+
+//     if (!result.success) {
+//       return null;
+//     }
+
+//     return { user: result.data.user };
+//   } catch (error) {
+//     console.error("Auth check error:", error);
+//     return null;
+//   }
+// });
+//   проба 2
 export const checkAuthStatus = createAsyncThunk<
   AuthResponse | null,
   void,
@@ -108,19 +136,22 @@ export const checkAuthStatus = createAsyncThunk<
       credentials: "include",
     });
 
+    if (response.status === 401) {
+      return null;
+    }
+
     if (!response.ok) {
       return null;
     }
 
     const result = await response.json();
 
-    if (!result.success) {
+    if (!result.success || !result.data?.user) {
       return null;
     }
 
     return { user: result.data.user };
-  } catch (error) {
-    console.error("Auth check error:", error);
+  } catch {
     return null;
   }
 });
@@ -211,3 +242,39 @@ export const verifyEmail = createAsyncThunk<
     return rejectWithValue("Помилка мережі");
   }
 });
+/**************************************************** */
+
+// // --- Check Auth Status ---
+// export const checkAuthStatus = createAsyncThunk<
+//   AuthResponse | null,
+//   void,
+//   { rejectValue: string }
+// >("auth/checkStatus", async (_, { rejectWithValue }) => {
+//   try {
+//     const response = await fetch("/api/user/me", {
+//       method: "GET",
+//       credentials: "include",
+//     });
+
+//     // Якщо сервер повертає 401/403 - це нормально, просто немає аутентифікації
+//     if (response.status === 401 || response.status === 403) {
+//       return null;
+//     }
+
+//     if (!response.ok) {
+//       console.warn("Auth check failed:", response.status);
+//       return null;
+//     }
+
+//     const result = await response.json();
+
+//     if (!result.success || !result.data?.user) {
+//       return null;
+//     }
+
+//     return { user: result.data.user };
+//   } catch (error) {
+//     console.error("Auth check error:", error);
+//     return null;
+//   }
+// });

@@ -16,6 +16,9 @@ export interface AuthState {
   loading: boolean;
   error: string | null;
 
+  // Додаємо стан для перевірки аутентифікації при завантаженні
+  isAuthChecking: boolean;
+
   forgotPasswordLoading: boolean;
   forgotPasswordSent: boolean;
   resetPasswordLoading: boolean;
@@ -29,6 +32,9 @@ const initialState: AuthState = {
   isAuthenticated: false,
   loading: false,
   error: null,
+
+  // При старті завжди перевіряємо аутентифікацію
+  isAuthChecking: true,
 
   forgotPasswordLoading: false,
   forgotPasswordSent: false,
@@ -81,8 +87,23 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // ---- httpOnly cookies----
+      // // ---- httpOnly cookies----
+      // .addCase(checkAuthStatus.fulfilled, (state, action) => {
+      //   if (action.payload?.user) {
+      //     state.user = action.payload.user;
+      //     state.isAuthenticated = true;
+      //   } else {
+      //     state.user = null;
+      //     state.isAuthenticated = false;
+      //   }
+      // })
+
+      // ---- Auth Status Check ----
+      .addCase(checkAuthStatus.pending, (state) => {
+        state.isAuthChecking = true;
+      })
       .addCase(checkAuthStatus.fulfilled, (state, action) => {
+        state.isAuthChecking = false;
         if (action.payload?.user) {
           state.user = action.payload.user;
           state.isAuthenticated = true;
@@ -90,6 +111,11 @@ const authSlice = createSlice({
           state.user = null;
           state.isAuthenticated = false;
         }
+      })
+      .addCase(checkAuthStatus.rejected, (state) => {
+        state.user = null;
+        state.isAuthChecking = false;
+        state.isAuthenticated = false;
       })
       // --- Register ---
       .addCase(registerUser.pending, (state) => {

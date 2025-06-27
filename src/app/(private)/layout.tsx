@@ -7,3 +7,11 @@ export default function PrivateLayout({
 }) {
   return <AppGuard>{children}</AppGuard>;
 }
+
+// export default function PrivateLayout({
+//   children,
+// }: {
+//   children: React.ReactNode;
+// }) {
+//   return <>{children}</>;
+// }

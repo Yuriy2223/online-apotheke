@@ -1,30 +1,67 @@
+// "use client";
+
+// import { useRouter } from "next/navigation";
+// import { useEffect } from "react";
+// import { useAppSelector } from "@/redux/store";
+// import { Loader } from "@/components/Loader/Loader";
+// import { selectAuth } from "@/redux/auth/selectors";
+
+// interface Props {
+//   children: React.ReactNode;
+// }
+
+// export const AppGuard = ({ children }: Props) => {
+//   const router = useRouter();
+//   const { isAuthenticated, loading, isAuthChecking } =
+//     useAppSelector(selectAuth);
+
+//   useEffect(() => {
+//     if (!isAuthChecking && !loading && !isAuthenticated) {
+//       router.replace("/login");
+//     }
+//   }, [isAuthChecking, loading, isAuthenticated, router]);
+
+//   if (isAuthChecking || loading) {
+//     return <Loader />;
+//   }
+
+//   if (!isAuthenticated) {
+//     return null;
+//   }
+
+//   return <>{children}</>;
+// };
+
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useAppSelector } from "@/redux/store";
-import {
-  selectIsAuthenticated,
-  selectAuthLoading,
-} from "@/redux/auth/selectors";
+import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { Loader } from "@/components/Loader/Loader";
+import { selectAuth } from "@/redux/auth/selectors";
+import { checkAuthStatus } from "@/redux/auth/operations";
 
 interface Props {
   children: React.ReactNode;
 }
 
 export const AppGuard = ({ children }: Props) => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
-  const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const loading = useAppSelector(selectAuthLoading);
+  const { isAuthenticated, loading, isAuthChecking } =
+    useAppSelector(selectAuth);
 
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
+    dispatch(checkAuthStatus());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!isAuthChecking && !loading && !isAuthenticated) {
       router.replace("/login");
     }
-  }, [loading, isAuthenticated, router]);
+  }, [isAuthChecking, loading, isAuthenticated, router]);
 
-  if (loading) {
+  if (isAuthChecking || loading) {
     return <Loader />;
   }
 
