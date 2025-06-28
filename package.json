@@ -22,7 +22,6 @@
     "nodemailer": "^7.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-ellipsis-text": "^1.2.1",
     "react-hook-form": "^7.58.1",
     "react-redux": "^9.2.0",
     "react-toastify": "^11.0.5",
