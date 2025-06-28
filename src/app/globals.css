@@ -26,6 +26,10 @@ yellow-400 або amber-300/400 */
   --color-red-light: #f6e8e9;
   --color-red-dark: #e85050;
   --color-yellow-dark: #ffc531;
+  --color-purpule-dark: #8059e4;
+  --color-orange-dark: #f79042;
+  --color-blue-light: #70a6e8;
+  --color-blue-dark: #3b82f6;
 
   --breakpoint-*: initial;
   --breakpoint-mobile: 375px;

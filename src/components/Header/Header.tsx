@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { Menu } from "lucide-react";
 import { Container } from "@/shared/Container";
-import { NavBar } from "./NavBar";
-import { UserBar } from "./UserBar";
+import { NavBar } from "../NavBar/NavBar";
+import { UserBar } from "../UserBar/UserBar";
 import { Logo } from "../Logo/Logo";
-import { BurgerMenu } from "./BurgerMenu";
-import { UserCartAndIcon } from "./UserCartAndIcon";
+import { BurgerMenu } from "../BurgerMenu/BurgerMenu";
+import { UserCartAndIcon } from "../UserCartAndIcon/UserCartAndIcon";
 import { selectIsAuthenticated } from "@/redux/auth/selectors";
 import { useAppSelector } from "@/redux/store";
 

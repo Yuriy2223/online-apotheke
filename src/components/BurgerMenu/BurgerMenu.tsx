@@ -1,7 +1,7 @@
 import { X } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
-import { NavBar } from "./NavBar";
-import { UserBar } from "./UserBar";
+import { NavBar } from "../NavBar/NavBar";
+import { UserBar } from "../UserBar/UserBar";
 import { Logo } from "../Logo/Logo";
 
 interface BurgerMenuProps {
