@@ -52,3 +52,4 @@ npm install react-hook-form yup @hookform/resolvers
 npm install lucide-react
 npm install react-toastify
 npm i clsx
+npm i react-ellipsis-text

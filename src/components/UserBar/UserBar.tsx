@@ -3,7 +3,7 @@ import Link from "next/link";
 import { selectIsAuthenticated } from "@/redux/auth/selectors";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { logoutUser } from "@/redux/auth/operations";
-import { UserCartAndIcon } from "./UserCartAndIcon";
+import { UserCartAndIcon } from "../UserCartAndIcon/UserCartAndIcon";
 
 interface UserBarProps {
   isMobile?: boolean;

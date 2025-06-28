@@ -1,3 +1,4 @@
+import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
 
 export default function PrivateLayout({
@@ -12,7 +13,9 @@ export default function PrivateLayout({
       </header>
 
       <main>{children}</main>
-      <footer className="bg-green-light"></footer>
+      <footer className="bg-green-light">
+        <Footer />
+      </footer>
     </>
   );
 }

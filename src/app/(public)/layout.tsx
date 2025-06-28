@@ -1,6 +1,5 @@
+import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
-import { Logo } from "@/components/Logo/Logo";
-import { Container } from "@/shared/Container";
 
 export default function PublicLayout({
   children,
@@ -14,9 +13,7 @@ export default function PublicLayout({
       </header>
       <main>{children}</main>
       <footer className="bg-green-light">
-        <Container>
-          <Logo variant="white" />
-        </Container>
+        <Footer />
       </footer>
     </>
   );
