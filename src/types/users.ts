@@ -14,14 +14,7 @@ export interface IncomeExpense {
   amount: string;
   type: string;
 }
-export interface NearestPharmacie {
-  _id: string;
-  name: string;
-  address: string;
-  city: string;
-  phone: string;
-  rating: string;
-}
+
 export interface Order {
   _id: string;
   photo: string;
@@ -32,23 +25,6 @@ export interface Order {
   status: string;
   order_date: string;
 }
-export interface Pharmacie {
-  _id: string;
-  name: string;
-  address: string;
-  city: string;
-  phone: string;
-  rating: string;
-}
-// export interface Product {
-//   _id: string;
-//   photo: string;
-//   name: string;
-//   suppliers: string;
-//   stock: string;
-//   price: string;
-//   category: string;
-// }
 export interface Review {
   _id: string;
   name: string;
