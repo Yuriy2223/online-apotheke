@@ -25,5 +25,6 @@ export interface NearestPharmacie {
   address: string;
   city: string;
   phone: string;
-  rating: string;
+  rating: number;
+  url?: string;
 }
