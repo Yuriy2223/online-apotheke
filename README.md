@@ -53,3 +53,4 @@ npm install lucide-react
 npm install react-toastify
 npm i clsx
 npm i react-ellipsis-text
+npm install react-fast-marquee прокрутка
