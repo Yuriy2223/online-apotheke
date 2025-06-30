@@ -25,11 +25,7 @@ export interface Order {
   status: string;
   order_date: string;
 }
-export interface Review {
-  _id: string;
-  name: string;
-  testimonial: string;
-}
+
 export interface Supplier {
   _id: string;
   name: string;
