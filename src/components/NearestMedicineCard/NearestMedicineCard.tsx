@@ -29,7 +29,7 @@ export const NearestMedicineCard = ({
               className={`w-5 h-5 ${
                 i < nearestPharmacie.rating
                   ? "fill-yellow-dark text-yellow-dark"
-                  : "fill-white-true text-white-true"
+                  : "fill-green-soft text-yellow-dark"
               }`}
             />
           ))}
