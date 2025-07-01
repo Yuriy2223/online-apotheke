@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import { Navigation, Pagination } from "swiper/modules";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
-import { reviews } from "./reviews";
+import { reviews } from "../../потімВидали/reviews";
 import { Container } from "@/shared/Container";
 
 const StarRating = memo(({ rating }: { rating: number }) => (
