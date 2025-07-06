@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "@/database/MongoDB";
+
 import PharmacieNearestModel from "@/models/PharmacieNearest";
 
 export async function GET(request: NextRequest) {
   try {
-    await connectDB();
+    // await connectDB();
 
     const { searchParams } = new URL(request.url);
     const limit = Math.min(
