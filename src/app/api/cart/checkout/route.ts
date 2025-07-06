@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "@/database/MongoDB";
+
 import Cart from "@/models/Cart";
 import Product from "@/models/MedicineProduct";
 import Order from "@/models/Order";
 import { getUserId } from "@/auth/auth";
 import mongoose from "mongoose";
+import { connectDB } from "@/database/MongoDB";
 
 interface ShippingInfo {
   name: string;
