@@ -3,7 +3,7 @@ import Cart from "@/models/Cart";
 import Product from "@/models/MedicineProduct";
 import mongoose from "mongoose";
 import { getUserId } from "@/auth/auth";
-// import { connectDB } from "@/database/MongoDB";
+import { connectDB } from "@/database/MongoDB";
 
 interface CartItem {
   _id: mongoose.Types.ObjectId;
@@ -53,7 +53,7 @@ export async function PUT(request: NextRequest) {
   const session = await mongoose.startSession();
 
   try {
-    // await connectDB();
+    await connectDB();
 
     const userId = await getUserId(request);
     if (!userId) {

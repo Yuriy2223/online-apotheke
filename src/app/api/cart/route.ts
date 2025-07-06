@@ -1,8 +1,8 @@
+import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import Cart from "@/models/Cart";
 import { getUserId } from "@/auth/auth";
-import mongoose from "mongoose";
-// import { connectDB } from "@/database/MongoDB";
+import { connectDB } from "@/database/MongoDB";
 
 interface CartProduct {
   _id: mongoose.Types.ObjectId;
@@ -18,7 +18,7 @@ interface CartProduct {
 
 export async function GET(request: NextRequest) {
   try {
-    // await connectDB();
+    await connectDB();
 
     const userId = await getUserId(request);
     if (!userId) {

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-// import { connectDB } from "@/database/MongoDB";
 import MedicineProductReviewModel from "@/models/MedicineProductReview";
+import { connectDB } from "@/database/MongoDB";
 
 interface RouteParams {
   params: Promise<{
@@ -10,7 +10,7 @@ interface RouteParams {
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
-    // await connectDB();
+    await connectDB();
 
     const { id } = await params;
     const { searchParams } = new URL(request.url);
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
 export async function POST(request: NextRequest, { params }: RouteParams) {
   try {
-    // await connectDB();
+    await connectDB();
 
     const { id } = await params;
     const body = await request.json();
