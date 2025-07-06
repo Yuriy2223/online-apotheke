@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import MedicineProductReviewModel from "@/models/MedicineProductReview";
-import { connectDB } from "@/database/MongoDB";
+import { connectDB } from "@/database/ConnectMongoDB";
 
 interface RouteParams {
   params: Promise<{

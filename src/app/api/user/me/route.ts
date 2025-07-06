@@ -4,7 +4,7 @@ import {
   verifyRefreshToken,
   generateAccessToken,
 } from "@/jwt/jwt";
-import { connectDB } from "@/database/MongoDB";
+import { connectDB } from "@/database/ConnectMongoDB";
 import User, { UserDocument } from "@/models/User";
 import { JWTPayload, UserResponse } from "@/types/users";
 

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getGoogleAuthUrl } from "@/auth/google";
 import { processGoogleAuth } from "@/auth/googleAuthService";
-import { connectDB } from "@/database/MongoDB";
+import { connectDB } from "@/database/ConnectMongoDB";
 
 export async function GET() {
   try {
