@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "@/database/ConnectMongoDB";
+import { connectDB } from "@/database/MongoDB";
 import User from "@/models/User";
 import { verifyEmailSchema } from "@/validation/users";
 import { verifyEmailVerificationToken } from "@/jwt/jwt";

@@ -3,7 +3,7 @@ import Cart from "@/models/Cart";
 import Product from "@/models/MedicineProduct";
 import mongoose from "mongoose";
 import { getUserId } from "@/auth/auth";
-import { connectDB } from "@/database/ConnectMongoDB";
+import { connectDB } from "@/database/MongoDB";
 
 interface CartItem {
   _id: mongoose.Types.ObjectId;

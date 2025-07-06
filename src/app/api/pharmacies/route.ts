@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import PharmacieModel from "@/models/Pharmacie";
-import { connectDB } from "@/database/ConnectMongoDB";
+import { connectDB } from "@/database/MongoDB";
 
 export async function GET(request: NextRequest) {
   try {

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import User from "@/models/User";
 import { sign } from "jsonwebtoken";
 import { sendResetPasswordEmail } from "@/email/sendResetPasswordEmail";
-import { connectDB } from "@/database/ConnectMongoDB";
+import { connectDB } from "@/database/MongoDB";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 
