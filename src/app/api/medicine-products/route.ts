@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "@/database/MongoDB";
 import MedicineProduct from "@/models/MedicineProduct";
+import { connectDB } from "@/database/MongoDB";
 
 interface FilterOptions {
   $or?: Array<{ [key: string]: { $regex: string; $options: string } }>;

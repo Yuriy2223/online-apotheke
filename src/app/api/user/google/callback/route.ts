@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "@/database/MongoDB";
 import { processGoogleAuth } from "@/auth/googleAuthService";
+import { connectDB } from "@/database/MongoDB";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
