@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "@/database/MongoDB";
 import Cart from "@/models/Cart";
 import { getUserId } from "@/auth/auth";
 import mongoose from "mongoose";
+import { connectDB } from "@/database/MongoDB";
 
 interface CartProduct {
   _id: mongoose.Types.ObjectId;
