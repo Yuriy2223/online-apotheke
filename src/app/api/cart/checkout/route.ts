@@ -5,7 +5,7 @@ import Product from "@/models/MedicineProduct";
 import Order from "@/models/Order";
 import { getUserId } from "@/auth/auth";
 import mongoose from "mongoose";
-import { connectDB } from "@/database/MongoDB";
+// import { connectDB } from "@/database/MongoDB";
 
 interface ShippingInfo {
   name: string;
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
   const session = await mongoose.startSession();
 
   try {
-    await connectDB();
+    // await connectDB();
 
     const userId = await getUserId(request);
     if (!userId) {
