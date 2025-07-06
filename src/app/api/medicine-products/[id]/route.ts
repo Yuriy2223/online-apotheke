@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "@/database/MongoDB";
 import MedicineProduct from "@/models/MedicineProduct";
 import MedicineProductReviewModel from "@/models/MedicineProductReview";
 
@@ -11,7 +10,7 @@ interface RouteParams {
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
-    await connectDB();
+    // await connectDB();
 
     const { id } = await params;
 
@@ -66,7 +65,7 @@ function generateDefaultDescription(productName: string): string {
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
-    await connectDB();
+    // await connectDB();
 
     const { id } = await params;
 
@@ -97,7 +96,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
-    await connectDB();
+    // await connectDB();
 
     const { id } = await params;
 
