@@ -4,7 +4,7 @@ import Cart from "@/models/Cart";
 import Product from "@/models/MedicineProduct";
 import Order from "@/models/Order";
 import { getUserId } from "@/auth/auth";
-import { connectDB } from "@/database/ConnectMongoDB";
+import { connectDB } from "@/database/MongoDB";
 
 interface ShippingInfo {
   name: string;
