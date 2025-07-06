@@ -1,30 +1,14 @@
 import { Pharmacie } from "@/types/pharmacies";
 import { MapPin, Phone, Building2 } from "lucide-react";
 import { RatingStars } from "../RatingStars/RatingStars";
+import { getPharmacyStatus } from "@/utils/pharmacyStatus";
 
 interface PharmacieCardProps {
   pharmacie: Pharmacie;
 }
 
 export const PharmacieCard = ({ pharmacie }: PharmacieCardProps) => {
-  const isOpen = () => {
-    const now = new Date();
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
-    const [openHours, openMinutes] = pharmacie.openTime.split(":").map(Number);
-    const [closeHours, closeMinutes] = pharmacie.closeTime
-      .split(":")
-      .map(Number);
-
-    const openTime = openHours * 60 + openMinutes;
-    const closeTime = closeHours * 60 + closeMinutes;
-    // return currentTime >= openTime && currentTime <= closeTime;
-    if (openTime <= closeTime) {
-      return currentMinutes >= openTime && currentMinutes <= closeTime;
-    } else {
-      return currentMinutes >= openTime || currentMinutes <= closeTime;
-    }
-  };
+  const status = getPharmacyStatus(pharmacie);
 
   const handleVisitStore = () => {
     if (pharmacie.url) {
@@ -41,6 +25,7 @@ export const PharmacieCard = ({ pharmacie }: PharmacieCardProps) => {
           <h3 className="text-lg font-semibold text-black-true overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
             {pharmacie.name}
           </h3>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/logo-green.webp"
             alt="Pharmacy logo"
@@ -77,12 +62,14 @@ export const PharmacieCard = ({ pharmacie }: PharmacieCardProps) => {
             <RatingStars rating={pharmacie.rating} />
             <div
               className={`px-2 py-1 rounded text-xs font-medium ${
-                isOpen()
+                status === "OPEN"
                   ? "bg-green-light text-white-true"
-                  : "bg-red-light text-red-dark"
+                  : status === "CLOSE"
+                  ? "bg-red-light text-red-dark"
+                  : "bg-gray-200 text-gray-600"
               }`}
             >
-              {isOpen() ? "OPEN" : "CLOSE"}
+              {status}
             </div>
           </div>
         </div>

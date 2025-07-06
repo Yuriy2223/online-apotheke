@@ -54,3 +54,9 @@ npm install react-toastify
 npm i clsx
 npm i react-ellipsis-text
 npm install react-fast-marquee прокрутка
+npm install react-paginate
+npm install -D @types/react-paginate
+npm install lodash
+npm install --save-dev @types/lodash
+
+{/_ eslint-disable-next-line @next/next/no-img-element _/}

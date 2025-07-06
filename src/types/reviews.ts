@@ -1,7 +1,7 @@
-export interface Review {
+export interface ReviewHome {
   _id: string;
-  avatar: string;
   name: string;
+  avatar: string;
   review: string;
-  rating?: number;
+  rating: number;
 }

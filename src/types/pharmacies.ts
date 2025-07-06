@@ -19,7 +19,7 @@ export interface Pharmacie {
 //   rating: string;
 //   status: "OPEN" | "CLOSE";
 // }
-export interface NearestPharmacie {
+export interface PharmacieNearest {
   _id: string;
   name: string;
   address: string;

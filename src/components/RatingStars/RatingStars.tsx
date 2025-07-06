@@ -19,7 +19,7 @@ export const RatingStars = ({
           className={`w-4 h-4 ${
             i < Math.floor(rating)
               ? "fill-yellow-dark text-yellow-dark"
-              : "fill-green-soft text-yellow-dark"
+              : "fill-transparent text-yellow-dark"
           }`}
         />
       ))}

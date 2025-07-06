@@ -7,6 +7,11 @@ import {
 // import storage from "redux-persist/lib/storage";
 import { authReducer } from "./auth/slice";
 import { modalReducer } from "./modal/slice";
+import { pharmaciesReducer } from "./pharmacies/slice";
+import { homeReducer } from "./home/slice";
+import { medicineProductsReducer } from "./medicine/slice";
+import { medicineProductDetailsReducer } from "./medicine-product/slice";
+import { cartReducer } from "./cart/slice";
 
 // const authPersistConfig = {
 //   key: "auth",
@@ -22,6 +27,11 @@ export const store = configureStore({
     // auth: persistedAuthReducer,
     auth: authReducer,
     modal: modalReducer,
+    home: homeReducer,
+    pharmacies: pharmaciesReducer,
+    medicineProducts: medicineProductsReducer,
+    medicineProductDetails: medicineProductDetailsReducer,
+    cart: cartReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
