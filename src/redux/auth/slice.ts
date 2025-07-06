@@ -15,10 +15,7 @@ export interface AuthState {
   isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
-
-  // Додаємо стан для перевірки аутентифікації при завантаженні
   isAuthChecking: boolean;
-
   forgotPasswordLoading: boolean;
   forgotPasswordSent: boolean;
   resetPasswordLoading: boolean;
@@ -32,10 +29,7 @@ const initialState: AuthState = {
   isAuthenticated: false,
   loading: false,
   error: null,
-
-  // При старті завжди перевіряємо аутентифікацію
   isAuthChecking: true,
-
   forgotPasswordLoading: false,
   forgotPasswordSent: false,
   resetPasswordLoading: false,

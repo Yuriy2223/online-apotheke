@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/database/MongoDB";
 import Cart from "@/models/Cart";
-import Product from "@/models/Product";
+import Product from "@/models/MedicineProduct";
 import mongoose from "mongoose";
 import { getUserId } from "@/auth/auth";
 

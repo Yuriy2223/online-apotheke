@@ -6,6 +6,9 @@ export interface PharmacieDocument extends Document {
   city: string;
   phone: string;
   rating: string;
+  url: string;
+  openTime: string;
+  closeTime: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -17,12 +20,12 @@ const pharmacieSchema = new Schema<PharmacieDocument>(
       required: true,
       trim: true,
     },
-    address: {
+    city: {
       type: String,
       required: true,
       trim: true,
     },
-    city: {
+    address: {
       type: String,
       required: true,
       trim: true,
@@ -33,6 +36,20 @@ const pharmacieSchema = new Schema<PharmacieDocument>(
       trim: true,
     },
     rating: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    url: {
+      type: String,
+      trim: true,
+    },
+    openTime: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    closeTime: {
       type: String,
       required: true,
       trim: true,
@@ -49,8 +66,8 @@ pharmacieSchema.index({ city: 1 });
 pharmacieSchema.index({ rating: -1 });
 pharmacieSchema.index({ createdAt: -1 });
 
-const Pharmacie: Model<PharmacieDocument> =
-  mongoose.models.Pharmacie ||
+const PharmacieModel: Model<PharmacieDocument> =
+  mongoose.models.Pharmacies_nearest ||
   mongoose.model<PharmacieDocument>("Pharmacie", pharmacieSchema);
 
-export default Pharmacie;
+export default PharmacieModel;

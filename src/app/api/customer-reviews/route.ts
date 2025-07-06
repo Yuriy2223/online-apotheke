@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/database/MongoDB";
-import Review from "@/models/Review";
+import Review from "@/models/MedicineProductReview";
 
 export async function GET(request: NextRequest) {
   try {

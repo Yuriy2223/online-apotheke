@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/database/MongoDB";
-import Pharmacie from "@/models/Pharmacie";
+import PharmacieModel from "@/models/Pharmacie";
 
 export async function GET(request: NextRequest) {
   try {
@@ -58,33 +58,28 @@ export async function GET(request: NextRequest) {
     }
 
     const [pharmacies, totalCount] = await Promise.all([
-      Pharmacie.find(filter).sort(sortOptions).skip(skip).limit(limit).lean(),
-      Pharmacie.countDocuments(filter),
+      PharmacieModel.find(filter)
+        .sort(sortOptions)
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      PharmacieModel.countDocuments(filter),
     ]);
 
     const totalPages = Math.ceil(totalCount / limit);
-    const hasNextPage = page < totalPages;
-    const hasPrevPage = page > 1;
 
     return NextResponse.json(
       {
-        success: true,
-        data: {
-          pharmacies,
-          pagination: {
-            currentPage: page,
-            totalPages,
-            totalCount,
-            limit,
-            hasNextPage,
-            hasPrevPage,
-          },
-          filters: {
-            search,
-            city,
-            minRating,
-          },
-        },
+        pharmacies,
+        totalCount,
+        currentPage: page,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1,
+        limit,
+        search,
+        city,
+        minRating,
       },
       { status: 200 }
     );
@@ -93,7 +88,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(
       {
-        success: false,
         error: "Помилка сервера при отриманні списку аптек",
       },
       { status: 500 }
