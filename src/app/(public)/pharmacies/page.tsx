@@ -35,7 +35,7 @@ const PharmaciesPage = () => {
   }, [dispatch, currentPage, deviceLimit]);
 
   if (loading) {
-    return Spinner;
+    return <Spinner />;
     // <Container className="py-8 px-4">
     //   <div className="max-w-7xl mx-auto">
     //     <div className="text-center py-12">

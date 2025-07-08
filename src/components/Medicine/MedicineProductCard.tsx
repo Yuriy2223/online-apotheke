@@ -1,18 +1,27 @@
 import { MedicineProduct } from "@/types/medicine-products";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "@/redux/store";
+import { addToCart } from "@/redux/cart/operations";
+import { selectIsUpdatingItem } from "@/redux/cart/selectors";
 
 interface ProductCardProps {
   product: MedicineProduct;
-  onAddToCart: (productId: string) => void;
   onDetails: (productId: string) => void;
 }
 
 export const MedicineProductCard: React.FC<ProductCardProps> = ({
   product,
-  onAddToCart,
   onDetails,
 }) => {
-  const handleAddToCart = () => {
-    onAddToCart(product._id);
+  const dispatch = useAppDispatch();
+  const isUpdatingItem = useSelector(selectIsUpdatingItem);
+
+  const handleAddToCart = async () => {
+    try {
+      await dispatch(addToCart({ productId: product._id, quantity: 1 }));
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
   };
 
   const handleDetails = () => {
@@ -20,7 +29,6 @@ export const MedicineProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    // <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300 w-full max-w-[335px] sm:max-w-[226px] lg:max-w-[280px]">
     <div className="bg-green-soft rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
       <div className="aspect-square bg-gray-50 p-6 flex items-center justify-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -45,9 +53,17 @@ export const MedicineProductCard: React.FC<ProductCardProps> = ({
         <div className="flex gap-2">
           <button
             onClick={handleAddToCart}
-            className="flex-1 bg-green-500 text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors"
+            disabled={isUpdatingItem}
+            className="flex-1 bg-green-500 text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            Add to cart
+            {isUpdatingItem ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                Adding...
+              </>
+            ) : (
+              "Add to cart"
+            )}
           </button>
           <button
             onClick={handleDetails}

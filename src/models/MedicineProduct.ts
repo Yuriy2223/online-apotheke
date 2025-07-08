@@ -4,8 +4,8 @@ export interface MedicineProductDocument extends Document {
   photo: string;
   name: string;
   suppliers: string;
-  stock: string;
-  price: string;
+  stock: number;
+  price: number;
   category: string;
   description: string;
   createdAt: Date;
@@ -30,14 +30,14 @@ const medicineProductSchema = new Schema<MedicineProductDocument>(
       trim: true,
     },
     stock: {
-      type: String,
+      type: Number,
       required: true,
-      trim: true,
+      min: [0, "Stock cannot be negative"],
     },
     price: {
-      type: String,
+      type: Number,
       required: true,
-      trim: true,
+      min: [0, "Price cannot be negative"],
     },
     category: {
       type: String,

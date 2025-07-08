@@ -15,7 +15,7 @@ export interface CartDocument extends Document {
 const productSchema = new Schema({
   _id: {
     type: Schema.Types.ObjectId,
-    ref: "Product",
+    ref: "MedicineProduct",
     required: [true, "Product ID is required"],
   },
   quantity: {

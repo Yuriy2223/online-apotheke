@@ -5,35 +5,13 @@ import Product from "@/models/MedicineProduct";
 import Order from "@/models/Order";
 import { getUserId } from "@/auth/auth";
 import { connectDB } from "@/database/MongoDB";
-
-interface ShippingInfo {
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-}
-
-interface CheckoutRequest {
-  shippingInfo: ShippingInfo;
-  paymentMethod: "Cash On Delivery" | "Bank";
-}
-
-type ProductWithRequiredFields = {
-  _id: mongoose.Types.ObjectId;
-  name: string;
-  price: string;
-  stock: string;
-};
-
-interface CartProductData {
-  _id: mongoose.Types.ObjectId;
-  quantity: number;
-}
-
-interface CartDocument {
-  products: CartProductData[];
-  userId: mongoose.Types.ObjectId;
-}
+import {
+  ShippingInfo,
+  CheckoutRequest,
+  ProductInDb,
+  CartProductInDb,
+  CartDocumentInDb,
+} from "@/types/cart";
 
 class CheckoutError extends Error {
   constructor(
@@ -82,12 +60,12 @@ export async function POST(request: NextRequest) {
     await session.withTransaction(async () => {
       const cart = (await Cart.findOne({ userId }).session(
         session
-      )) as CartDocument | null;
+      )) as CartDocumentInDb | null;
       if (!cart || cart.products.length === 0) {
         throw new CheckoutError("Кошик порожній", "EMPTY_CART");
       }
 
-      const productIds = cart.products.map((item: CartProductData) => item._id);
+      const productIds = cart.products.map((item: CartProductInDb) => item._id);
       const productDocuments = await Product.find({
         _id: { $in: productIds },
       }).session(session);
@@ -99,10 +77,9 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      const products =
-        productDocuments as unknown as ProductWithRequiredFields[];
+      const products = productDocuments as unknown as ProductInDb[];
 
-      const productMap = new Map<string, ProductWithRequiredFields>();
+      const productMap = new Map<string, ProductInDb>();
       products.forEach((product) => {
         productMap.set(product._id.toString(), product);
       });
@@ -118,7 +95,7 @@ export async function POST(request: NextRequest) {
           );
         }
 
-        const availableStock = parseInt(product.stock);
+        const availableStock = Number(product.stock);
         if (cartProduct.quantity > availableStock) {
           throw new CheckoutError(
             `Недостатньо товару "${product.name}" на складі. Доступно: ${availableStock}`,
@@ -126,7 +103,7 @@ export async function POST(request: NextRequest) {
           );
         }
 
-        const pricePerUnit = parseFloat(product.price);
+        const pricePerUnit = Number(product.price);
         const productTotal = pricePerUnit * cartProduct.quantity;
         totalAmount += productTotal;
 
@@ -160,7 +137,7 @@ export async function POST(request: NextRequest) {
         const updateResult = await Product.findOneAndUpdate(
           {
             _id: cartProduct._id,
-            stock: { $gte: cartProduct.quantity.toString() },
+            stock: { $gte: cartProduct.quantity },
           },
           {
             $inc: { stock: -cartProduct.quantity },
@@ -189,7 +166,7 @@ export async function POST(request: NextRequest) {
         success: true,
         message: "Замовлення успішно створено",
         data: {
-          orderId: orderId!,
+          orderId: orderId!.toString(),
           totalAmount: totalAmount,
           orderStatus: "pending",
           estimatedDelivery,

@@ -18,8 +18,8 @@ export interface MedicineProduct {
   photo: string;
   name: string;
   suppliers: string;
-  stock: string;
-  price: string;
+  stock: number;
+  price: number;
   category: string;
   createdAt?: string;
   updatedAt?: string;
@@ -81,3 +81,18 @@ export interface MedicineProductReviewsResponse {
     limit: number;
   };
 }
+
+// export interface MedicineProductDetails {
+//   _id: string;
+//   photo: string;
+//   name: string;
+//   suppliers: string;
+//   stock: string;
+//   price: string;
+//   category: string;
+//   description: string;
+//   rating: number;
+//   reviewsCount: number;
+//   createdAt?: string;
+//   updatedAt?: string;
+// }

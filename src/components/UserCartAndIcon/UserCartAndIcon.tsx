@@ -4,11 +4,12 @@ import Link from "next/link";
 import { ShoppingCart, User } from "lucide-react";
 import { useAppSelector } from "@/redux/store";
 import { selectIsAuthenticated } from "@/redux/auth/selectors";
+import { selectCartTotalItems } from "@/redux/cart/selectors";
 
 export const UserCartAndIcon = () => {
   const isLoggedIn = useAppSelector(selectIsAuthenticated);
-  // const cartCount = useAppSelector(selectCartItemCount);
-  const cartCount = 0;
+  const cartCount = useAppSelector(selectCartTotalItems);
+
   if (!isLoggedIn) return null;
 
   return (

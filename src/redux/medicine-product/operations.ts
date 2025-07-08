@@ -73,6 +73,7 @@ export const addToCart = createAsyncThunk<
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({ productId, quantity }),
       });
 
