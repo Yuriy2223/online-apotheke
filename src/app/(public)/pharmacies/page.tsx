@@ -11,7 +11,6 @@ import { fetchPharmacies } from "@/redux/pharmacies/operations";
 import {
   selectPharmacies,
   selectPharmaciesLoading,
-  // selectPharmaciesError,
   selectPharmaciesPagination,
 } from "@/redux/pharmacies/selectors";
 
@@ -19,7 +18,6 @@ const PharmaciesPage = () => {
   const dispatch = useAppDispatch();
   const pharmacies = useAppSelector(selectPharmacies);
   const loading = useAppSelector(selectPharmaciesLoading);
-  // const error = useAppSelector(selectPharmaciesError);
   const paginationData = useAppSelector(selectPharmaciesPagination);
 
   const { currentPage, deviceLimit, handlePageChange } = usePagination({
@@ -36,26 +34,7 @@ const PharmaciesPage = () => {
 
   if (loading) {
     return <Spinner />;
-    // <Container className="py-8 px-4">
-    //   <div className="max-w-7xl mx-auto">
-    //     <div className="text-center py-12">
-    //       <p className="text-gray-dark text-lg">Loading pharmacies...</p>
-    //     </div>
-    //   </div>
-    // </Container>
   }
-
-  // if (error) {
-  //   return (
-  //     <Container className="py-8 px-4">
-  //       <div className="max-w-7xl mx-auto">
-  //         <div className="text-center py-12">
-  //           <p className="text-red-500 text-lg">Error: {error}</p>
-  //         </div>
-  //       </div>
-  //     </Container>
-  //   );
-  // }
 
   return (
     <Container className="py-8 px-4">
