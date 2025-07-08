@@ -1,99 +1,123 @@
+import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { ShippingInfo } from "@/types/cart";
 
 interface ShippingFormProps {
-  shippingInfo: ShippingInfo;
-  shippingErrors: Record<string, string>;
-  onShippingInfoChange: (field: keyof ShippingInfo, value: string) => void;
+  register: UseFormRegister<ShippingInfo>;
+  errors: FieldErrors<ShippingInfo>;
 }
 
-export default function ShippingForm({
-  shippingInfo,
-  shippingErrors,
-  onShippingInfoChange,
-}: ShippingFormProps) {
+export const ShippingForm = ({ register, errors }: ShippingFormProps) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 mb-6 border border-blue-200">
-      <h2 className="text-lg font-semibold mb-2">Enter shipping info</h2>
-      <p className="text-gray-600 text-sm mb-6">
-        Enter your delivery address where you get the product. You can also send
-        any other location where you send the products.
-      </p>
+    <div className="bg-white-true rounded-lg shadow-sm p-6 mb-6 border border-gray-light">
+      <div>
+        <h2 className="text-lg font-semibold mb-2">Enter shipping info</h2>
+        <p className="text-gray-dark text-sm mb-6">
+          Enter your delivery address where you get the product. You can also
+          send any other location where you send the products.
+        </p>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 tablet:grid-cols-2 gap-x-4 gap-y-2">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-black-true mb-2"
+          >
             Name
           </label>
           <input
+            id="name"
             type="text"
             placeholder="Enter text"
-            value={shippingInfo.name}
-            onChange={(e) => onShippingInfoChange("name", e.target.value)}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-              shippingErrors.name ? "border-red-500" : "border-gray-300"
+            {...register("name")}
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-light focus:border-green-light ${
+              errors.name ? "border-red-dark" : "border-gray-dark"
             }`}
           />
-          {shippingErrors.name && (
-            <p className="text-red-500 text-xs mt-1">{shippingErrors.name}</p>
-          )}
+          <div className="h-2 mt-1">
+            {errors.name && (
+              <p className="text-red-dark text-xs" role="alert">
+                {errors.name.message}
+              </p>
+            )}
+          </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-black-true mb-2"
+          >
             Email
           </label>
           <input
+            id="email"
             type="email"
             placeholder="Enter text"
-            value={shippingInfo.email}
-            onChange={(e) => onShippingInfoChange("email", e.target.value)}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-              shippingErrors.email ? "border-red-500" : "border-gray-300"
+            {...register("email")}
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-light focus:border-green-light ${
+              errors.email ? "border-red-dark" : "border-gray-dark"
             }`}
           />
-          {shippingErrors.email && (
-            <p className="text-red-500 text-xs mt-1">{shippingErrors.email}</p>
-          )}
+          <div className="h-2 mt-1">
+            {errors.email && (
+              <p className="text-red-dark text-xs" role="alert">
+                {errors.email.message}
+              </p>
+            )}
+          </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="phone"
+            className="block text-sm font-medium text-black-true mb-2"
+          >
             Phone
           </label>
           <input
+            id="phone"
             type="tel"
             placeholder="Enter text"
-            value={shippingInfo.phone}
-            onChange={(e) => onShippingInfoChange("phone", e.target.value)}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-              shippingErrors.phone ? "border-red-500" : "border-gray-300"
+            {...register("phone")}
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-light focus:border-green-light ${
+              errors.phone ? "border-red-dark" : "border-gray-dark"
             }`}
           />
-          {shippingErrors.phone && (
-            <p className="text-red-500 text-xs mt-1">{shippingErrors.phone}</p>
-          )}
+          <div className="h-2 mt-1">
+            {errors.phone && (
+              <p className="text-red-dark text-xs" role="alert">
+                {errors.phone.message}
+              </p>
+            )}
+          </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="address"
+            className="block text-sm font-medium text-black-true mb-2"
+          >
             Address
           </label>
           <input
+            id="address"
             type="text"
             placeholder="Enter text"
-            value={shippingInfo.address}
-            onChange={(e) => onShippingInfoChange("address", e.target.value)}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-              shippingErrors.address ? "border-red-500" : "border-gray-300"
+            {...register("address")}
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-light focus:border-green-light ${
+              errors.address ? "border-red-dark" : "border-gray-dark"
             }`}
           />
-          {shippingErrors.address && (
-            <p className="text-red-500 text-xs mt-1">
-              {shippingErrors.address}
-            </p>
-          )}
+          <div className="h-2 mt-1">
+            {errors.address && (
+              <p className="text-red-dark text-xs" role="alert">
+                {errors.address.message}
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>
   );
-}
+};

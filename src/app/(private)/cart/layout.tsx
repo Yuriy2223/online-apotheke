@@ -11,8 +11,7 @@ export default function PrivateLayout({
       <header className="bg-green-light">
         <Header />
       </header>
-
-      <main>{children}</main>
+      <main className="bg-gray-light">{children}</main>
       <footer className="bg-green-light">
         <Footer />
       </footer>
