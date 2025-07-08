@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   fetchMedicineProductDetails,
   fetchMedicineProductReviews,
-  addToCart,
 } from "./operations";
 import {
   MedicineProductDetails,
@@ -10,12 +9,9 @@ import {
 } from "@/types/medicine-products";
 
 interface MedicineProductState {
-  // Product details
   productDetails: MedicineProductDetails | null;
   productDetailsLoading: boolean;
   productDetailsError: string | null;
-
-  // Reviews
   reviews: MedicineProductDetailsReview[];
   reviewsLoading: boolean;
   reviewsError: string | null;
@@ -25,8 +21,6 @@ interface MedicineProductState {
     totalCount: number;
     limit: number;
   } | null;
-
-  // Cart
   addingToCart: boolean;
   addToCartError: string | null;
 }
@@ -35,12 +29,10 @@ const initialState: MedicineProductState = {
   productDetails: null,
   productDetailsLoading: false,
   productDetailsError: null,
-
   reviews: [],
   reviewsLoading: false,
   reviewsError: null,
   reviewsPagination: null,
-
   addingToCart: false,
   addToCartError: null,
 };
@@ -63,7 +55,6 @@ const medicineProductDetailsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Fetch product details
     builder
       .addCase(fetchMedicineProductDetails.pending, (state) => {
         state.productDetailsLoading = true;
@@ -78,10 +69,8 @@ const medicineProductDetailsSlice = createSlice({
         state.productDetailsLoading = false;
         state.productDetailsError =
           action.payload || "Failed to fetch product details";
-      });
+      })
 
-    // Fetch reviews
-    builder
       .addCase(fetchMedicineProductReviews.pending, (state) => {
         state.reviewsLoading = true;
         state.reviewsError = null;
@@ -95,21 +84,6 @@ const medicineProductDetailsSlice = createSlice({
       .addCase(fetchMedicineProductReviews.rejected, (state, action) => {
         state.reviewsLoading = false;
         state.reviewsError = action.payload || "Failed to fetch reviews";
-      });
-
-    // Add to cart
-    builder
-      .addCase(addToCart.pending, (state) => {
-        state.addingToCart = true;
-        state.addToCartError = null;
-      })
-      .addCase(addToCart.fulfilled, (state) => {
-        state.addingToCart = false;
-        state.addToCartError = null;
-      })
-      .addCase(addToCart.rejected, (state, action) => {
-        state.addingToCart = false;
-        state.addToCartError = action.payload || "Failed to add to cart";
       });
   },
 });

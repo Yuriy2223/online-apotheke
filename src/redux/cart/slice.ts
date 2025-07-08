@@ -50,21 +50,17 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    // Update shipping info
     updateShippingInfo: (
       state,
       action: PayloadAction<{ field: keyof ShippingInfo; value: string }>
     ) => {
       const { field, value } = action.payload;
       state.shippingInfo[field] = value;
-
-      // Clear error when user starts typing
       if (state.shippingErrors[field]) {
         delete state.shippingErrors[field];
       }
     },
 
-    // Set shipping errors
     setShippingErrors: (
       state,
       action: PayloadAction<Record<string, string>>
@@ -72,7 +68,6 @@ const cartSlice = createSlice({
       state.shippingErrors = action.payload;
     },
 
-    // Update payment method
     updatePaymentMethod: (
       state,
       action: PayloadAction<"Cash On Delivery" | "Bank">
@@ -80,7 +75,6 @@ const cartSlice = createSlice({
       state.paymentMethod = action.payload;
     },
 
-    // Clear errors
     clearCartError: (state) => {
       state.cartError = null;
     },
@@ -93,7 +87,6 @@ const cartSlice = createSlice({
       state.orderError = null;
     },
 
-    // Reset form after successful order
     resetOrderForm: (state) => {
       state.shippingInfo = {
         name: "",
@@ -106,7 +99,6 @@ const cartSlice = createSlice({
       state.orderError = null;
     },
 
-    // Clear cart (after successful order)
     clearCart: (state) => {
       state.cartData = {
         cartItems: [],
@@ -116,8 +108,6 @@ const cartSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Add to cart
-
     builder
       .addCase(addToCart.pending, (state) => {
         state.isUpdatingItem = true;
@@ -133,8 +123,6 @@ const cartSlice = createSlice({
         state.updateError = action.payload || "Failed to add item to cart";
       })
 
-      // Fetch cart data
-
       .addCase(fetchCartData.pending, (state) => {
         state.isLoadingCart = true;
         state.cartError = null;
@@ -149,8 +137,6 @@ const cartSlice = createSlice({
         state.cartError = action.payload || "Failed to fetch cart data";
       })
 
-      // Update cart item
-
       .addCase(updateCartData.pending, (state) => {
         state.isUpdatingItem = true;
         state.updateError = null;
@@ -164,8 +150,6 @@ const cartSlice = createSlice({
         state.isUpdatingItem = false;
         state.updateError = action.payload || "Failed to update cart item";
       })
-
-      // Place order
 
       .addCase(placeOrder.pending, (state) => {
         state.isPlacingOrder = true;

@@ -27,14 +27,3 @@ export const selectPaymentMethod = (state: RootState) =>
 
 export const selectIsCartEmpty = (state: RootState) =>
   state.cart.cartData.cartItems.length === 0;
-
-export const selectCanPlaceOrder = (state: RootState) => {
-  const { shippingInfo, cartData } = state.cart;
-  return (
-    cartData.cartItems.length > 0 &&
-    shippingInfo.name.trim().length >= 2 &&
-    /^\S+@\S+\.\S+$/.test(shippingInfo.email.trim()) &&
-    /^\+?[\d\s\-\(\)]{10,}$/.test(shippingInfo.phone.trim()) &&
-    shippingInfo.address.trim().length >= 10
-  );
-};
