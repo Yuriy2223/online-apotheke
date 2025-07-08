@@ -42,9 +42,9 @@ MedicineProductReviewSchema.index({ productId: 1, createdAt: -1 });
 MedicineProductReviewSchema.index({ userId: 1 });
 
 const MedicineProductReviewModel =
-  models.MedicineProductReview ||
+  models.Medicine_product_reviews ||
   model<MedicineProductReview>(
-    "MedicineProductReview",
+    "Medicine_product_reviews",
     MedicineProductReviewSchema
   );
 

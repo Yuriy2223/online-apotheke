@@ -35,10 +35,16 @@ export async function GET(request: NextRequest) {
       filter.city = { $regex: city, $options: "i" };
     }
 
-    if (minRating) {
+    // if (minRating) {
+    //   const rating = parseFloat(minRating);
+    //   if (!isNaN(rating)) {
+    //     filter.rating = { $gte: rating.toString() };
+    //   }
+    // }
+    if (minRating !== null) {
       const rating = parseFloat(minRating);
       if (!isNaN(rating)) {
-        filter.rating = { $gte: rating.toString() };
+        filter.rating = { $gte: rating };
       }
     }
 

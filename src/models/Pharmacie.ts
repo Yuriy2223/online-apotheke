@@ -67,7 +67,7 @@ pharmacieSchema.index({ rating: -1 });
 pharmacieSchema.index({ createdAt: -1 });
 
 const PharmacieModel: Model<PharmacieDocument> =
-  mongoose.models.Pharmacies_nearest ||
-  mongoose.model<PharmacieDocument>("Pharmacie", pharmacieSchema);
+  mongoose.models.Pharmacies ||
+  mongoose.model<PharmacieDocument>("Pharmacies", pharmacieSchema);
 
 export default PharmacieModel;
