@@ -1,18 +1,26 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "react-toastify";
 import { useAppDispatch } from "@/redux/store";
-
+import { ShippingInfo } from "@/types/cart";
+import { Spinner } from "@/shared/Spinner";
+import { Container } from "@/shared/Container";
+import { ShippingForm } from "@/components/Cart/ShippingForm";
+import { PaymentMethod } from "@/components/Cart/PaymentMethod";
+import { OrderSummary } from "@/components/Cart/OrderSummary";
+import { OrderSidebar } from "@/components/Cart/OrderSidebar";
+import { cartSchema } from "@/validation/cart";
 import {
   fetchCartData,
   updateCartData,
   placeOrder,
 } from "@/redux/cart/operations";
-
 import {
-  updateShippingInfo,
-  setShippingErrors,
   updatePaymentMethod,
   clearCartError,
   clearUpdateError,
@@ -20,7 +28,6 @@ import {
   resetOrderForm,
   clearCart,
 } from "@/redux/cart/slice";
-
 import {
   selectCartItems,
   selectCartTotalAmount,
@@ -31,24 +38,16 @@ import {
   selectCartError,
   selectUpdateError,
   selectOrderError,
-  selectShippingInfo,
-  selectShippingErrors,
   selectPaymentMethod,
   selectIsCartEmpty,
   selectCanPlaceOrder,
 } from "@/redux/cart/selectors";
-
-import { ShippingInfo } from "@/types/cart";
-import AlertNotification from "@/components/Cart/AlertNotification";
-import ShippingForm from "@/components/Cart/ShippingForm";
-import PaymentMethodSection from "@/components/Cart/PaymentMethodSection";
-import OrderSummarySection from "@/components/Cart/OrderSummarySection";
-import OrderSidebar from "@/components/Cart/OrderSidebar";
-import { Spinner } from "@/shared/Spinner";
+import { selectAuthState } from "@/redux/auth/selectors";
 
 export default function CartPage() {
   const dispatch = useAppDispatch();
-
+  const router = useRouter();
+  const { isAuthenticated, isAuthChecking } = useSelector(selectAuthState);
   const cartItems = useSelector(selectCartItems);
   const totalAmount = useSelector(selectCartTotalAmount);
   const totalItems = useSelector(selectCartTotalItems);
@@ -58,71 +57,83 @@ export default function CartPage() {
   const cartError = useSelector(selectCartError);
   const updateError = useSelector(selectUpdateError);
   const orderError = useSelector(selectOrderError);
-  const shippingInfo = useSelector(selectShippingInfo);
-  const shippingErrors = useSelector(selectShippingErrors);
   const paymentMethod = useSelector(selectPaymentMethod);
   const isCartEmpty = useSelector(selectIsCartEmpty);
   const canPlaceOrder = useSelector(selectCanPlaceOrder);
 
-  const [showAlert, setShowAlert] = useState<{
-    type: "success" | "error";
-    message: string;
-  } | null>(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ShippingInfo>({
+    resolver: yupResolver(cartSchema),
+    mode: "onChange",
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      address: "",
+    },
+  });
 
   useEffect(() => {
-    dispatch(fetchCartData());
-  }, [dispatch]);
+    if (!isAuthChecking && !isAuthenticated) {
+      toast.error("Для доступу до кошика необхідно авторизуватись");
+      router.push("/login");
+    }
+  }, [isAuthenticated, isAuthChecking, router]);
+
+  useEffect(() => {
+    if (isAuthenticated && !isAuthChecking) {
+      dispatch(fetchCartData());
+    }
+  }, [dispatch, isAuthenticated, isAuthChecking]);
 
   useEffect(() => {
     if (cartError) {
-      setShowAlert({ type: "error", message: cartError });
+      toast.error(cartError);
       dispatch(clearCartError());
     }
   }, [cartError, dispatch]);
 
   useEffect(() => {
     if (updateError) {
-      setShowAlert({ type: "error", message: updateError });
+      toast.error(updateError);
       dispatch(clearUpdateError());
     }
   }, [updateError, dispatch]);
 
   useEffect(() => {
     if (orderError) {
-      setShowAlert({ type: "error", message: orderError });
+      toast.error(orderError);
       dispatch(clearOrderError());
     }
   }, [orderError, dispatch]);
 
-  useEffect(() => {
-    if (showAlert) {
-      const timer = setTimeout(() => setShowAlert(null), 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [showAlert]);
-
   const handleUpdateQuantity = useCallback(
     async (productId: string, newQuantity: number) => {
       if (newQuantity < 1) return;
-      await dispatch(
+      const result = await dispatch(
         updateCartData({ productId, quantity: newQuantity, action: "update" })
       );
+
+      if (updateCartData.fulfilled.match(result)) {
+        toast.success("Кількість товару оновлено");
+      }
     },
     [dispatch]
   );
 
   const handleRemoveItem = useCallback(
     async (productId: string) => {
-      await dispatch(
+      const result = await dispatch(
         updateCartData({ productId, quantity: 1, action: "remove" })
       );
-    },
-    [dispatch]
-  );
 
-  const handleShippingInfoChange = useCallback(
-    (field: keyof ShippingInfo, value: string) => {
-      dispatch(updateShippingInfo({ field, value }));
+      if (updateCartData.fulfilled.match(result)) {
+        toast.success("Товар видалено з кошика");
+      }
     },
     [dispatch]
   );
@@ -130,105 +141,77 @@ export default function CartPage() {
   const handlePaymentMethodChange = useCallback(
     (method: "Cash On Delivery" | "Bank") => {
       dispatch(updatePaymentMethod(method));
+      toast.info(
+        `Обрано метод оплати: ${
+          method === "Bank" ? "Банківський переказ" : "Оплата при отриманні"
+        }`
+      );
     },
     [dispatch]
   );
 
-  const validateShippingInfo = useCallback((): boolean => {
-    const newErrors: Record<string, string> = {};
+  const onSubmit = useCallback(
+    async (data: ShippingInfo) => {
+      if (isCartEmpty) {
+        toast.error("Ваш кошик порожній");
+        return;
+      }
 
-    if (!shippingInfo.name || shippingInfo.name.trim().length < 2) {
-      newErrors.name = "Ім'я має містити принаймні 2 символи";
-    }
+      const result = await dispatch(
+        placeOrder({ shippingInfo: data, paymentMethod })
+      );
 
-    if (
-      !shippingInfo.email ||
-      !/^\S+@\S+\.\S+$/.test(shippingInfo.email.trim())
-    ) {
-      newErrors.email = "Невірний формат email";
-    }
+      if (placeOrder.fulfilled.match(result)) {
+        const orderData = result.payload;
+        toast.success(
+          `Замовлення створено! Трекінг: ${orderData.trackingInfo.trackingNumber}`
+        );
 
-    if (
-      !shippingInfo.phone ||
-      !/^\+?[\d\s\-\(\)]{10,}$/.test(shippingInfo.phone.trim())
-    ) {
-      newErrors.phone = "Невірний формат телефону";
-    }
+        dispatch(resetOrderForm());
+        dispatch(clearCart());
+        reset();
 
-    if (!shippingInfo.address || shippingInfo.address.trim().length < 10) {
-      newErrors.address = "Адреса має містити принаймні 10 символів";
-    }
+        setTimeout(() => {
+          window.location.href = orderData.trackingInfo.trackingUrl;
+        }, 2000);
+      }
+    },
+    [isCartEmpty, paymentMethod, dispatch, reset]
+  );
 
-    dispatch(setShippingErrors(newErrors));
-    return Object.keys(newErrors).length === 0;
-  }, [shippingInfo, dispatch]);
-
-  const handlePlaceOrder = useCallback(async () => {
-    if (!validateShippingInfo()) return;
-
-    if (isCartEmpty) {
-      setShowAlert({ type: "error", message: "Ваш кошик порожній" });
-      return;
-    }
-
-    const result = await dispatch(placeOrder({ shippingInfo, paymentMethod }));
-
-    if (placeOrder.fulfilled.match(result)) {
-      const orderData = result.payload;
-      setShowAlert({
-        type: "success",
-        message: `Замовлення успішно створено! Номер відстеження: ${orderData.trackingInfo.trackingNumber}`,
-      });
-
-      dispatch(resetOrderForm());
-      dispatch(clearCart());
-
-      setTimeout(() => {
-        window.location.href = orderData.trackingInfo.trackingUrl;
-      }, 2000);
-    }
-  }, [
-    validateShippingInfo,
-    isCartEmpty,
-    shippingInfo,
-    paymentMethod,
-    dispatch,
-  ]);
-
-  if (isLoadingCart) {
+  if (isAuthChecking || isLoadingCart) {
     return <Spinner />;
   }
 
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <AlertNotification alert={showAlert} onClose={() => setShowAlert(null)} />
+    <Container className="px-4 py-8">
+      <h1 className="text-4xl font-bold text-black-true mb-8 text-center">
+        Cart
+      </h1>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-8">Cart</h1>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="grid grid-cols-1 desktop:grid-cols-2 gap-8">
+          <div className="desktop:col-span-1">
+            <ShippingForm register={register} errors={errors} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <ShippingForm
-              shippingInfo={shippingInfo}
-              shippingErrors={shippingErrors}
-              onShippingInfoChange={handleShippingInfoChange}
-            />
-
-            <PaymentMethodSection
+            <PaymentMethod
               paymentMethod={paymentMethod}
               onPaymentMethodChange={handlePaymentMethodChange}
             />
 
-            <OrderSummarySection
+            <OrderSummary
               totalAmount={totalAmount}
               isPlacingOrder={isPlacingOrder}
               isCartEmpty={isCartEmpty}
               canPlaceOrder={canPlaceOrder}
-              onPlaceOrder={handlePlaceOrder}
             />
           </div>
 
-          <div className="lg:col-span-1">
+          <aside className="desktop:col-span-1">
             <OrderSidebar
               cartItems={cartItems}
               totalItems={totalItems}
@@ -237,9 +220,9 @@ export default function CartPage() {
               onUpdateQuantity={handleUpdateQuantity}
               onRemoveItem={handleRemoveItem}
             />
-          </div>
+          </aside>
         </div>
-      </div>
-    </div>
+      </form>
+    </Container>
   );
 }
