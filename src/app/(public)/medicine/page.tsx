@@ -78,16 +78,16 @@ export default function MedicinePage() {
     [handlePageChange]
   );
 
-  const handleAddToCart = useCallback((productId: string) => {
-    const isAuthenticated = checkUserAuthentication();
+  // const handleAddToCart = useCallback((productId: string) => {
+  //   const isAuthenticated = checkUserAuthentication();
 
-    if (!isAuthenticated) {
-      setIsAuthModalOpen(true);
-      return;
-    }
+  //   if (!isAuthenticated) {
+  //     setIsAuthModalOpen(true);
+  //     return;
+  //   }
 
-    addToCartLogic(productId);
-  }, []);
+  //   addToCartLogic(productId);
+  // }, []);
 
   // const handleDetails = useCallback(
   //   (productId: string) => {
@@ -112,13 +112,13 @@ export default function MedicinePage() {
   //   dispatch(fetchMedicinesProducts({ page: 1, limit: deviceLimit }));
   // }, [dispatch, deviceLimit]);
 
-  const checkUserAuthentication = (): boolean => {
-    return false;
-  };
+  // const checkUserAuthentication = (): boolean => {
+  //   return false;
+  // };
 
-  const addToCartLogic = (productId: string) => {
-    console.log("Adding to cart:", productId);
-  };
+  // const addToCartLogic = (productId: string) => {
+  //   console.log("Adding to cart:", productId);
+  // };
 
   const handleAuthModalClose = useCallback(() => {
     setIsAuthModalOpen(false);
@@ -176,7 +176,7 @@ export default function MedicinePage() {
                 <li key={product._id}>
                   <MedicineProductCard
                     product={product}
-                    onAddToCart={handleAddToCart}
+                    // onAddToCart={handleAddToCart}
                     onDetails={handleDetails}
                   />
                 </li>

@@ -1,81 +1,13 @@
-export interface Cart {
-  _id: string;
-  name: string;
-  photo: string;
-  price: string;
-  category: string;
-  suppliers: string;
-  stock: string;
-  quantity: number;
-  totalPrice: string;
-}
-
-export interface CartResponse {
-  cartItems: Cart[];
-  totalAmount: string;
-  totalItems: number;
-}
-
-export interface UpdateCartRequest {
-  productId: string;
-  quantity?: number;
-  action: "add" | "update" | "remove";
-}
-
-export interface ShippingInfo {
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-}
-
-export interface CheckoutRequest {
-  shippingInfo: ShippingInfo;
-  paymentMethod: "Cash On Delivery" | "Bank";
-}
-
-export interface CheckoutResponse {
-  orderId: string;
-  totalAmount: string;
-  orderStatus: string;
-  estimatedDelivery: string;
-}
-
-export interface OrderProduct {
-  productId: string;
-  name: string;
-  price: string;
-  quantity: number;
-  total: string;
-}
-
-export interface OrderData {
-  _id: string;
-  userId: string;
-  products: OrderProduct[];
-  shippingInfo: ShippingInfo;
-  paymentMethod: "Cash On Delivery" | "Bank";
-  totalAmount: string;
-  status:
-    | "pending"
-    | "confirmed"
-    | "processing"
-    | "shipped"
-    | "delivered"
-    | "cancelled";
-  orderDate: Date;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { Types } from "mongoose";
 
 export interface CartItem {
   _id: string;
   name: string;
   photo: string;
-  price: string;
+  price: number;
   category: string;
   suppliers: string[];
-  stock: string;
+  stock: number;
   quantity: number;
   totalPrice: number;
 }
@@ -91,6 +23,17 @@ export interface ShippingInfo {
   email: string;
   phone: string;
   address: string;
+}
+
+export interface UpdateCartItemParams {
+  productId: string;
+  quantity: number;
+  action: "add" | "update" | "remove";
+}
+
+export interface CheckoutRequest {
+  shippingInfo: ShippingInfo;
+  paymentMethod: "Cash On Delivery" | "Bank";
 }
 
 export interface OrderResponse {
@@ -110,13 +53,19 @@ export interface OrderResponse {
   };
 }
 
-export interface UpdateCartItemParams {
-  productId: string;
+export interface CartProductInDb {
+  _id: Types.ObjectId;
   quantity: number;
-  action: "add" | "update" | "remove";
 }
 
-export interface PlaceOrderParams {
-  shippingInfo: ShippingInfo;
-  paymentMethod: "Cash On Delivery" | "Bank";
+export interface CartDocumentInDb {
+  products: CartProductInDb[];
+  userId: Types.ObjectId;
+}
+
+export interface ProductInDb {
+  _id: Types.ObjectId;
+  name: string;
+  price: number;
+  stock: number;
 }

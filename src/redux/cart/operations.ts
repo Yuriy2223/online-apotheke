@@ -1,12 +1,50 @@
-// redux/cart/operations.ts
-
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   CartData,
   UpdateCartItemParams,
-  PlaceOrderParams,
+  CheckoutRequest,
   OrderResponse,
 } from "@/types/cart";
+
+// Add to cart
+export const addToCart = createAsyncThunk<
+  CartData,
+  { productId: string; quantity: number },
+  { rejectValue: string }
+>("cart/addToCart", async ({ productId, quantity }, { rejectWithValue }) => {
+  try {
+    const response = await fetch("/api/cart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        productId,
+        quantity,
+      }),
+    });
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        throw new Error("Unauthorized");
+      }
+      throw new Error("Failed to add item to cart");
+    }
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(result.error || "Failed to add item to cart");
+    }
+
+    return result.data as CartData;
+  } catch (error) {
+    return rejectWithValue(
+      error instanceof Error ? error.message : "Unknown error occurred"
+    );
+  }
+});
 
 // Fetch cart data
 export const fetchCartData = createAsyncThunk<
@@ -44,7 +82,7 @@ export const fetchCartData = createAsyncThunk<
   }
 });
 
-// Update cart item
+// Update cart
 export const updateCartData = createAsyncThunk<
   CartData,
   UpdateCartItemParams,
@@ -53,7 +91,7 @@ export const updateCartData = createAsyncThunk<
   "cart/updateCartItem",
   async ({ productId, quantity, action }, { rejectWithValue }) => {
     try {
-      const response = await fetch("/api/cart", {
+      const response = await fetch("/api/cart/update", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -65,6 +103,13 @@ export const updateCartData = createAsyncThunk<
           action,
         }),
       });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Unauthorized");
+        }
+        throw new Error("Failed to update cart item");
+      }
 
       const result = await response.json();
 
@@ -84,7 +129,7 @@ export const updateCartData = createAsyncThunk<
 // Place order
 export const placeOrder = createAsyncThunk<
   OrderResponse,
-  PlaceOrderParams,
+  CheckoutRequest,
   { rejectValue: string }
 >(
   "cart/placeOrder",
@@ -101,6 +146,13 @@ export const placeOrder = createAsyncThunk<
           paymentMethod,
         }),
       });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Unauthorized");
+        }
+        throw new Error("Failed to place order");
+      }
 
       const result = await response.json();
 

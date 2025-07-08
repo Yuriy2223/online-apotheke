@@ -4,39 +4,7 @@ import Product from "@/models/MedicineProduct";
 import mongoose from "mongoose";
 import { getUserId } from "@/auth/auth";
 import { connectDB } from "@/database/MongoDB";
-
-interface CartItem {
-  _id: mongoose.Types.ObjectId;
-  name: string;
-  photo: string;
-  price: string;
-  category: string;
-  suppliers: string[];
-  stock: string;
-  quantity: number;
-  totalPrice: number;
-}
-
-interface CartData {
-  cartItems: CartItem[];
-  totalAmount: number;
-  totalItems: number;
-}
-
-interface CartProductData {
-  _id: mongoose.Types.ObjectId;
-  quantity: number;
-}
-
-interface ProductDocument {
-  _id: mongoose.Types.ObjectId;
-  name: string;
-  photo: string;
-  price: string;
-  category: string;
-  suppliers: string[];
-  stock: string;
-}
+import { CartItem, CartData, CartProductInDb } from "@/types/cart";
 
 class CartError extends Error {
   constructor(
@@ -90,7 +58,7 @@ export async function PUT(request: NextRequest) {
       }
 
       const productIndex = cart.products.findIndex(
-        (item: CartProductData) => item._id.toString() === productId
+        (item: CartProductInDb) => item._id.toString() === productId
       );
 
       if (action === "remove") {
@@ -105,7 +73,7 @@ export async function PUT(request: NextRequest) {
           );
         }
 
-        const availableStock = parseInt(product.stock);
+        const availableStock = Number(product.stock);
         if (quantity > availableStock) {
           throw new CartError(
             `Недостатньо товару на складі. Доступно: ${availableStock}`,
@@ -119,7 +87,7 @@ export async function PUT(request: NextRequest) {
           cart.products.push({
             _id: new mongoose.Types.ObjectId(productId),
             quantity,
-          } as CartProductData);
+          });
         }
       }
 
@@ -168,7 +136,7 @@ async function getCartWithProducts(userId: string): Promise<CartData> {
     },
     {
       $lookup: {
-        from: "products",
+        from: "medicine_products",
         localField: "products._id",
         foreignField: "_id",
         as: "productDetails",
@@ -217,11 +185,21 @@ async function getCartWithProducts(userId: string): Promise<CartData> {
         },
       },
     },
+    {
+      $addFields: {
+        products: {
+          $filter: {
+            input: "$products",
+            cond: { $ne: ["$$this._id", null] },
+          },
+        },
+      },
+    },
   ]);
 
   const cart = cartWithProducts[0];
 
-  if (!cart || !cart.products) {
+  if (!cart || !cart.products || cart.products.length === 0) {
     return {
       cartItems: [],
       totalAmount: 0,
@@ -229,19 +207,11 @@ async function getCartWithProducts(userId: string): Promise<CartData> {
     };
   }
 
-  const cartItems = cart.products
-    .filter(
-      (item: ProductDocument & { quantity: number; totalPrice: number }) =>
-        item._id
-    )
-    .map(
-      (
-        item: ProductDocument & { quantity: number; totalPrice: number }
-      ): CartItem => ({
-        ...item,
-        totalPrice: Number(item.totalPrice.toFixed(2)),
-      })
-    );
+  const cartItems = cart.products.map((item: CartItem) => ({
+    ...item,
+    _id: item._id.toString(),
+    totalPrice: Number(item.totalPrice.toFixed(2)),
+  }));
 
   const totalAmount = Number(
     cartItems

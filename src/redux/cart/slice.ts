@@ -1,25 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CartData, ShippingInfo } from "@/types/cart";
-import { fetchCartData, updateCartData, placeOrder } from "./operations";
+import {
+  fetchCartData,
+  updateCartData,
+  placeOrder,
+  addToCart,
+} from "./operations";
 
 interface CartState {
-  // Cart data
   cartData: CartData;
   isLoadingCart: boolean;
   cartError: string | null;
-
-  // Shipping info
   shippingInfo: ShippingInfo;
   shippingErrors: Record<string, string>;
-
-  // Payment method
   paymentMethod: "Cash On Delivery" | "Bank";
-
-  // Order processing
   isPlacingOrder: boolean;
   orderError: string | null;
-
-  // UI state
   isUpdatingItem: boolean;
   updateError: string | null;
 }
@@ -120,8 +116,25 @@ const cartSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Fetch cart data
+    // Add to cart
+
     builder
+      .addCase(addToCart.pending, (state) => {
+        state.isUpdatingItem = true;
+        state.updateError = null;
+      })
+      .addCase(addToCart.fulfilled, (state, action) => {
+        state.isUpdatingItem = false;
+        state.cartData = action.payload;
+        state.updateError = null;
+      })
+      .addCase(addToCart.rejected, (state, action) => {
+        state.isUpdatingItem = false;
+        state.updateError = action.payload || "Failed to add item to cart";
+      })
+
+      // Fetch cart data
+
       .addCase(fetchCartData.pending, (state) => {
         state.isLoadingCart = true;
         state.cartError = null;
@@ -134,15 +147,10 @@ const cartSlice = createSlice({
       .addCase(fetchCartData.rejected, (state, action) => {
         state.isLoadingCart = false;
         state.cartError = action.payload || "Failed to fetch cart data";
+      })
 
-        // Handle unauthorized
-        if (action.payload === "Unauthorized") {
-          // This will be handled in the component
-        }
-      });
+      // Update cart item
 
-    // Update cart item
-    builder
       .addCase(updateCartData.pending, (state) => {
         state.isUpdatingItem = true;
         state.updateError = null;
@@ -155,10 +163,10 @@ const cartSlice = createSlice({
       .addCase(updateCartData.rejected, (state, action) => {
         state.isUpdatingItem = false;
         state.updateError = action.payload || "Failed to update cart item";
-      });
+      })
 
-    // Place order
-    builder
+      // Place order
+
       .addCase(placeOrder.pending, (state) => {
         state.isPlacingOrder = true;
         state.orderError = null;
@@ -166,7 +174,6 @@ const cartSlice = createSlice({
       .addCase(placeOrder.fulfilled, (state) => {
         state.isPlacingOrder = false;
         state.orderError = null;
-        // Clear cart and reset form will be handled in the component
       })
       .addCase(placeOrder.rejected, (state, action) => {
         state.isPlacingOrder = false;

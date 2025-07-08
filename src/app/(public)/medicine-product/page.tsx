@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Container } from "@/shared/Container";
 import { Spinner } from "@/shared/Spinner";
@@ -23,21 +23,6 @@ import { checkAuthStatus } from "@/redux/auth/operations";
 import { toast } from "react-toastify";
 import { updateCartData } from "@/redux/cart/operations";
 
-export interface MedicineProductDetails {
-  _id: string;
-  photo: string;
-  name: string;
-  suppliers: string;
-  stock: string;
-  price: string;
-  category: string;
-  description: string;
-  rating: number;
-  reviewsCount: number;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
 export default function MedicineProductPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -55,22 +40,46 @@ export default function MedicineProductPage() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("description");
   const [isAddingToCart, setIsAddingToCart] = useState(false);
-
   const productId = searchParams.get("id");
+  const lastAuthCheckRef = useRef<number>(0);
+  const authCheckTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const debouncedAuthCheck = useCallback(() => {
+    const now = Date.now();
+    const timeSinceLastCheck = now - lastAuthCheckRef.current;
+
+    if (timeSinceLastCheck < 5000) {
+      return;
+    }
+
+    if (authCheckTimeoutRef.current) {
+      clearTimeout(authCheckTimeoutRef.current);
+    }
+
+    authCheckTimeoutRef.current = setTimeout(() => {
+      if (!isAuthChecking) {
+        lastAuthCheckRef.current = Date.now();
+        dispatch(checkAuthStatus());
+      }
+    }, 1000);
+  }, [dispatch, isAuthChecking]);
 
   useEffect(() => {
-    dispatch(checkAuthStatus());
+    if (lastAuthCheckRef.current === 0) {
+      lastAuthCheckRef.current = Date.now();
+      dispatch(checkAuthStatus());
+    }
   }, [dispatch]);
 
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden) {
-        dispatch(checkAuthStatus());
+        debouncedAuthCheck();
       }
     };
 
     const handleFocus = () => {
-      dispatch(checkAuthStatus());
+      debouncedAuthCheck();
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -79,8 +88,12 @@ export default function MedicineProductPage() {
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("focus", handleFocus);
+
+      if (authCheckTimeoutRef.current) {
+        clearTimeout(authCheckTimeoutRef.current);
+      }
     };
-  }, [dispatch]);
+  }, [debouncedAuthCheck]);
 
   useEffect(() => {
     if (productId) {

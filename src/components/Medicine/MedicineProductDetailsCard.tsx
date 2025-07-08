@@ -1,5 +1,4 @@
 import { MedicineProduct } from "@/types/medicine-products";
-
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useState } from "react";
@@ -7,7 +6,7 @@ import { StarRating } from "./StarRating";
 
 interface MedicineProductCardProps {
   product: MedicineProduct;
-  onAddToCart: (productId: string) => void;
+  onAddToCart: (productId: string, quantity?: number) => void;
   onDetails?: (productId: string) => void;
 }
 
@@ -30,7 +29,7 @@ export function MedicineProductDetailsCard({
   };
 
   const handleAddToCartClick = () => {
-    onAddToCart(product._id);
+    onAddToCart(product._id, quantity);
   };
 
   const mockRating = 4;

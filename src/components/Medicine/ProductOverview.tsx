@@ -64,18 +64,10 @@ export function ProductOverview({
                 <span className="px-4 py-2 border-x border-gray-300 min-w-[60px] text-center">
                   {quantity}
                 </span>
-                {/* <button
-                  onClick={() => onQuantityChange(quantity + 1)}
-                  disabled={isAddingToCart}
-                  className="px-3 py-2 text-gray-600 hover:text-gray-800 disabled:text-gray-400 disabled:cursor-not-allowed"
-                >
-                  +
-                </button> */}
+
                 <button
                   onClick={() => onQuantityChange(quantity + 1)}
-                  disabled={
-                    isAddingToCart || quantity >= parseInt(product.stock)
-                  }
+                  disabled={isAddingToCart || quantity >= product.stock}
                   className="px-3 py-2 text-gray-600 hover:text-gray-800 disabled:text-gray-400 disabled:cursor-not-allowed"
                 >
                   +
