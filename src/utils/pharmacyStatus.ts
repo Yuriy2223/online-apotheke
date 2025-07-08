@@ -1,73 +1,66 @@
 import { Pharmacie } from "@/types/pharmacies";
 
-export const getPharmacyStatus = (
+export const getPharmacyStatus = (pharmacie: Pharmacie): "OPEN" | "CLOSE" => {
+  if (!pharmacie) return "CLOSE";
+
+  const openTime = pharmacie.openTime?.toString().trim();
+  const closeTime = pharmacie.closeTime?.toString().trim();
+
+  if (!openTime || !closeTime) return "CLOSE";
+
+  const parseTime = (
+    time: string
+  ): { hours: number; minutes: number } | null => {
+    const cleaned = time.replace(/[^\d]/g, "");
+
+    if (cleaned.length === 4) {
+      const hours = parseInt(cleaned.slice(0, 2), 10);
+      const minutes = parseInt(cleaned.slice(2), 10);
+      if (hours < 24 && minutes < 60) return { hours, minutes };
+    } else if (cleaned.length === 3) {
+      const hours = parseInt(cleaned[0], 10);
+      const minutes = parseInt(cleaned.slice(1), 10);
+      if (hours < 24 && minutes < 60) return { hours, minutes };
+    } else if (cleaned.length <= 2) {
+      const hours = parseInt(cleaned, 10);
+      if (hours < 24) return { hours, minutes: 0 };
+    }
+
+    return null;
+  };
+
+  const parsedOpen = parseTime(openTime);
+  const parsedClose = parseTime(closeTime);
+
+  if (!parsedOpen || !parsedClose) return "CLOSE";
+
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  const openMinutes = parsedOpen.hours * 60 + parsedOpen.minutes;
+  const closeMinutes = parsedClose.hours * 60 + parsedClose.minutes;
+
+  if (openMinutes === closeMinutes) return "CLOSE";
+
+  const isOpen =
+    openMinutes < closeMinutes
+      ? currentMinutes >= openMinutes && currentMinutes < closeMinutes
+      : currentMinutes >= openMinutes || currentMinutes < closeMinutes;
+
+  return isOpen ? "OPEN" : "CLOSE";
+};
+
+export const getPharmacyStatusText = (
   pharmacie: Pharmacie
-): "OPEN" | "CLOSE" | "DESTROYED" => {
-  if (!pharmacie) {
-    return "DESTROYED";
-  }
+): { status: "OPEN" | "CLOSE"; text: string; color: string } => {
+  const status = getPharmacyStatus(pharmacie);
 
-  if (
-    !pharmacie.openTime ||
-    !pharmacie.closeTime ||
-    pharmacie.openTime.trim() === "" ||
-    pharmacie.closeTime.trim() === ""
-  ) {
-    return "DESTROYED";
-  }
+  const statusMap = {
+    OPEN: { text: "Відкрито", color: "text-green-500" },
+    CLOSE: { text: "Закрито", color: "text-red-500" },
+  };
 
-  try {
-    const now = new Date();
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
-    const openTimeParts = pharmacie.openTime.split(":");
-    const closeTimeParts = pharmacie.closeTime.split(":");
-
-    if (openTimeParts.length !== 2 || closeTimeParts.length !== 2) {
-      return "DESTROYED";
-    }
-
-    const openHours = parseInt(openTimeParts[0], 10);
-    const openMinutes = parseInt(openTimeParts[1], 10);
-    const closeHours = parseInt(closeTimeParts[0], 10);
-    const closeMinutes = parseInt(closeTimeParts[1], 10);
-
-    if (
-      isNaN(openHours) ||
-      isNaN(openMinutes) ||
-      isNaN(closeHours) ||
-      isNaN(closeMinutes)
-    ) {
-      return "DESTROYED";
-    }
-
-    if (
-      openHours < 0 ||
-      openHours > 23 ||
-      closeHours < 0 ||
-      closeHours > 23 ||
-      openMinutes < 0 ||
-      openMinutes > 59 ||
-      closeMinutes < 0 ||
-      closeMinutes > 59
-    ) {
-      return "DESTROYED";
-    }
-
-    const openTime = openHours * 60 + openMinutes;
-    const closeTime = closeHours * 60 + closeMinutes;
-
-    if (openTime <= closeTime) {
-      return currentMinutes >= openTime && currentMinutes <= closeTime
-        ? "OPEN"
-        : "CLOSE";
-    } else {
-      return currentMinutes >= openTime || currentMinutes <= closeTime
-        ? "OPEN"
-        : "CLOSE";
-    }
-  } catch (error) {
-    console.error("Error calculating pharmacy status:", error);
-    return "DESTROYED";
-  }
+  return {
+    status,
+    ...statusMap[status],
+  };
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { PharmacieCard } from "@/components/PharmacieCard/PharmacieCard";
 import { Container } from "@/shared/Container";
 import { Pagination } from "@/components/Pagination/Pagination";
@@ -28,9 +28,41 @@ const PharmaciesPage = () => {
     },
   });
 
+  const lastFetchParams = useRef<string>("");
+  const isInitialRender = useRef(true);
+
   useEffect(() => {
+    const fetchKey = `${currentPage}-${deviceLimit}`;
+
+    if (lastFetchParams.current === fetchKey) {
+      return;
+    }
+
+    if (loading) {
+      return;
+    }
+
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      const timer = setTimeout(() => {
+        if (lastFetchParams.current !== fetchKey) {
+          lastFetchParams.current = fetchKey;
+          dispatch(fetchPharmacies({ page: currentPage, limit: deviceLimit }));
+        }
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+
+    lastFetchParams.current = fetchKey;
     dispatch(fetchPharmacies({ page: currentPage, limit: deviceLimit }));
-  }, [dispatch, currentPage, deviceLimit]);
+  }, [dispatch, currentPage, deviceLimit, loading]);
+
+  useEffect(() => {
+    return () => {
+      lastFetchParams.current = "";
+    };
+  }, []);
 
   if (loading) {
     return <Spinner />;
