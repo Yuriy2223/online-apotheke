@@ -1,9 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  MedicineProduct,
-  MedicinesParams,
-  MedicinesResponse,
-} from "@/types/medicine-products";
+import { MedicinesParams, MedicinesResponse } from "@/types/medicine-products";
 
 export const fetchMedicinesProducts = createAsyncThunk<
   MedicinesResponse,
@@ -35,32 +31,6 @@ export const fetchMedicinesProducts = createAsyncThunk<
     } catch (error) {
       return rejectWithValue(
         error instanceof Error ? error.message : "Failed to fetch medicines"
-      );
-    }
-  }
-);
-
-export const fetchMedicinesProductDetails = createAsyncThunk<
-  MedicineProduct,
-  string,
-  { rejectValue: string }
->(
-  "medicineProducts/fetchMedicinesProductDetails",
-  async (productId: string, { rejectWithValue }) => {
-    try {
-      const response = await fetch(`/api/medicine-products/${productId}`);
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch product details");
-      }
-
-      const data: MedicineProduct = await response.json();
-      return data;
-    } catch (error) {
-      return rejectWithValue(
-        error instanceof Error
-          ? error.message
-          : "Failed to fetch product details"
       );
     }
   }

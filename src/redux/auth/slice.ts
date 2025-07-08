@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { User } from "@/types/users";
 import {
   registerUser,
   loginUser,
@@ -8,7 +9,6 @@ import {
   verifyEmail,
   checkAuthStatus,
 } from "./operations";
-import { User } from "@/types/users";
 
 export interface AuthState {
   user: User | null;
@@ -65,7 +65,6 @@ const authSlice = createSlice({
       state.verifyEmailLoading = false;
       state.verifyEmailSuccess = false;
     },
-    // ---- httpOnly cookies----
     setAuthFromServer: (
       state,
       action: { payload: { user: User; isAuthenticated: boolean } }
@@ -81,18 +80,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // // ---- httpOnly cookies----
-      // .addCase(checkAuthStatus.fulfilled, (state, action) => {
-      //   if (action.payload?.user) {
-      //     state.user = action.payload.user;
-      //     state.isAuthenticated = true;
-      //   } else {
-      //     state.user = null;
-      //     state.isAuthenticated = false;
-      //   }
-      // })
 
-      // ---- Auth Status Check ----
       .addCase(checkAuthStatus.pending, (state) => {
         state.isAuthChecking = true;
       })
@@ -111,7 +99,7 @@ const authSlice = createSlice({
         state.isAuthChecking = false;
         state.isAuthenticated = false;
       })
-      // --- Register ---
+
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -126,7 +114,6 @@ const authSlice = createSlice({
         state.error = action.payload || "Помилка реєстрації";
       })
 
-      // --- Login ---
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -141,7 +128,6 @@ const authSlice = createSlice({
         state.error = action.payload || "Помилка входу";
       })
 
-      // --- Logout ---
       .addCase(logoutUser.pending, (state) => {
         state.loading = true;
       })
@@ -158,7 +144,6 @@ const authSlice = createSlice({
         state.error = null;
       })
 
-      // --- Forgot Password ---
       .addCase(forgotPassword.pending, (state) => {
         state.forgotPasswordLoading = true;
         state.error = null;
@@ -173,7 +158,6 @@ const authSlice = createSlice({
         state.error = action.payload || "Помилка при надсиланні листа";
       })
 
-      // --- Reset Password ---
       .addCase(resetPassword.pending, (state) => {
         state.resetPasswordLoading = true;
         state.error = null;
@@ -188,7 +172,6 @@ const authSlice = createSlice({
         state.error = action.payload || "Помилка при зміні пароля";
       })
 
-      // --- Verify Email ---
       .addCase(verifyEmail.pending, (state) => {
         state.verifyEmailLoading = true;
         state.error = null;

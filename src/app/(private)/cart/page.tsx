@@ -1,12 +1,11 @@
 "use client";
 
 import { useCallback, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
-import { useAppDispatch } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { ShippingInfo } from "@/types/cart";
 import { Spinner } from "@/shared/Spinner";
 import { Container } from "@/shared/Container";
@@ -15,6 +14,10 @@ import { PaymentMethod } from "@/components/Cart/PaymentMethod";
 import { OrderSummary } from "@/components/Cart/OrderSummary";
 import { OrderSidebar } from "@/components/Cart/OrderSidebar";
 import { cartSchema } from "@/validation/cart";
+import {
+  selectIsAuthChecking,
+  selectIsAuthenticated,
+} from "@/redux/auth/selectors";
 import {
   fetchCartData,
   updateCartData,
@@ -40,26 +43,24 @@ import {
   selectOrderError,
   selectPaymentMethod,
   selectIsCartEmpty,
-  selectCanPlaceOrder,
 } from "@/redux/cart/selectors";
-import { selectAuthState } from "@/redux/auth/selectors";
 
 export default function CartPage() {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { isAuthenticated, isAuthChecking } = useSelector(selectAuthState);
-  const cartItems = useSelector(selectCartItems);
-  const totalAmount = useSelector(selectCartTotalAmount);
-  const totalItems = useSelector(selectCartTotalItems);
-  const isLoadingCart = useSelector(selectIsLoadingCart);
-  const isUpdatingItem = useSelector(selectIsUpdatingItem);
-  const isPlacingOrder = useSelector(selectIsPlacingOrder);
-  const cartError = useSelector(selectCartError);
-  const updateError = useSelector(selectUpdateError);
-  const orderError = useSelector(selectOrderError);
-  const paymentMethod = useSelector(selectPaymentMethod);
-  const isCartEmpty = useSelector(selectIsCartEmpty);
-  const canPlaceOrder = useSelector(selectCanPlaceOrder);
+  const cartItems = useAppSelector(selectCartItems);
+  const totalAmount = useAppSelector(selectCartTotalAmount);
+  const totalItems = useAppSelector(selectCartTotalItems);
+  const isLoadingCart = useAppSelector(selectIsLoadingCart);
+  const isUpdatingItem = useAppSelector(selectIsUpdatingItem);
+  const isPlacingOrder = useAppSelector(selectIsPlacingOrder);
+  const cartError = useAppSelector(selectCartError);
+  const updateError = useAppSelector(selectUpdateError);
+  const orderError = useAppSelector(selectOrderError);
+  const paymentMethod = useAppSelector(selectPaymentMethod);
+  const isCartEmpty = useAppSelector(selectIsCartEmpty);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const isAuthChecking = useAppSelector(selectIsAuthChecking);
 
   const {
     register,
@@ -207,7 +208,6 @@ export default function CartPage() {
               totalAmount={totalAmount}
               isPlacingOrder={isPlacingOrder}
               isCartEmpty={isCartEmpty}
-              canPlaceOrder={canPlaceOrder}
             />
           </div>
 

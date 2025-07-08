@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { sortCategory } from "@/types/medicine-products";
 import { SearchFilter } from "@/components/Medicine/MedicineFilter";
@@ -10,13 +10,10 @@ import { Container } from "@/shared/Container";
 import { Pagination } from "@/components/Pagination/Pagination";
 import { usePagination } from "@/hooks/usePagination";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import {
-  fetchMedicinesProducts,
-  // fetchMedicinesProductDetails,
-} from "@/redux/medicine/operations";
+import { fetchMedicinesProducts } from "@/redux/medicine/operations";
+import { checkAuthStatus } from "@/redux/auth/operations";
 import {
   selectMedicineProducts,
-  // selectMedicineProductsError,
   selectMedicineProductsLoading,
   selectMedicineProductsPagination,
 } from "@/redux/medicine/selectors";
@@ -26,13 +23,11 @@ export default function MedicinePage() {
   const router = useRouter();
   const products = useAppSelector(selectMedicineProducts);
   const loading = useAppSelector(selectMedicineProductsLoading);
-  // const error = useAppSelector(selectMedicineProductsError);
   const paginationData = useAppSelector(selectMedicineProductsPagination);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Show all");
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-
+  const hasCheckedAuth = useRef(false);
   const { currentPage, deviceLimit, handlePageChange } = usePagination({
     responsiveLimits: {
       mobile: 6,
@@ -47,6 +42,13 @@ export default function MedicinePage() {
       : [];
     return ["Show all", ...validCategories];
   }, []);
+
+  useEffect(() => {
+    if (!hasCheckedAuth.current) {
+      hasCheckedAuth.current = true;
+      dispatch(checkAuthStatus());
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     const categoryParam =
@@ -78,47 +80,12 @@ export default function MedicinePage() {
     [handlePageChange]
   );
 
-  // const handleAddToCart = useCallback((productId: string) => {
-  //   const isAuthenticated = checkUserAuthentication();
-
-  //   if (!isAuthenticated) {
-  //     setIsAuthModalOpen(true);
-  //     return;
-  //   }
-
-  //   addToCartLogic(productId);
-  // }, []);
-
-  // const handleDetails = useCallback(
-  //   (productId: string) => {
-  //     dispatch(fetchMedicinesProductDetails(productId));
-  //   },
-  //   [dispatch]
-  // );
-  // const handleDetails = useCallback(
-  //   (productId: string) => {
-  //     router.push(`/medicine-products/${productId}`);
-  //   },
-  //   [router]
-  // );
   const handleDetails = useCallback(
     (productId: string) => {
       router.push(`/medicine-product?id=${productId}`);
     },
     [router]
   );
-
-  // const handleRetry = useCallback(() => {
-  //   dispatch(fetchMedicinesProducts({ page: 1, limit: deviceLimit }));
-  // }, [dispatch, deviceLimit]);
-
-  // const checkUserAuthentication = (): boolean => {
-  //   return false;
-  // };
-
-  // const addToCartLogic = (productId: string) => {
-  //   console.log("Adding to cart:", productId);
-  // };
 
   const handleAuthModalClose = useCallback(() => {
     setIsAuthModalOpen(false);
@@ -127,26 +94,6 @@ export default function MedicinePage() {
   if (loading) {
     return <Spinner />;
   }
-
-  // if (error) {
-  //   return (
-  //     <Container className="">
-  //       <div className="flex justify-center items-center py-16">
-  //         <div className="text-center">
-  //           <div className="text-red-500 mb-4">
-  //             <p className="text-lg">Error: {error}</p>
-  //           </div>
-  //           <button
-  //             onClick={handleRetry}
-  //             className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
-  //           >
-  //             Try Again
-  //           </button>
-  //         </div>
-  //       </div>
-  //     </Container>
-  //   );
-  // }
 
   return (
     <Container className="py-8 px-4">
@@ -164,7 +111,6 @@ export default function MedicinePage() {
 
         {products.length === 0 ? (
           <div className="flex items-center justify-center min-h-screen">
-            {/* // <div className="flex items-center justify-center min-h-[500px]"> */}
             <p className="text-gray-dark text-lg">
               Nothing was found for your request.
             </p>
@@ -176,7 +122,6 @@ export default function MedicinePage() {
                 <li key={product._id}>
                   <MedicineProductCard
                     product={product}
-                    // onAddToCart={handleAddToCart}
                     onDetails={handleDetails}
                   />
                 </li>

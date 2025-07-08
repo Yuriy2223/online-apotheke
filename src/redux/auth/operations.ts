@@ -6,7 +6,6 @@ interface AuthResponse {
   user: User;
 }
 
-// --- Register ---
 export const registerUser = createAsyncThunk<
   AuthResponse,
   RegisterFormData,
@@ -41,7 +40,6 @@ export const registerUser = createAsyncThunk<
   }
 });
 
-// --- Login ---
 export const loginUser = createAsyncThunk<
   AuthResponse,
   LoginFormData,
@@ -71,7 +69,6 @@ export const loginUser = createAsyncThunk<
   }
 });
 
-// --- Logout ---
 export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
   "auth/logout",
   async (_, { rejectWithValue }) => {
@@ -96,35 +93,6 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
   }
 );
 
-// --- Check Auth Status ---
-// export const checkAuthStatus = createAsyncThunk<
-//   AuthResponse | null,
-//   void,
-//   { rejectValue: string }
-// >("auth/checkStatus", async () => {
-//   try {
-//     const response = await fetch("/api/user/me", {
-//       method: "GET",
-//       credentials: "include",
-//     });
-
-//     if (!response.ok) {
-//       return null;
-//     }
-
-//     const result = await response.json();
-
-//     if (!result.success) {
-//       return null;
-//     }
-
-//     return { user: result.data.user };
-//   } catch (error) {
-//     console.error("Auth check error:", error);
-//     return null;
-//   }
-// });
-//   проба 2
 export const checkAuthStatus = createAsyncThunk<
   AuthResponse | null,
   void,
@@ -156,7 +124,6 @@ export const checkAuthStatus = createAsyncThunk<
   }
 });
 
-// --- Forgot Password ---
 export const forgotPassword = createAsyncThunk<
   { message: string },
   { email: string },
@@ -185,7 +152,6 @@ export const forgotPassword = createAsyncThunk<
   }
 });
 
-// --- Reset Password ---
 export const resetPassword = createAsyncThunk<
   { message: string },
   { token: string; password: string },
@@ -214,7 +180,6 @@ export const resetPassword = createAsyncThunk<
   }
 });
 
-// // --- Verify Email ---
 export const verifyEmail = createAsyncThunk<
   { message: string },
   { token: string },
@@ -242,39 +207,3 @@ export const verifyEmail = createAsyncThunk<
     return rejectWithValue("Помилка мережі");
   }
 });
-/**************************************************** */
-
-// // --- Check Auth Status ---
-// export const checkAuthStatus = createAsyncThunk<
-//   AuthResponse | null,
-//   void,
-//   { rejectValue: string }
-// >("auth/checkStatus", async (_, { rejectWithValue }) => {
-//   try {
-//     const response = await fetch("/api/user/me", {
-//       method: "GET",
-//       credentials: "include",
-//     });
-
-//     // Якщо сервер повертає 401/403 - це нормально, просто немає аутентифікації
-//     if (response.status === 401 || response.status === 403) {
-//       return null;
-//     }
-
-//     if (!response.ok) {
-//       console.warn("Auth check failed:", response.status);
-//       return null;
-//     }
-
-//     const result = await response.json();
-
-//     if (!result.success || !result.data?.user) {
-//       return null;
-//     }
-
-//     return { user: result.data.user };
-//   } catch (error) {
-//     console.error("Auth check error:", error);
-//     return null;
-//   }
-// });

@@ -6,7 +6,6 @@ import {
   OrderResponse,
 } from "@/types/cart";
 
-// Add to cart
 export const addToCart = createAsyncThunk<
   CartData,
   { productId: string; quantity: number },
@@ -46,7 +45,6 @@ export const addToCart = createAsyncThunk<
   }
 });
 
-// Fetch cart data
 export const fetchCartData = createAsyncThunk<
   CartData,
   void,
@@ -82,7 +80,6 @@ export const fetchCartData = createAsyncThunk<
   }
 });
 
-// Update cart
 export const updateCartData = createAsyncThunk<
   CartData,
   UpdateCartItemParams,
@@ -126,7 +123,6 @@ export const updateCartData = createAsyncThunk<
   }
 );
 
-// Place order
 export const placeOrder = createAsyncThunk<
   OrderResponse,
   CheckoutRequest,
