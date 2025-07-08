@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface UsePaginationProps {
@@ -17,27 +17,55 @@ interface UsePaginationProps {
 const useDeviceLimit = (
   responsiveLimits?: UsePaginationProps["responsiveLimits"]
 ) => {
-  const [deviceLimit, setDeviceLimit] = useState(10);
+  const getInitialLimit = useCallback(() => {
+    if (!responsiveLimits) return 10;
+
+    if (typeof window === "undefined") return responsiveLimits.desktop || 12;
+
+    const width = window.innerWidth;
+    if (width < 768) return responsiveLimits.mobile || 6;
+    if (width < 1440) return responsiveLimits.tablet || 8;
+    return responsiveLimits.desktop || 12;
+  }, [responsiveLimits]);
+
+  const [deviceLimit, setDeviceLimit] = useState(getInitialLimit);
+  const isInitialized = useRef(false);
 
   useEffect(() => {
-    if (!responsiveLimits) return;
+    if (!responsiveLimits || typeof window === "undefined") return;
 
     const updateLimit = () => {
       const width = window.innerWidth;
+      let newLimit: number;
 
       if (width < 768) {
-        setDeviceLimit(responsiveLimits.mobile || 6);
+        newLimit = responsiveLimits.mobile || 6;
       } else if (width < 1440) {
-        setDeviceLimit(responsiveLimits.tablet || 8);
+        newLimit = responsiveLimits.tablet || 8;
       } else {
-        setDeviceLimit(responsiveLimits.desktop || 12);
+        newLimit = responsiveLimits.desktop || 12;
       }
+
+      setDeviceLimit((prev) => (prev !== newLimit ? newLimit : prev));
     };
 
-    updateLimit();
-    window.addEventListener("resize", updateLimit);
+    if (!isInitialized.current) {
+      updateLimit();
+      isInitialized.current = true;
+    }
 
-    return () => window.removeEventListener("resize", updateLimit);
+    let timeoutId: NodeJS.Timeout;
+    const debouncedUpdateLimit = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(updateLimit, 150);
+    };
+
+    window.addEventListener("resize", debouncedUpdateLimit);
+
+    return () => {
+      window.removeEventListener("resize", debouncedUpdateLimit);
+      clearTimeout(timeoutId);
+    };
   }, [responsiveLimits]);
 
   return deviceLimit;
@@ -58,8 +86,16 @@ export const usePagination = ({
     updateUrl ? urlPage : initialPage
   );
 
+  useEffect(() => {
+    if (updateUrl && urlPage !== currentPage) {
+      setCurrentPage(urlPage);
+    }
+  }, [urlPage, updateUrl, currentPage]);
+
   const handlePageChange = useCallback(
     (page: number) => {
+      if (page === currentPage) return;
+
       setCurrentPage(page);
 
       if (updateUrl) {
@@ -68,7 +104,7 @@ export const usePagination = ({
         router.push(`?${params.toString()}`);
       }
     },
-    [router, searchParams, updateUrl, pageParamName]
+    [router, searchParams, updateUrl, pageParamName, currentPage]
   );
 
   const buildApiUrl = useCallback(
@@ -76,7 +112,6 @@ export const usePagination = ({
       const params = new URLSearchParams();
 
       params.set("page", currentPage.toString());
-
       params.set("limit", deviceLimit.toString());
 
       searchParams.forEach((value, key) => {
