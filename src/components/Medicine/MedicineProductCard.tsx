@@ -21,9 +21,8 @@ export const MedicineProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div className="bg-green-soft rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
-      <div className="aspect-square bg-gray-50 p-6 flex items-center justify-center">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
+    <div className="bg-green-soft rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
+      <div className="flex items-center justify-center rounded-2xl overflow-hidden">
         <img
           src={product.photo || "/images/default-medicine.webp"}
           alt={product.name}
@@ -31,26 +30,28 @@ export const MedicineProductCard: React.FC<ProductCardProps> = ({
             e.currentTarget.onerror = null;
             e.currentTarget.src = "/images/default-medicine.webp";
           }}
-          className="w-full h-full object-contain max-w-[120px] max-h-[120px]"
+          className="w-full h-full object-contain"
         />
       </div>
 
-      <div className="p-4 border-t border-gray-100">
-        <h3 className="font-semibold text-gray-900 text-lg mb-1">
+      <div className="pt-2 px-2">
+        <h3 className="font-semibold text-black-true text-lg mb-1">
           {product.name}
         </h3>
-        <p className="text-sm text-gray-500 mb-3">{product.suppliers}</p>
-        <p className="text-xl font-bold text-gray-900 mb-4">₴{product.price}</p>
+        <p className="text-sm text-gray-dark mb-3">{product.suppliers}</p>
+        <p className="text-xl font-bold text-black-true mb-4">
+          $ {product.price}
+        </p>
 
-        <div className="flex gap-2">
+        <div className="flex gap-4">
           <button
             onClick={handleAddToCartClick}
             disabled={isUpdatingItem}
-            className="flex-1 bg-green-500 text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="flex-1 bg-green-light text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-green-dark focus:outline-none focus:ring-2 focus:ring-green-dark focus:ring-offset-2 transition-colors disabled:bg-gray-dark disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {isUpdatingItem ? (
               <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-4 h-4 border-2 border-white-true border-t-transparent rounded-full animate-spin"></div>
                 Adding...
               </>
             ) : (
@@ -59,7 +60,7 @@ export const MedicineProductCard: React.FC<ProductCardProps> = ({
           </button>
           <button
             onClick={handleDetails}
-            className="px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+            className="px-4 py-2.5 border border-gray-dark text-gray-dark rounded-lg text-sm font-medium hover:bg-gray-light focus:outline-none focus:ring-2 focus:ring-gray-dark focus:ring-offset-2 transition-colors"
           >
             Details
           </button>
