@@ -26,7 +26,7 @@ export default function MedicinePage() {
   const paginationData = useAppSelector(selectMedicineProductsPagination);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Show all");
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  // const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const hasCheckedAuth = useRef(false);
   const { currentPage, deviceLimit, handlePageChange } = usePagination({
     responsiveLimits: {
@@ -87,9 +87,9 @@ export default function MedicinePage() {
     [router]
   );
 
-  const handleAuthModalClose = useCallback(() => {
-    setIsAuthModalOpen(false);
-  }, []);
+  // const handleAuthModalClose = useCallback(() => {
+  //   setIsAuthModalOpen(false);
+  // }, []);
 
   if (loading) {
     return <Spinner />;
@@ -139,13 +139,13 @@ export default function MedicinePage() {
           </>
         )}
 
-        {isAuthModalOpen && (
+        {/* {isAuthModalOpen && (
           <div className="fixed inset-0 bg-black-true bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white-true rounded-lg p-8 max-w-md w-full mx-4">
               <h2 className="text-2xl font-bold mb-4">
                 Authentication Required
               </h2>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-dark mb-6">
                 Please log in or register to add items to your cart.
               </p>
               <div className="flex gap-4">
@@ -164,7 +164,7 @@ export default function MedicinePage() {
               </button>
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </Container>
   );
