@@ -1,6 +1,6 @@
 import { Schema, model, models, Types, Document } from "mongoose";
 
-export interface MedicineProductReview extends Document {
+export interface MedicineProductReviewDocument extends Document {
   productId: Types.ObjectId;
   userId: Types.ObjectId;
   rating: number;
@@ -9,11 +9,11 @@ export interface MedicineProductReview extends Document {
   updatedAt: Date;
 }
 
-const MedicineProductReviewSchema = new Schema<MedicineProductReview>(
+const medicineProductReviewSchema = new Schema<MedicineProductReviewDocument>(
   {
     productId: {
       type: Schema.Types.ObjectId,
-      ref: "MedicineProduct",
+      ref: "Medicine_products",
       required: true,
     },
     userId: {
@@ -30,22 +30,24 @@ const MedicineProductReviewSchema = new Schema<MedicineProductReview>(
     comment: {
       type: String,
       required: true,
+      trim: true,
       maxlength: 1000,
     },
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 
-MedicineProductReviewSchema.index({ productId: 1, createdAt: -1 });
-MedicineProductReviewSchema.index({ userId: 1 });
+medicineProductReviewSchema.index({ productId: 1, createdAt: -1 });
+medicineProductReviewSchema.index({ userId: 1 });
 
 const MedicineProductReviewModel =
   models.Medicine_product_reviews ||
-  model<MedicineProductReview>(
+  model<MedicineProductReviewDocument>(
     "Medicine_product_reviews",
-    MedicineProductReviewSchema
+    medicineProductReviewSchema
   );
 
 export default MedicineProductReviewModel;

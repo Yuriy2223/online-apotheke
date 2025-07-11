@@ -41,6 +41,8 @@ export interface User {
   name: string;
   email: string;
   phone?: string;
+  avatar?: string;
+  address?: string;
   password: string;
   isEmailVerified: boolean;
   provider: "local" | "google";

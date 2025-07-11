@@ -5,6 +5,8 @@ export interface UserDocument extends Document {
   name: string;
   email: string;
   phone?: string;
+  avatar?: string;
+  address?: string;
   password: string;
   isEmailVerified: boolean;
   emailVerificationToken: string | null;
@@ -25,6 +27,14 @@ const userSchema = new Schema<UserDocument>(
       trim: true,
       minlength: 3,
       maxlength: 50,
+    },
+    avatar: {
+      type: String,
+      trim: true,
+    },
+    address: {
+      type: String,
+      trim: true,
     },
     email: {
       type: String,

@@ -26,7 +26,7 @@ export function TabsContainer({
   ];
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-white-true rounded-lg shadow-sm border border-gray-light">
       <div className="border-b border-gray-200">
         <nav className="flex">
           {tabs.map((tab) => (
@@ -35,8 +35,8 @@ export function TabsContainer({
               onClick={() => onTabChange(tab.id)}
               className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
                 activeTab === tab.id
-                  ? "border-green-500 text-green-600 bg-green-50"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "border-green-light text-green-light bg-green-soft"
+                  : "border-transparent text-gray-dark hover:text-gray-dark hover:border-gray-dark"
               }`}
             >
               {tab.label}
