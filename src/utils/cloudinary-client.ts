@@ -1,5 +1,3 @@
-// utils/cloudinary-client.ts
-
 export const uploadImage = async (file: File): Promise<string | null> => {
   const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!;
   const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!;
@@ -7,7 +5,7 @@ export const uploadImage = async (file: File): Promise<string | null> => {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", UPLOAD_PRESET);
-  // formData.append("folder", "e-parmacy");
+  formData.append("folder", "e-parmacy");
   // formData.append("transformation", "c_fill,g_face,h_200,w_200/f_webp/q_auto");
 
   try {
