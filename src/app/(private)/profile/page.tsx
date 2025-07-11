@@ -198,7 +198,7 @@ const ProfilePage: React.FC = () => {
           return;
         }
 
-        const response = await fetch("/api/user/update-avatar", {
+        const response = await fetch("/api/user/upload-avatar", {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -239,7 +239,7 @@ const ProfilePage: React.FC = () => {
 
     setUploadLoading(true);
     try {
-      const response = await fetch("/api/user/update-avatar", {
+      const response = await fetch("/api/user/upload-avatar", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
