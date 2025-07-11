@@ -7,8 +7,8 @@ export const uploadImage = async (file: File): Promise<string | null> => {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", UPLOAD_PRESET);
-  formData.append("folder", "avatars");
-  formData.append("transformation", "c_fill,g_face,h_200,w_200/f_webp/q_auto");
+  // formData.append("folder", "e-parmacy");
+  // formData.append("transformation", "c_fill,g_face,h_200,w_200/f_webp/q_auto");
 
   try {
     const res = await fetch(
