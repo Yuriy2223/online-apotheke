@@ -4,10 +4,9 @@ import { ReviewHome } from "@/types/reviews";
 export const ReviewsHomeCard = ({ review }: { review: ReviewHome }) => (
   <div className="bg-white rounded-2xl shadow-none min-h-[240px] flex flex-col">
     <div className="p-6 flex items-center gap-4">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={review.avatar}
-        alt=""
+        alt="Avatar"
         className="w-14 h-14 rounded-full object-cover flex-shrink-0"
         loading="lazy"
       />

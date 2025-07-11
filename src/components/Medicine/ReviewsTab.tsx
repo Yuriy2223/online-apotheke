@@ -78,7 +78,6 @@ export function ReviewsTab({ reviews, loading }: ReviewsTabProps) {
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-gray-200 rounded-full flex-shrink-0 overflow-hidden">
                     {review.userAvatar ? (
-                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={review.userAvatar}
                         alt={review.userName}

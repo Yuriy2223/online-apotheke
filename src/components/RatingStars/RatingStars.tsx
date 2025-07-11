@@ -24,7 +24,9 @@ export const RatingStars = ({
         />
       ))}
       {showValue && (
-        <span className="ml-1 text-sm font-medium text-gray-700">{rating}</span>
+        <span className="ml-1 text-sm font-medium text-gray-dark">
+          {rating}
+        </span>
       )}
     </div>
   );
