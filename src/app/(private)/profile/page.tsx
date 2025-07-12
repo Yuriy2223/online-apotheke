@@ -4,18 +4,18 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { updateUser } from "@/redux/auth/slice";
+import { toast } from "react-toastify";
+import { Camera, X, Edit3, Save, X as XIcon } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/redux/store";
+import { ProfileFormData, User } from "@/types/users";
+import { uploadImage } from "@/utils/cloudinary-client";
+import { profileSchema } from "@/validation/products";
 import {
   selectUser,
   selectIsAuthenticated,
   selectIsAuthChecking,
 } from "@/redux/auth/selectors";
-import { updateUser } from "@/redux/auth/slice";
-import { toast } from "react-toastify";
-import { Camera, X, Edit3, Save, X as XIcon } from "lucide-react";
-import { ProfileFormData, User } from "@/types/users";
-import { uploadImage } from "@/utils/cloudinary-client";
-import { profileSchema } from "@/validation/products";
 
 interface UpdateProfileResponse {
   success: boolean;
