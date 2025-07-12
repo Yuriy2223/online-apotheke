@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useAppSelector, useAppDispatch } from "@/redux/store";
@@ -14,38 +13,9 @@ import {
 import { updateUser } from "@/redux/auth/slice";
 import { toast } from "react-toastify";
 import { Camera, X, Edit3, Save, X as XIcon } from "lucide-react";
-import { User } from "@/types/users";
+import { ProfileFormData, User } from "@/types/users";
 import { uploadImage } from "@/utils/cloudinary-client";
-
-export type ProfileFormData = {
-  name: string;
-  phone?: string | null;
-  address?: string | null;
-  avatar?: string | null;
-};
-
-export const profileSchema: yup.ObjectSchema<ProfileFormData> = yup.object({
-  name: yup.string().required("Імʼя обовʼязкове").min(2).max(50).trim(),
-  phone: yup
-    .string()
-    .nullable()
-    .optional()
-    .transform((value) => (value === "" ? null : value))
-    .matches(/^\+?[1-9]\d{7,14}$/, {
-      message: "Невалідний номер телефону",
-      excludeEmptyString: true,
-    }),
-  address: yup
-    .string()
-    .nullable()
-    .optional()
-    .transform((value) => (value === "" ? null : value)),
-  avatar: yup
-    .string()
-    .nullable()
-    .optional()
-    .transform((value) => (value === "" ? null : value)),
-});
+import { profileSchema } from "@/validation/products";
 
 interface UpdateProfileResponse {
   success: boolean;

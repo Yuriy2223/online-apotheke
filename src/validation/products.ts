@@ -1,3 +1,4 @@
+import { ProfileFormData } from "@/types/users";
 import * as yup from "yup";
 
 export const createProductSchema = yup.object({
@@ -110,4 +111,27 @@ export const searchProductsSchema = yup.object({
     .string()
     .oneOf(["asc", "desc"], "Порядок сортування повинен бути 'asc' або 'desc'")
     .optional(),
+});
+
+export const profileSchema: yup.ObjectSchema<ProfileFormData> = yup.object({
+  name: yup.string().required("Імʼя обовʼязкове").min(2).max(50).trim(),
+  phone: yup
+    .string()
+    .nullable()
+    .optional()
+    .transform((value) => (value === "" ? null : value))
+    .matches(/^\+?[1-9]\d{7,14}$/, {
+      message: "Невалідний номер телефону",
+      excludeEmptyString: true,
+    }),
+  address: yup
+    .string()
+    .nullable()
+    .optional()
+    .transform((value) => (value === "" ? null : value)),
+  avatar: yup
+    .string()
+    .nullable()
+    .optional()
+    .transform((value) => (value === "" ? null : value)),
 });
