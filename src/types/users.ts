@@ -97,3 +97,9 @@ export interface JWTPayload {
   iat?: number;
   exp?: number;
 }
+export type ProfileFormData = {
+  name: string;
+  phone?: string | null;
+  address?: string | null;
+  avatar?: string | null;
+};
