@@ -3,14 +3,20 @@
 import Link from "next/link";
 import { ShoppingCart, User } from "lucide-react";
 import { useAppSelector } from "@/redux/store";
-import { selectIsAuthenticated } from "@/redux/auth/selectors";
+import { selectIsAuthenticated, selectUserName } from "@/redux/auth/selectors";
 import { selectCartTotalItems } from "@/redux/cart/selectors";
 
 export const UserCartAndIcon = () => {
   const isLoggedIn = useAppSelector(selectIsAuthenticated);
   const cartCount = useAppSelector(selectCartTotalItems);
+  const userName = useAppSelector(selectUserName);
 
   if (!isLoggedIn) return null;
+
+  const getFirstLetter = (name: string | undefined) => {
+    if (!name || name.trim() === "") return null;
+    return name.charAt(0).toUpperCase();
+  };
 
   return (
     <div className="flex items-center gap-4 relative">
@@ -32,7 +38,13 @@ export const UserCartAndIcon = () => {
         aria-label="Go to profile"
         className="flex items-center justify-center w-11 h-11 bg-white-true/20 rounded-full"
       >
-        <User className="w-6 h-6 text-white-true" />
+        {getFirstLetter(userName) ? (
+          <span className="text-white-true text-lg font-semibold">
+            {getFirstLetter(userName)}
+          </span>
+        ) : (
+          <User className="w-6 h-6 text-white-true" />
+        )}
       </Link>
     </div>
   );
