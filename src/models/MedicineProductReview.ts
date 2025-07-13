@@ -1,10 +1,12 @@
-import { Schema, model, models, Types, Document } from "mongoose";
+import { Schema, model, models, Document } from "mongoose";
 
 export interface MedicineProductReviewDocument extends Document {
-  productId: Types.ObjectId;
-  userId: Types.ObjectId;
+  productId: string;
+  userId: string;
   rating: number;
   comment: string;
+  commentDate: string;
+  description?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -12,13 +14,13 @@ export interface MedicineProductReviewDocument extends Document {
 const medicineProductReviewSchema = new Schema<MedicineProductReviewDocument>(
   {
     productId: {
-      type: Schema.Types.ObjectId,
+      type: String,
       ref: "Medicine_products",
       required: true,
     },
     userId: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
+      ref: "Users",
       required: true,
     },
     rating: {
@@ -32,6 +34,16 @@ const medicineProductReviewSchema = new Schema<MedicineProductReviewDocument>(
       required: true,
       trim: true,
       maxlength: 1000,
+    },
+    commentDate: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    description: {
+      type: String,
+      trim: true,
+      maxlength: 2000,
     },
   },
   {

@@ -10,9 +10,7 @@ export const sortCategory = [
   "Skin Care",
   "Dental Care",
   "Supplements",
-  // "Show all",
 ];
-
 export interface MedicineProduct {
   _id: string;
   photo: string;
@@ -24,30 +22,16 @@ export interface MedicineProduct {
   createdAt?: string;
   updatedAt?: string;
 }
-
 export interface MedicinesResponse {
   products: MedicineProduct[];
   pagination: PaginationData;
 }
-
 export interface MedicinesParams {
   page?: number;
   limit?: number;
   search?: string;
   category?: string;
 }
-// export interface MedicineProduct {
-//   _id: string;
-//   photo: string;
-//   name: string;
-//   suppliers: string;
-//   stock: string;
-//   price: string;
-//   category: string;
-//   createdAt?: string;
-//   updatedAt?: string;
-// }
-
 export interface MedicineProductDetails extends MedicineProduct {
   description: string;
   rating: number;
@@ -61,17 +45,6 @@ export interface MedicineProductDetails extends MedicineProduct {
     digestiveAid?: string;
   };
 }
-
-export interface MedicineProductDetailsReview {
-  _id: string;
-  userId: string;
-  userName: string;
-  userAvatar?: string;
-  rating: number;
-  comment: string;
-  createdAt: string;
-}
-
 export interface MedicineProductReviewsResponse {
   reviews: MedicineProductDetailsReview[];
   pagination: {
@@ -81,18 +54,14 @@ export interface MedicineProductReviewsResponse {
     limit: number;
   };
 }
-
-// export interface MedicineProductDetails {
-//   _id: string;
-//   photo: string;
-//   name: string;
-//   suppliers: string;
-//   stock: string;
-//   price: string;
-//   category: string;
-//   description: string;
-//   rating: number;
-//   reviewsCount: number;
-//   createdAt?: string;
-//   updatedAt?: string;
-// }
+export interface MedicineProductDetailsReview {
+  _id: string;
+  productId: string;
+  userId: string;
+  rating: number;
+  comment: string;
+  commentDate: string;
+  // description: string;
+  createdAt: string;
+  updatedAt: string;
+}

@@ -47,7 +47,7 @@ export default function MedicineProductPage() {
   useEffect(() => {
     if (productId) {
       dispatch(fetchMedicineProductDetails(productId));
-      dispatch(fetchMedicineProductReviews(productId));
+      dispatch(fetchMedicineProductReviews({ productId, page: 1, limit: 5 }));
     }
   }, [productId, dispatch]);
 
@@ -75,7 +75,7 @@ export default function MedicineProductPage() {
   const handleRetry = useCallback(() => {
     if (productId) {
       dispatch(fetchMedicineProductDetails(productId));
-      dispatch(fetchMedicineProductReviews(productId));
+      dispatch(fetchMedicineProductReviews({ productId, page: 1, limit: 5 }));
     }
   }, [productId, dispatch]);
 
@@ -128,6 +128,7 @@ export default function MedicineProductPage() {
           product={product}
           reviews={reviews}
           reviewsLoading={reviewsLoading}
+          productId={productId || ""}
         />
       </div>
     </Container>

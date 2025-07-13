@@ -22,7 +22,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     const reviewsStats = await MedicineProductReviewModel.aggregate([
-      { $match: { productId: product._id } },
+      // { $match: { productId: product._id } },
+      { $match: { productId: product._id.toString() } },
       {
         $group: {
           _id: null,
