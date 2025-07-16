@@ -151,14 +151,6 @@ export function ReviewsTab({ reviews, loading, productId }: ReviewsTabProps) {
   const pagination = useAppSelector(selectMedicineProductReviewsPagination);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // useEffect(() => {
-  //   if (productId && currentPage > 1) {
-  //     dispatch(
-  //       fetchMedicineProductReviews(`${productId}?page=${currentPage}&limit=5`)
-  //     );
-  //   }
-  // }, [currentPage, productId, dispatch]);
-
   useEffect(() => {
     if (productId) {
       dispatch(
