@@ -5,14 +5,14 @@ import {
 } from "./operations";
 import {
   MedicineProductDetails,
-  MedicineProductDetailsReview,
+  MedicineProductDetailsReviewWithUser,
 } from "@/types/medicine-products";
 
 interface MedicineProductState {
   productDetails: MedicineProductDetails | null;
   productDetailsLoading: boolean;
   productDetailsError: string | null;
-  reviews: MedicineProductDetailsReview[];
+  reviews: MedicineProductDetailsReviewWithUser[];
   reviewsLoading: boolean;
   reviewsError: string | null;
   reviewsPagination: {
