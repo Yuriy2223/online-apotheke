@@ -19,7 +19,7 @@ interface GoogleAuthButtonProps {
   size?: "sm" | "md" | "lg";
 }
 
-export default function GoogleAuthButton({
+export function GoogleAuthButton({
   buttonText = "Увійти через Google",
   loadingText = "Підключення до Google...",
   disabled = false,
