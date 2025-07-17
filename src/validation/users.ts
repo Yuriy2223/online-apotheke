@@ -14,16 +14,16 @@ export const registerSchema = yup.object({
     .max(100, "Максимум 100 символів")
     .lowercase()
     .trim(),
-  phone: yup
-    .string()
-    .required("Телефон обовʼязковий")
-    .matches(/^\+?[1-9]\d{1,14}$/, "Невалідний формат телефону")
-    .trim(),
+  // phone: yup
+  //   .string()
+  //   .required("Телефон обовʼязковий")
+  //   .matches(/^\+?[1-9]\d{1,14}$/, "Невалідний формат телефону")
+  //   .trim(),
   password: yup
     .string()
     .required("Пароль обовʼязковий")
     .min(6, "Пароль повинен містити мінімум 6 символів")
-    .max(32, "Пароль не повинен перевищувати 32 символи")
+    .max(128, "Пароль не повинен перевищувати 128 символів")
     .trim(),
   confirmPassword: yup
     .string()

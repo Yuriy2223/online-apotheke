@@ -62,7 +62,7 @@ export interface UserResponse {
 export interface RegisterFormData {
   name: string;
   email: string;
-  phone: string;
+  // phone: string;
   password: string;
   confirmPassword: string;
 }

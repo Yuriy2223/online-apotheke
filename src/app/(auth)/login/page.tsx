@@ -9,12 +9,12 @@ import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { LoginFormData } from "@/types/users";
 import { loginUser } from "@/redux/auth/operations";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import GoogleAuthButton from "@/components/GoogleAuthButton/GoogleAuthButton";
+import { GoogleAuthButton } from "@/components/GoogleAuthButton/GoogleAuthButton";
+import { useUrlErrorHandler } from "@/hooks/useUrlErrorHandler";
 import {
   selectAuthLoading,
   selectIsAuthenticated,
 } from "@/redux/auth/selectors";
-import { useUrlErrorHandler } from "@/hooks/useUrlErrorHandler";
 
 export default function LoginPage() {
   const dispatch = useAppDispatch();
