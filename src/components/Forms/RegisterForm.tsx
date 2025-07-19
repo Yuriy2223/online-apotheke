@@ -12,11 +12,12 @@ import { User, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { registerSchema } from "@/validation/users";
 import { selectAuthLoading } from "@/redux/auth/selectors";
 
-interface RegisterFormProps {
-  onSuccess?: () => void;
-}
+// interface RegisterFormProps {
+//   onSuccess?: () => void;
+// }
 
-export function RegisterForm({ onSuccess }: RegisterFormProps) {
+export function RegisterForm() {
+// { onSuccess }: RegisterFormProps
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -48,7 +49,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
       } else if (registerUser.fulfilled.match(result)) {
         toast.success("Реєстрацію успішно завершено!");
         reset();
-        onSuccess?.();
+        // onSuccess?.();
       }
     } catch (error) {
       console.error("Registration error:", error);

@@ -21,7 +21,7 @@
     "lodash": "^4.17.21",
     "lucide-react": "^0.515.0",
     "mongoose": "^8.15.2",
-    "multer": "^2.0.1",
+    "multer": "^2.0.2",
     "next": "15.3.3",
     "nodemailer": "^7.0.3",
     "react": "^19.0.0",
