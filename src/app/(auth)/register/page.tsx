@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Container } from "@/shared/Container";
 import { useAppSelector } from "@/redux/store";
 import { GoogleAuthButton } from "@/components/GoogleAuthButton/GoogleAuthButton";
 import { RegisterForm } from "@/components/Forms/RegisterForm";
@@ -28,40 +30,51 @@ export default function RegisterPage() {
   }, [isAuthenticated, router]);
 
   const handleGoogleError = (error: string) => {
-    console.error("Google Auth Error:", error);
     toast.error(`Помилка Google авторизації: ${error}`);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-900">Реєстрація</h2>
-          <p className="text-gray-600 mt-2">Створіть новий акаунт</p>
-        </div>
-
-        <RegisterForm />
-
-        <p className="text-center text-sm text-gray-600 mt-6">
-          Вже маєте акаунт?
-          <Link
-            href="/login"
-            className="text-blue-600 hover:text-blue-700 font-medium"
-          >
-            Увійти
-          </Link>
-        </p>
-
-        <div className="mt-6">
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">або</span>
+    <Container className="flex">
+      <div className="flex flex-col gap-5 desktop:flex-row desktop:pt-[198px] desktop:pb-[198px]">
+        <div className="pt-[80px] relative tablet:pt-[140px] tablet:flex tablet:items-center tablet:justify-center  desktop:flex-1 desktop:pt-0">
+          <h2 className="font-semibold text-[28px] leading-[1.21] text-black-true tablet:text-[54px] tablet:leading-[1.11] tablet:w-[614px]">
+            Your medication, delivered. Say goodbye to all
+            <span className="text-green-light"> your healthcare </span>
+            worries with us.
+          </h2>
+          <div className="absolute top-6 right-7 tablet:top-7 tablet:right-5">
+            <div className="relative h-[93px] w-[95px] tablet:h-[175px] tablet:w-[179px]">
+              <Image
+                src="/images/auth-pill.webp"
+                alt="pill"
+                fill
+                className="object-contain"
+                priority
+              />
             </div>
           </div>
-
+        </div>
+        <div className="desktop:flex-1 desktop:shrink-0">
+          <RegisterForm />
+          <p className="text-center text-sm text-gray-dark mt-6">
+            Вже маєте акаунт?
+            <Link
+              href="/login"
+              className="text-green-light hover:text-green-dark font-medium"
+            >
+              Увійти
+            </Link>
+          </p>
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-dark" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 text-gray-dark">або</span>
+              </div>
+            </div>
+          </div>
           <div className="mt-3">
             <GoogleAuthButton
               buttonText="Увійти через Google"
@@ -73,7 +86,7 @@ export default function RegisterPage() {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 }
 

@@ -14,7 +14,7 @@ export const Hero = () => {
           height={508}
           sizes="(max-width: 375px) 330px, (max-width: 768px) 704px, 750px"
           className="w-full max-w-[750px] h-auto  mx-auto"
-          priority //  важливо пріорететне завантаження!
+          priority
         />
         <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center">
           <div className="pt-[20px] tablet:pt-[140px] tablet:pl-[32px] tablet:pr-[83px] bg-img h-[312px] w-[330px] max-tablet:w-[280px] tablet:h-[508px] tablet:w-auto lg:w-[750px] mx-auto">
