@@ -42,7 +42,7 @@ export default function RegisterPage() {
             <span className="text-green-light"> your healthcare </span>
             worries with us.
           </h2>
-          <div className="absolute top-6 right-7 tablet:top-7 tablet:right-15 desktop:top-[-54px] desktop:right-6">
+          <div className="absolute top-6 right-7 max-mobile:top-2 max-mobile:right-1 tablet:top-7 tablet:right-15 desktop:top-[-54px] desktop:right-6">
             <div className="relative h-[93px] w-[95px] tablet:h-[175px] tablet:w-[179px]">
               <Image
                 src="/images/auth-pill.webp"
