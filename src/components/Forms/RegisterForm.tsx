@@ -187,7 +187,7 @@ export function RegisterForm() {
         <button
           type="submit"
           disabled={loading || isSubmitting}
-          className="w-full max-w-[300px] bg-green-light text-white-true py-3 px-4 rounded-lg hover:bg-green-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+          className="w-full max-w-[400px] bg-green-light text-white-true py-3 px-4 rounded-lg hover:bg-green-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
         >
           {loading || isSubmitting ? "Реєстрація..." : "Зареєструватися"}
         </button>
