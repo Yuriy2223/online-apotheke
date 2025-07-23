@@ -42,7 +42,7 @@ export default function RegisterPage() {
             <span className="text-green-light"> your healthcare </span>
             worries with us.
           </h2>
-          <div className="absolute top-6 right-7 tablet:top-7 tablet:right-5 desktop:top-1 desktop:right-3">
+          <div className="absolute top-6 right-7 tablet:top-7 tablet:right-15 desktop:top-[-54px] desktop:right-6">
             <div className="relative h-[93px] w-[95px] tablet:h-[175px] tablet:w-[179px]">
               <Image
                 src="/images/auth-pill.webp"
@@ -54,7 +54,7 @@ export default function RegisterPage() {
             </div>
           </div>
         </div>
-        <div className="desktop:flex-1 desktop:shrink-0">
+        <div className="desktop:flex-1 desktop:shrink-0 tablet:px-10 desktop:px-1">
           <RegisterForm />
           <p className="text-center text-sm text-gray-dark mt-6">
             Вже маєте акаунт?
@@ -71,7 +71,9 @@ export default function RegisterPage() {
                 <div className="w-full border-t border-gray-dark" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 text-gray-dark">or</span>
+                <span className="text-base px-2 text-gray-dark bg-gray-light">
+                  or
+                </span>
               </div>
             </div>
           </div>
