@@ -42,7 +42,7 @@ export default function RegisterPage() {
             <span className="text-green-light"> your healthcare </span>
             worries with us.
           </h2>
-          <div className="absolute top-6 right-7 tablet:top-7 tablet:right-15 desktop:top-[-54px] desktop:right-6">
+          <div className="absolute top-6 right-7 max-mobile:top-2 max-mobile:right-1 tablet:top-7 tablet:right-15 desktop:top-[-54px] desktop:right-6">
             <div className="relative h-[93px] w-[95px] tablet:h-[175px] tablet:w-[179px]">
               <Image
                 src="/images/auth-pill.webp"
@@ -60,13 +60,13 @@ export default function RegisterPage() {
             Вже маєте акаунт?
             <Link
               href="/login"
-              className="text-green-light hover:text-green-dark font-medium"
+              className="text-green-light hover:text-green-dark font-medium ml-2 transition-colors"
             >
               Увійти
             </Link>
           </p>
-          <div className="mt-6">
-            <div className="relative">
+          <div className="mt-4 flex flex-col items-center">
+            <div className="relative w-full max-w-[400px]">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-dark" />
               </div>
@@ -76,15 +76,16 @@ export default function RegisterPage() {
                 </span>
               </div>
             </div>
-          </div>
-          <div className="mt-3">
-            <GoogleAuthButton
-              buttonText="Увійти через Google"
-              loadingText="Підключення до Google..."
-              disabled={loading}
-              onError={handleGoogleError}
-              size="md"
-            />
+
+            <div className="mt-4 w-full max-w-[400px]">
+              <GoogleAuthButton
+                buttonText="Увійти через Google"
+                loadingText="Підключення до Google..."
+                disabled={loading}
+                onError={handleGoogleError}
+                size="md"
+              />
+            </div>
           </div>
         </div>
       </div>
