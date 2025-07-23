@@ -92,11 +92,6 @@ export function GoogleAuthButton({
         ${sizeClasses[size]}
         ${className}
       `}
-      // className={`
-      //   w-full max-w-[400px] flex justify-center items-center border border-gray-dark rounded-lg shadow-sm font-medium text-black-true bg-green-light hover:bg-green-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors
-      //   ${sizeClasses[size]}
-      //   ${className}
-      // `}
     >
       {isLoading ? (
         <div className="flex items-center">
