@@ -60,12 +60,12 @@ export default function RegisterPage() {
             Вже маєте акаунт?
             <Link
               href="/login"
-              className="text-green-light hover:text-green-dark font-medium"
+              className="text-green-light hover:text-green-dark font-medium ml-2 transition-colors"
             >
               Увійти
             </Link>
           </p>
-          <div className="mt-6">
+          <div className="mt-4">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-dark" />
