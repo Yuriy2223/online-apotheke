@@ -76,8 +76,7 @@ export default function RegisterPage() {
                 </span>
               </div>
             </div>
-
-            <div className="mt-4 w-full max-w-[400px]">
+            <div className="mt-4 mb-6 w-full max-w-[400px]">
               <GoogleAuthButton
                 buttonText="Увійти через Google"
                 loadingText="Підключення до Google..."

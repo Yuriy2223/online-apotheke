@@ -1,16 +1,17 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { toast } from "react-toastify";
-import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { LoginFormData } from "@/types/users";
 import { loginUser } from "@/redux/auth/operations";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { GoogleAuthButton } from "@/components/GoogleAuthButton/GoogleAuthButton";
 import { useUrlErrorHandler } from "@/hooks/useUrlErrorHandler";
+import { LoginForm } from "@/components/Forms/LoginForm";
+import { Container } from "@/shared/Container";
 import {
   selectAuthLoading,
   selectIsAuthenticated,
@@ -18,151 +19,96 @@ import {
 
 export default function LoginPage() {
   const dispatch = useAppDispatch();
-  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const loading = useAppSelector(selectAuthLoading);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
   useUrlErrorHandler();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginFormData>();
-
   useEffect(() => {
     if (isAuthenticated) {
+      toast.success("Ласкаво просимо!");
       router.push("/");
     }
   }, [isAuthenticated, router]);
 
-  const onSubmit = (data: LoginFormData) => {
+  const handleFormSubmit = (data: LoginFormData) => {
     dispatch(loginUser(data));
   };
 
   const handleGoogleError = (error: string) => {
-    console.error("Google Auth Error:", error);
     toast.error(`Помилка Google авторизації: ${error}`);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-900">Вхід</h2>
-          <p className="text-gray-600 mt-2">Увійдіть у свій акаунт</p>
-        </div>
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                {...register("email", {
-                  required: "Email обов'язковий",
-                  pattern: {
-                    value: /^\S+@\S+$/i,
-                    message: "Невірний формат email",
-                  },
-                })}
-                type="email"
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="example@email.com"
+    <Container className="flex">
+      <div className="flex flex-col gap-7 desktop:flex-row desktop:pt-[198px] desktop:pb-[198px] desktop:gap-[70px]">
+        <div className="pt-[80px] relative tablet:pt-[140px] tablet:flex tablet:items-center tablet:justify-center  desktop:flex-1 desktop:pt-0">
+          <h2 className="font-semibold text-[28px] leading-[1.21] text-black-true tablet:text-[54px] tablet:leading-[1.11] tablet:w-[614px]">
+            Your medication, delivered. Say goodbye to all
+            <span className="text-green-light"> your healthcare </span>
+            worries with us.
+          </h2>
+          <div className="absolute top-6 right-7 max-mobile:top-2 max-mobile:right-1 tablet:top-7 tablet:right-15 desktop:top-[-68px] desktop:right-6">
+            <div className="relative h-[93px] w-[95px] tablet:h-[175px] tablet:w-[179px]">
+              <Image
+                src="/images/auth-pill.webp"
+                alt="pill"
+                fill
+                className="object-contain"
+                priority
               />
             </div>
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.email.message}
-              </p>
-            )}
           </div>
+        </div>
+        <div className="desktop:flex-1 desktop:shrink-0 tablet:px-10 desktop:px-1">
+          <LoginForm onSubmit={handleFormSubmit} loading={loading} />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Пароль
-            </label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                {...register("password", { required: "Пароль обов'язковий" })}
-                type={showPassword ? "text" : "password"}
-                className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Введіть пароль"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+          <div className="mt-6 text-center space-y-2">
+            <p className="text-center text-sm text-gray-dark mt-6">
+              Забули пароль?
+              <Link
+                href="/forgot-password"
+                className="text-green-light hover:text-green-dark font-medium ml-2 transition-colors"
               >
-                {showPassword ? (
-                  <EyeOff className="w-5 h-5" />
-                ) : (
-                  <Eye className="w-5 h-5" />
-                )}
-              </button>
-            </div>
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.password.message}
-              </p>
-            )}
+                Відновити
+              </Link>
+            </p>
+            <p className="text-sm text-gray-600">
+              Немає акаунту?
+              <Link
+                href="/register"
+                className="text-green-light hover:text-green-dark font-medium ml-2 transition-colors"
+              >
+                Зареєструватися
+              </Link>
+            </p>
           </div>
 
-          <button
-            type="submit"
-            disabled={loading || isSubmitting}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {loading || isSubmitting ? "Входжу..." : "Увійти"}
-          </button>
-        </form>
-
-        <div className="mt-6 text-center space-y-2">
-          <p className="text-sm text-gray-600">
-            Забули пароль?{" "}
-            <Link
-              href="/forgot-password"
-              className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
-            >
-              Відновити
-            </Link>
-          </p>
-          <p className="text-sm text-gray-600">
-            Немає акаунту?{" "}
-            <Link
-              href="/register"
-              className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
-            >
-              Зареєструватися
-            </Link>
-          </p>
-        </div>
-
-        <div className="mt-6">
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
+          <div className="mt-4 flex flex-col items-center">
+            <div className="relative w-full max-w-[400px]">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-dark" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="text-base px-2 text-gray-dark bg-gray-light">
+                  or
+                </span>
+              </div>
             </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">або</span>
-            </div>
-          </div>
 
-          <div className="mt-3">
-            <GoogleAuthButton
-              buttonText="Увійти через Google"
-              loadingText="Підключення до Google..."
-              disabled={loading || isSubmitting}
-              onError={handleGoogleError}
-              size="md"
-            />
+            <div className="mt-4 mb-6 w-full max-w-[400px]">
+              <GoogleAuthButton
+                buttonText="Увійти через Google"
+                loadingText="Підключення до Google..."
+                disabled={loading}
+                onError={handleGoogleError}
+                size="md"
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 }
