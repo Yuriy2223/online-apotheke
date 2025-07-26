@@ -11,6 +11,11 @@ import { clearError, resetResetPasswordState } from "@/redux/auth/slice";
 import { resetPassword } from "@/redux/auth/operations";
 import { ResetPasswordData } from "@/types/users";
 import {
+  selectAuthError,
+  selectResetPasswordLoading,
+  selectResetPasswordSuccess,
+} from "@/redux/auth/selectors";
+import {
   Lock,
   Eye,
   EyeOff,
@@ -18,11 +23,6 @@ import {
   AlertCircle,
   Loader2,
 } from "lucide-react";
-import {
-  selectAuthError,
-  selectResetPasswordLoading,
-  selectResetPasswordSuccess,
-} from "@/redux/auth/selectors";
 
 export interface ResetPasswordProps {
   token: string;
@@ -60,7 +60,7 @@ export default function ResetPasswordClient({ token }: ResetPasswordProps) {
     if (success) {
       const timer = setTimeout(() => {
         router.push("/login");
-      }, 3000);
+      }, 2000);
 
       return () => clearTimeout(timer);
     }
@@ -118,7 +118,7 @@ export default function ResetPasswordClient({ token }: ResetPasswordProps) {
               Ваш пароль успішно змінено. Можете увійти з новим паролем.
             </p>
             <p className="text-sm text-gray-500">
-              Перенаправлення через 3 секунди...
+              Перенаправлення через 2 секунди...
             </p>
           </div>
         ) : (
