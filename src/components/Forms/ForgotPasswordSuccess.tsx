@@ -24,7 +24,7 @@ export function ForgotPasswordSuccess() {
 
       <Link
         href="/login"
-        className="inline-block mt-6 text-green-light hover:text-green-dark font-semibold transition-colors duration-200"
+        className="inline-block my-6 text-green-light hover:text-green-dark font-semibold transition-colors duration-200"
       >
         Повернутися до входу
       </Link>
