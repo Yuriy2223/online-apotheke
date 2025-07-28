@@ -629,48 +629,51 @@ export default function ResetPasswordClient({ token }: ResetPasswordProps) {
     </div>
   );
 
-  const renderHeaderSection = () => (
-    <div className="pt-[80px] pb-8 relative tablet:pt-[140px] tablet:pb-12 desktop:flex-1 desktop:pt-0 desktop:pb-0 tablet:flex tablet:items-center tablet:justify-center desktop:flex desktop:items-center desktop:justify-start">
-      <div className="relative tablet:w-[614px] desktop:w-auto desktop:max-w-[600px]">
-        <h2 className="font-semibold text-[28px] leading-[1.21] text-black-true tablet:text-[54px] tablet:leading-[1.11] desktop:text-[48px] desktop:leading-[1.15]">
-          Secure password reset for your
-          <span className="text-green-light"> healthcare </span>
-          peace of mind.
-        </h2>
-        <div className="absolute top-14 right-2 max-mobile:top-[-80px] max-mobile:right-[-6px] tablet:top-24 tablet:right-0 desktop:top-[-50px] desktop:right-[-80px]">
-          <div className="relative h-[93px] w-[95px] tablet:h-[120px] tablet:w-[123px]">
-            <Image
-              src="/images/auth-pill.webp"
-              alt="pill"
-              fill
-              className="object-contain"
-              priority
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderFormSection = () => (
-    <div className="desktop:flex-1 desktop:flex desktop:items-center desktop:justify-center">
-      <div className="w-full max-w-md tablet:max-w-lg tablet:mx-auto desktop:mx-0">
-        {!token ? (
-          renderInvalidTokenMessage()
-        ) : success ? (
-          renderSuccessMessage()
-        ) : (
-          <ResetPasswordForm token={token} />
-        )}
-      </div>
-    </div>
-  );
-
   return (
     <Container className="flex">
       <div className="flex flex-col gap-7 w-full desktop:flex-row desktop:pt-[100px] desktop:pb-[100px] desktop:gap-[70px]">
-        {renderHeaderSection()}
-        {renderFormSection()}
+        <div className="pt-[80px] pb-8 relative tablet:pt-[140px] tablet:pb-12 desktop:flex-1 desktop:pt-0 desktop:pb-0 tablet:flex tablet:items-center tablet:justify-center desktop:flex desktop:items-center desktop:justify-start">
+          <div className="relative tablet:w-[614px] desktop:w-auto desktop:max-w-[600px]">
+            <h2 className="font-semibold text-[28px] leading-[1.21] text-black-true tablet:text-[54px] tablet:leading-[1.11] desktop:text-[48px] desktop:leading-[1.15]">
+              Secure password reset for your
+              <span className="text-green-light"> healthcare </span>
+              peace of mind.
+            </h2>
+            <div className="absolute top-14 right-2 max-mobile:top-[-80px] max-mobile:right-[-6px] tablet:top-24 tablet:right-0 desktop:top-[-50px] desktop:right-[-80px]">
+              <div className="relative h-[93px] w-[95px] tablet:h-[120px] tablet:w-[123px]">
+                <Image
+                  src="/images/auth-pill.webp"
+                  alt="pill"
+                  fill
+                  sizes="(max-width: 767px) 95px, (min-width: 768px) 120px"
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="desktop:flex-1 desktop:flex desktop:items-center desktop:justify-center">
+          {/* <div className="w-full max-w-md tablet:max-w-lg tablet:mx-auto desktop:mx-0"> */}
+          <div className="w-full">
+            {!token ? (
+              renderInvalidTokenMessage()
+            ) : success ? (
+              renderSuccessMessage()
+            ) : (
+              <ResetPasswordForm token={token} />
+            )}
+            <div className="w-full flex items-center justify-center my-6">
+              <Link
+                href="/login"
+                className="text-green-light hover:text-green-dark font-semibold text-sm transition-colors"
+              >
+                Повернутися до входу
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </Container>
   );
