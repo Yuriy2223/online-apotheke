@@ -68,10 +68,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         </div>
       )}
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        // className="w-full flex flex-col tablet:flex-row tablet:flex-wrap tablet:justify-between"
-      >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full flex flex-col tablet:flex-row tablet:flex-wrap tablet:justify-between">
           <div className="flex flex-col gap-1 tablet:w-[300px] w-full">
             <div className="relative group">
