@@ -3,13 +3,18 @@
 import Link from "next/link";
 import { ShoppingCart, User } from "lucide-react";
 import { useAppSelector } from "@/redux/store";
-import { selectIsAuthenticated, selectUserName } from "@/redux/auth/selectors";
 import { selectCartTotalItems } from "@/redux/cart/selectors";
+import {
+  selectIsAuthenticated,
+  selectUserAvatar,
+  selectUserName,
+} from "@/redux/auth/selectors";
 
 export const UserCartAndIcon = () => {
   const isLoggedIn = useAppSelector(selectIsAuthenticated);
   const cartCount = useAppSelector(selectCartTotalItems);
   const userName = useAppSelector(selectUserName);
+  const userAvatar = useAppSelector(selectUserAvatar);
 
   if (!isLoggedIn) return null;
 
@@ -36,15 +41,25 @@ export const UserCartAndIcon = () => {
       <Link
         href="/profile"
         aria-label="Go to profile"
-        className="flex items-center justify-center w-11 h-11 bg-white-true/20 rounded-full"
+        className="relative group"
       >
-        {getFirstLetter(userName) ? (
-          <span className="text-white-true text-lg font-semibold">
-            {getFirstLetter(userName)}
-          </span>
-        ) : (
-          <User className="w-6 h-6 text-white-true" />
-        )}
+        <div className="flex items-center justify-center w-11 h-11 bg-white-true/20 rounded-full overflow-hidden border-2 border-white-true/30 backdrop-blur-sm transition-all duration-300 group-hover:border-white-true/60 group-hover:shadow-lg group-hover:scale-105">
+          {userAvatar ? (
+            <img
+              src={userAvatar}
+              alt="User avatar"
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+            />
+          ) : getFirstLetter(userName) ? (
+            <span className="text-white-true text-lg font-semibold transition-transform duration-300 group-hover:scale-110">
+              {getFirstLetter(userName)}
+            </span>
+          ) : (
+            <User className="w-6 h-6 text-white-true transition-transform duration-300 group-hover:scale-110" />
+          )}
+        </div>
+
+        <div className="absolute inset-0 rounded-full bg-white-true/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-md"></div>
       </Link>
     </div>
   );
