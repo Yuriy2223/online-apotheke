@@ -14,6 +14,7 @@ export const selectIsAuthenticated = (state: RootState) =>
   state.auth.isAuthenticated;
 export const selectUserName = (state: RootState) => state.auth.user?.name;
 export const selectUserEmail = (state: RootState) => state.auth.user?.email;
+export const selectUserAvatar = (state: RootState) => state.auth.user?.avatar;
 export const selectIsEmailVerified = (state: RootState) =>
   state.auth.user?.isEmailVerified;
 export const selectUserProvider = (state: RootState) =>
