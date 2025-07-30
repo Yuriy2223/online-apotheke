@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Lock, Eye, EyeOff, AlertCircle } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { schemaResetPassword } from "@/validation/users";
 import { resetPassword } from "@/redux/auth/operations";
@@ -12,7 +13,6 @@ import {
   selectAuthError,
   selectResetPasswordLoading,
 } from "@/redux/auth/selectors";
-import { Lock, Eye, EyeOff, AlertCircle, Loader2 } from "lucide-react";
 
 interface ResetPasswordFormProps {
   token: string;
@@ -28,7 +28,6 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
   const {
     register,
     handleSubmit,
-
     formState: { errors, isValid },
   } = useForm<ResetPasswordData>({
     resolver: yupResolver(schemaResetPassword),
@@ -158,14 +157,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
             disabled={!isValid || isSubmitting}
             className="w-full max-w-[400px] bg-green-light text-white-true py-3 px-4 rounded-lg hover:bg-green-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
           >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Збереження...
-              </>
-            ) : (
-              "Зберегти новий пароль"
-            )}
+            {isSubmitting ? <>Збереження...</> : "Зберегти новий пароль"}
           </button>
         </div>
       </form>
