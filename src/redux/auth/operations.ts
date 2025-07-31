@@ -1,6 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import { LoginFormData, RegisterFormData, User } from "@/types/users";
+import { uploadImage } from "@/utils/cloudinary-client";
+import {
+  LoginFormData,
+  ProfileFormData,
+  RegisterFormData,
+  User,
+} from "@/types/users";
 
 interface AuthResponse {
   user: User;
@@ -205,5 +211,102 @@ export const verifyEmail = createAsyncThunk<
     console.error("Verify email error:", error);
     toast.error("Помилка мережі");
     return rejectWithValue("Помилка мережі");
+  }
+});
+
+export const uploadAvatar = createAsyncThunk<
+  string,
+  File,
+  { rejectValue: string }
+>("auth/uploadAvatar", async (file, { rejectWithValue }) => {
+  try {
+    const cloudinaryUrl = await uploadImage(file);
+    if (!cloudinaryUrl) {
+      throw new Error("Помилка при завантаженні зображення");
+    }
+
+    const response = await fetch("/api/user/upload-avatar", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ avatarUrl: cloudinaryUrl }),
+    });
+
+    const result = await response.json();
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "Помилка при оновленні аватара");
+    }
+
+    const avatarUrl = result.data?.avatarUrl;
+    if (!avatarUrl) {
+      throw new Error("Отримано невалідну відповідь від сервера");
+    }
+
+    return avatarUrl;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Невідома помилка";
+    return rejectWithValue(message);
+  }
+});
+
+export const removeAvatar = createAsyncThunk<
+  string,
+  void,
+  { rejectValue: string }
+>("auth/removeAvatar", async (_, { rejectWithValue }) => {
+  try {
+    const response = await fetch("/api/user/upload-avatar", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ avatarUrl: "" }),
+    });
+
+    const result = await response.json();
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "Помилка при видаленні аватара");
+    }
+
+    return "";
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Невідома помилка";
+    return rejectWithValue(message);
+  }
+});
+
+export const updateProfile = createAsyncThunk<
+  User,
+  ProfileFormData,
+  { rejectValue: string }
+>("auth/updateProfile", async (data, { rejectWithValue }) => {
+  try {
+    const cleanData = {
+      name: data.name.trim(),
+      phone: data.phone?.trim() || null,
+      address: data.address?.trim() || null,
+      avatar: data.avatar?.trim() || null,
+    };
+
+    const response = await fetch("/api/user/profile", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(cleanData),
+    });
+
+    const result = await response.json();
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "Помилка при оновленні профілю");
+    }
+
+    const updatedUser = result.data?.user;
+    if (!updatedUser) {
+      throw new Error("Отримано невалідну відповідь від сервера");
+    }
+
+    return updatedUser;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Невідома помилка";
+    return rejectWithValue(message);
   }
 });

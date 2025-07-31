@@ -34,3 +34,8 @@ export const selectVerifyEmailLoading = (state: RootState) =>
   state.auth.verifyEmailLoading;
 export const selectVerifyEmailSuccess = (state: RootState) =>
   state.auth.verifyEmailSuccess;
+
+export const selectUploadLoading = (state: RootState) =>
+  state.auth.uploadLoading;
+export const selectProfileLoading = (state: RootState) =>
+  state.auth.profileLoading;

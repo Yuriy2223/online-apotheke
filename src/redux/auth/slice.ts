@@ -8,6 +8,9 @@ import {
   resetPassword,
   verifyEmail,
   checkAuthStatus,
+  updateProfile,
+  removeAvatar,
+  uploadAvatar,
 } from "./operations";
 
 export interface AuthState {
@@ -22,6 +25,8 @@ export interface AuthState {
   resetPasswordSuccess: boolean;
   verifyEmailLoading: boolean;
   verifyEmailSuccess: boolean;
+  uploadLoading: boolean;
+  profileLoading: boolean;
 }
 
 const initialState: AuthState = {
@@ -36,6 +41,8 @@ const initialState: AuthState = {
   resetPasswordSuccess: false,
   verifyEmailLoading: false,
   verifyEmailSuccess: false,
+  uploadLoading: false,
+  profileLoading: false,
 };
 
 const authSlice = createSlice({
@@ -184,6 +191,49 @@ const authSlice = createSlice({
       .addCase(verifyEmail.rejected, (state, action) => {
         state.verifyEmailLoading = false;
         state.error = action.payload || "Помилка верифікації";
+      })
+
+      .addCase(uploadAvatar.pending, (state) => {
+        state.uploadLoading = true;
+        state.error = null;
+      })
+      .addCase(uploadAvatar.fulfilled, (state, action) => {
+        state.uploadLoading = false;
+        if (state.user) {
+          state.user.avatar = action.payload;
+        }
+      })
+      .addCase(uploadAvatar.rejected, (state, action) => {
+        state.uploadLoading = false;
+        state.error = action.payload as string;
+      })
+
+      .addCase(removeAvatar.pending, (state) => {
+        state.uploadLoading = true;
+        state.error = null;
+      })
+      .addCase(removeAvatar.fulfilled, (state) => {
+        state.uploadLoading = false;
+        if (state.user) {
+          state.user.avatar = "";
+        }
+      })
+      .addCase(removeAvatar.rejected, (state, action) => {
+        state.uploadLoading = false;
+        state.error = action.payload as string;
+      })
+
+      .addCase(updateProfile.pending, (state) => {
+        state.profileLoading = true;
+        state.error = null;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.profileLoading = false;
+        state.user = action.payload;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.profileLoading = false;
+        state.error = action.payload as string;
       });
   },
 });
