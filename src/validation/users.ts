@@ -80,7 +80,6 @@ export const refreshTokenSchema = yup.object({
 });
 
 export const userProfileSchema: yup.ObjectSchema<ProfileFormData> = yup.object({
-  // name: yup.string().required("Імʼя обовʼязкове").min(2).max(50).trim(),
   name: yup
     .string()
     .required("Ім'я обов'язкове")
