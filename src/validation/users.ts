@@ -1,3 +1,4 @@
+import { ProfileFormData } from "@/types/users";
 import * as yup from "yup";
 
 export const registerSchema = yup.object({
@@ -76,4 +77,38 @@ export const schemaResetPassword = yup.object().shape({
 
 export const refreshTokenSchema = yup.object({
   refreshToken: yup.string().min(1, "Refresh token обов'язковий"),
+});
+
+export const userProfileSchema: yup.ObjectSchema<ProfileFormData> = yup.object({
+  name: yup
+    .string()
+    .required("Ім'я обов'язкове")
+    .min(2, "Мінімум 2 символи")
+    .max(50, "Максимум 50 символів")
+    .trim(),
+  phone: yup
+    .string()
+    .nullable()
+    .optional()
+    .transform((value) => (value === "" ? null : value))
+    .matches(/^\+?[1-9]\d{7,14}$/, {
+      message: "Невалідний номер телефону",
+    })
+    .trim(),
+  address: yup
+    .string()
+    .nullable()
+    .optional()
+    .transform((value) => (value === "" ? null : value))
+    .min(5, "Адреса має містити мінімум 5 символів")
+    .max(200, "Адреса має містити максимум 200 символів")
+    .matches(/^[a-zA-Zа-яА-ЯіІїЇєЄ0-9\s,./№]+$/, {
+      message: "Адреса може містити літери, цифри, пробіли та символи: , . / №",
+    })
+    .trim(),
+  avatar: yup
+    .string()
+    .nullable()
+    .optional()
+    .transform((value) => (value === "" ? null : value)),
 });
