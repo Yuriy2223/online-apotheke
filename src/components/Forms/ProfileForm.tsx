@@ -275,11 +275,11 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
                   : "border-gray-300 focus:border-green-light focus:ring-2 focus:ring-green-light/20"
               }`}
             />
-            {errors.name && (
-              <p className="mt-1 text-sm text-red-dark">
-                {errors.name.message}
-              </p>
-            )}
+            <div className="h-4 flex items-start">
+              {errors.name && (
+                <p className="text-sm text-red-dark">{errors.name.message}</p>
+              )}
+            </div>
           </div>
 
           <div>
@@ -303,19 +303,21 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
               {...register("phone")}
               disabled={!isEditing}
               className={`w-full px-4 py-2 border rounded-lg outline-none transition-all duration-200 ${
-                !isEditing ? "bg-gray-50 cursor-not-allowed" : "bg-white"
+                !isEditing ? "bg-gray-50 cursor-not-allowed" : "bg-white-true"
               } ${
                 errors.phone
-                  ? "border-red-dark focus:border-red-dark focus:ring-2 focus:ring-red-200"
+                  ? "border-red-dark focus:border-red-dark focus:ring-2 focus:ring-red-light"
                   : "border-gray-300 focus:border-green-light focus:ring-2 focus:ring-green-light/20"
               }`}
               placeholder="+380123456789"
             />
-            {errors.phone && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.phone.message}
-              </p>
-            )}
+            <div className="h-4 flex items-start">
+              {errors.phone && (
+                <p className="mt-1 text-sm text-red-dark">
+                  {errors.phone.message}
+                </p>
+              )}
+            </div>
           </div>
 
           <div>
@@ -337,11 +339,13 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
               }`}
               placeholder="Введіть вашу адресу"
             />
-            {errors.address && (
-              <p className="mt-1 text-sm text-red-dark">
-                {errors.address.message}
-              </p>
-            )}
+            <div className="h-4 flex items-start">
+              {errors.address && (
+                <p className="mt-1 text-sm text-red-dark">
+                  {errors.address.message}
+                </p>
+              )}
+            </div>
           </div>
         </div>
 
@@ -359,7 +363,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
             <button
               type="submit"
               disabled={profileLoading || !isDirty}
-              className="px-6 py-2 bg-green-light text-white rounded-lg hover:bg-green-dark disabled:opacity-50 transition-colors duration-200 flex items-center space-x-2"
+              className="px-6 py-2 bg-green-light text-white-true rounded-lg hover:bg-green-dark disabled:opacity-50 transition-colors duration-200 flex items-center space-x-2"
             >
               {profileLoading ? (
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white-true"></div>

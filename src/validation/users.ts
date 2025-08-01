@@ -93,7 +93,6 @@ export const userProfileSchema: yup.ObjectSchema<ProfileFormData> = yup.object({
     .transform((value) => (value === "" ? null : value))
     .matches(/^\+?[1-9]\d{7,14}$/, {
       message: "Невалідний номер телефону",
-      excludeEmptyString: true,
     })
     .trim(),
   address: yup
@@ -103,10 +102,10 @@ export const userProfileSchema: yup.ObjectSchema<ProfileFormData> = yup.object({
     .transform((value) => (value === "" ? null : value))
     .min(5, "Адреса має містити мінімум 5 символів")
     .max(200, "Адреса має містити максимум 200 символів")
-    .matches(/^[a-zA-Zа-яА-ЯіІїЇєЄ0-9\s,.-/№]+$/, {
-      message:
-        "Адреса може містити літери, цифри, пробіли та символи: , . - / №",
-    }),
+    .matches(/^[a-zA-Zа-яА-ЯіІїЇєЄ0-9\s,./№]+$/, {
+      message: "Адреса може містити літери, цифри, пробіли та символи: , . / №",
+    })
+    .trim(),
   avatar: yup
     .string()
     .nullable()
