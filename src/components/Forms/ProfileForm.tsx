@@ -18,8 +18,6 @@ interface ProfileFormProps {
     phone?: string | null;
     address?: string | null;
     avatar?: string | null;
-    isEmailVerified?: boolean;
-    provider?: string;
   };
   isEditing: boolean;
   onEditToggle: (editing: boolean) => void;
