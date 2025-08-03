@@ -176,21 +176,18 @@ export default function CartPage() {
       );
 
       if (placeOrder.fulfilled.match(result)) {
-        const orderData = result.payload;
-        toast.success(
-          `Замовлення створено! Трекінг: ${orderData.trackingInfo.trackingNumber}`
-        );
+        toast.success("Замовлення успішно створено!");
 
         dispatch(resetOrderForm());
         dispatch(clearCart());
         reset();
 
         setTimeout(() => {
-          window.location.href = orderData.trackingInfo.trackingUrl;
+          router.push("/");
         }, 2000);
       }
     },
-    [isCartEmpty, paymentMethod, dispatch, reset]
+    [isCartEmpty, paymentMethod, dispatch, reset, router]
   );
 
   if (isAuthChecking || isLoadingCart) {
