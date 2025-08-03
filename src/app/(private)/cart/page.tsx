@@ -17,6 +17,7 @@ import { cartSchema } from "@/validation/cart";
 import {
   selectIsAuthChecking,
   selectIsAuthenticated,
+  selectUser,
 } from "@/redux/auth/selectors";
 import {
   fetchCartData,
@@ -61,6 +62,7 @@ export default function CartPage() {
   const isCartEmpty = useAppSelector(selectIsCartEmpty);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const isAuthChecking = useAppSelector(selectIsAuthChecking);
+  const user = useAppSelector(selectUser);
 
   const {
     register,
@@ -71,12 +73,23 @@ export default function CartPage() {
     resolver: yupResolver(cartSchema),
     mode: "onChange",
     defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      address: "",
+      name: user?.name || "",
+      email: user?.email || "",
+      phone: user?.phone || "",
+      address: user?.address || "",
     },
   });
+
+  useEffect(() => {
+    if (user) {
+      reset({
+        name: user.name || "",
+        email: user.email || "",
+        phone: user.phone || "",
+        address: user.address || "",
+      });
+    }
+  }, [user, reset]);
 
   useEffect(() => {
     if (!isAuthChecking && !isAuthenticated) {
