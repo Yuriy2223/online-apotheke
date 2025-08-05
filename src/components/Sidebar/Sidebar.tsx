@@ -7,6 +7,7 @@ import {
   FlaskConical,
   BarChart3,
   Users,
+  X,
 } from "lucide-react";
 
 export function Sidebar({ isOpen = false, onClose = () => {} }) {
@@ -45,18 +46,7 @@ export function Sidebar({ isOpen = false, onClose = () => {} }) {
           className="absolute top-4 right-4 tablet:hidden p-2 hover:bg-gray-50 rounded-lg transition-colors"
           aria-label="Close sidebar"
         >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            className="text-gray-dark"
-          >
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
+          <X size={20} className="text-gray-dark" />
         </button>
 
         <div className="mb-8 mt-8 tablet:mt-0">
