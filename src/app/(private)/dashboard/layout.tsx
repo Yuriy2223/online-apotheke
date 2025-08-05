@@ -10,7 +10,7 @@ export default function PrivateLayout({
       <header className="bg-green-light">
         <HeaderDashboard />
       </header>
-      <main>{children}</main>
+      <main className="bg-gray-light">{children}</main>
     </>
   );
 }
