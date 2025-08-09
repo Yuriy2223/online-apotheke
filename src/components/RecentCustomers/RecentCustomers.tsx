@@ -1,5 +1,3 @@
-import React from "react";
-
 interface Customer {
   id: number;
   name: string;
@@ -38,18 +36,24 @@ const customers: Customer[] = [
     email: "longburak@gmail.com",
     spent: 1890.66,
   },
+  {
+    id: 6,
+    name: "Burakus Longna",
+    email: "longrak@gmail.com",
+    spent: 4890.66,
+  },
 ];
 
 export function RecentCustomers() {
   return (
     <div className="bg-white-true rounded-lg shadow border border-gray-300 p-2">
-      <div className="bg-green-soft px-4 py-3 border-b border-gray-300">
+      <header className="bg-green-soft px-4 py-3 border-b border-gray-300">
         <h2 className="text-lg font-semibold text-black-true">
           Recent Customers
         </h2>
-      </div>
+      </header>
       <div className="overflow-x-auto">
-        <table className="min-w-full border-collapse">
+        <table className="w-[684px] desktop:w-full border-collapse">
           <thead>
             <tr className="bg-gray-light divide-x divide-gray-300">
               <th
@@ -76,7 +80,7 @@ export function RecentCustomers() {
             {customers.map((c) => (
               <tr key={c.id} className="divide-x divide-gray-300">
                 <td className="px-6 py-3 flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-dark">
+                  <div className="w-9 h-9 rounded-full bg-gray-light flex items-center justify-center text-xs font-medium text-gray-dark">
                     {c.name
                       .split(" ")
                       .map((n) => n[0])
@@ -91,10 +95,6 @@ export function RecentCustomers() {
                   {c.email}
                 </td>
                 <td className="px-6 py-3 text-sm font-medium text-black-true">
-                  {/* {c.spent.toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })} */}
                   {c.spent.toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,

@@ -10,7 +10,7 @@ import { Container } from "@/shared/Container";
 export default function DashboardPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   return (
-    <Container className="grid grid-cols-1 desktop:grid-cols-[140px_1fr] relative desktop:pl-0">
+    <Container className="grid grid-cols-1 desktop:grid-cols-[110px_1fr] relative desktop:pl-0 desktop:pr-4 pb-10">
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       <div>
         <div className="flex items-center justify-center p-4">
@@ -27,7 +27,7 @@ export default function DashboardPage() {
           <div className="w-full mx-auto ">
             <Statistics />
 
-            <div className="grid grid-cols-1 desktop:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 desktop:grid-cols-2 gap-6  desktop:gap-2">
               <RecentCustomers />
               <IncomeExpenses />
             </div>
