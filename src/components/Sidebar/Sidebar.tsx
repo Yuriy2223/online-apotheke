@@ -79,13 +79,13 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               >
                 <div
                   className={clsx(
-                    "w-14 h-14 flex items-center justify-center rounded-full transition-all cursor-pointer",
+                    "w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer",
                     active
                       ? "bg-white-true text-green-dark shadow"
                       : "text-white-true hover:bg-white-true hover:text-green-light"
                   )}
                 >
-                  <Icon size={30} />
+                  <Icon size={26} />
                 </div>
                 <div className="absolute left-[80%] ml-2 px-2 py-1 bg-white-true text-green-dark border text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
                   {label}

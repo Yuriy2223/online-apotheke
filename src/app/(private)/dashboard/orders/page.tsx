@@ -1,12 +1,28 @@
 "use client";
 
+import { useState } from "react";
+import { Sidebar } from "@/components/Sidebar/Sidebar";
 import { Container } from "@/shared/Container";
 
 export default function OrdersPage() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   return (
-    <Container className="py-6 tablet:py-8">
-      <div className="flex items-center justify-center h-40">
-        <h1 className="text-3xl font-semibold text-green-dark">Orders Page</h1>
+    <Container className="grid grid-cols-1 desktop:grid-cols-[110px_1fr] relative desktop:pl-0 desktop:pr-4 pb-10">
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+      <div>
+        <div className="flex items-center justify-center p-4">
+          <h1 className="text-green-light text-4xl">All orders</h1>
+        </div>
+        <button
+          className="absolute top-2 left-0 z-20 bg-green-light hover:bg-green-dark text-white-true px-3 py-2 rounded-md desktop:hidden"
+          onClick={() => setIsSidebarOpen(true)}
+          aria-label="Open sidebar"
+        >
+          Sidebar
+        </button>
+        <div className="flex-1">
+          <div className="w-full mx-auto "></div>
+        </div>
       </div>
     </Container>
   );
