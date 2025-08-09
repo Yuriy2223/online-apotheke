@@ -38,7 +38,7 @@ export const BurgerMenu: React.FC<BurgerMenuProps> = ({ onClose }) => {
   return (
     <div className="desktop:hidden fixed inset-0 z-50">
       <div
-        className="absolute inset-0 bg-black/10 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/10 backdrop-blur-[2px]"
         onClick={handleClose}
         aria-hidden="true"
       />
