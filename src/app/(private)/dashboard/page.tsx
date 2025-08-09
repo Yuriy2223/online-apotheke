@@ -12,7 +12,7 @@ export default function DashboardPage() {
   return (
     <Container className="grid grid-cols-1 desktop:grid-cols-[140px_1fr] relative desktop:pl-0">
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      <div className="">
+      <div>
         <div className="flex items-center justify-center p-4">
           <h1 className="text-green-light text-4xl">Dashboard</h1>
         </div>

@@ -54,7 +54,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           "flex flex-col items-center py-6 transition-transform duration-300 ease-in-out",
           {
             "translate-x-0": isOpen,
-            "-translate-x-full": !isOpen,
+            "-translate-x-[1000px]": !isOpen,
             "desktop:translate-x-0 desktop:static": true,
           }
         )}
