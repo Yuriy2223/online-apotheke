@@ -1,6 +1,9 @@
 "use client";
 
+import clsx from "clsx";
+import Link from "next/link";
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import {
   LayoutGrid,
   ShoppingCart,
@@ -10,14 +13,28 @@ import {
   X,
 } from "lucide-react";
 
-export function Sidebar({ isOpen = false, onClose = () => {} }) {
+type SidebarProps = {
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+const navItems = [
+  { icon: LayoutGrid, label: "Dashboard", href: "/dashboard" },
+  { icon: ShoppingCart, label: "Orders", href: "/dashboard/orders" },
+  { icon: FlaskConical, label: "Products", href: "/dashboard/products" },
+  { icon: BarChart3, label: "Suppliers", href: "/dashboard/suppliers" },
+  { icon: Users, label: "Customers", href: "/dashboard/customers" },
+];
+
+export function Sidebar({ isOpen, onClose }: SidebarProps) {
+  const pathname = usePathname();
+
   useEffect(() => {
-    const handleEscape = (e) => {
+    const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
         onClose();
       }
     };
-
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
   }, [isOpen, onClose]);
@@ -26,83 +43,56 @@ export function Sidebar({ isOpen = false, onClose = () => {} }) {
     <>
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black-true bg-opacity-50 z-40 tablet:hidden"
+          className="fixed z-30 inset-0 bg-black/10 backdrop-blur-[2px] desktop:hidden"
           onClick={onClose}
         />
       )}
 
       <aside
-        className={`
-        fixed left-0 top-0 h-full bg-white-true border-r border-gray-light z-50
-        transition-transform duration-300 ease-in-out
-        ${isOpen ? "translate-x-0" : "-translate-x-full"}
-        tablet:translate-x-0 tablet:static tablet:z-auto
-        w-20 flex flex-col items-center py-6
-        shadow-lg tablet:shadow-none
-      `}
+        className={clsx(
+          "fixed top-0 left-0 h-full w-24 bg-green-light shadow-lg z-40",
+          "flex flex-col items-center py-6 transition-transform duration-300 ease-in-out",
+          {
+            "translate-x-0": isOpen,
+            "-translate-x-full": !isOpen,
+            "desktop:translate-x-0 desktop:static": true,
+          }
+        )}
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 tablet:hidden p-2 hover:bg-gray-50 rounded-lg transition-colors"
+          className="absolute top-10 right-6 desktop:hidden p-2 hover:scale-110 hover:rotate-360 rounded-lg transition-transform"
           aria-label="Close sidebar"
         >
-          <X size={20} className="text-gray-dark" />
+          <X size={40} className="text-white-true" />
         </button>
 
-        <div className="mb-8 mt-8 tablet:mt-0">
-          <div className="w-10 h-10 bg-green-light rounded-lg flex items-center justify-center shadow-sm">
-            <div className="w-6 h-6 bg-white-true rounded-sm flex items-center justify-center">
-              <div className="w-3 h-3 bg-green-light rounded-sm"></div>
-            </div>
-          </div>
-        </div>
-
-        <nav className="flex flex-col space-y-2">
-          <div className="group relative">
-            <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-green-light text-white-true shadow-sm">
-              <LayoutGrid size={20} />
-            </div>
-
-            <div className="absolute left-full ml-2 px-2 py-1 bg-gray-dark text-white-true text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
-              Dashboard
-            </div>
-          </div>
-
-          <div className="group relative">
-            <div className="flex items-center justify-center w-12 h-12 rounded-lg text-gray-dark hover:bg-green-soft hover:text-green-dark transition-all cursor-pointer transform hover:scale-105">
-              <ShoppingCart size={20} />
-            </div>
-            <div className="absolute left-full ml-2 px-2 py-1 bg-gray-dark text-white-true text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
-              Shopping
-            </div>
-          </div>
-
-          <div className="group relative">
-            <div className="flex items-center justify-center w-12 h-12 rounded-lg text-gray-dark hover:bg-green-soft hover:text-green-dark transition-all cursor-pointer transform hover:scale-105">
-              <FlaskConical size={20} />
-            </div>
-            <div className="absolute left-full ml-2 px-2 py-1 bg-gray-dark text-white-true text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
-              Laboratory
-            </div>
-          </div>
-
-          <div className="group relative">
-            <div className="flex items-center justify-center w-12 h-12 rounded-lg text-gray-dark hover:bg-green-soft hover:text-green-dark transition-all cursor-pointer transform hover:scale-105">
-              <BarChart3 size={20} />
-            </div>
-            <div className="absolute left-full ml-2 px-2 py-1 bg-gray-dark text-white-true text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
-              Analytics
-            </div>
-          </div>
-
-          <div className="group relative">
-            <div className="flex items-center justify-center w-12 h-12 rounded-lg text-gray-dark hover:bg-green-soft hover:text-green-dark transition-all cursor-pointer transform hover:scale-105">
-              <Users size={20} />
-            </div>
-            <div className="absolute left-full ml-2 px-2 py-1 bg-gray-dark text-white-true text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
-              Users
-            </div>
-          </div>
+        <nav className="flex flex-col items-center gap-10 mt-24 mb-2 desktop:mt-4">
+          {navItems.map(({ icon: Icon, label, href }) => {
+            const active = pathname === href;
+            return (
+              <Link
+                key={label}
+                href={href}
+                className="group relative"
+                onClick={() => onClose()}
+              >
+                <div
+                  className={clsx(
+                    "w-14 h-14 flex items-center justify-center rounded-full transition-all cursor-pointer",
+                    active
+                      ? "bg-white-true text-green-dark shadow"
+                      : "text-white-true hover:bg-white-true hover:text-green-light"
+                  )}
+                >
+                  <Icon size={30} />
+                </div>
+                <div className="absolute left-[80%] ml-2 px-2 py-1 bg-white-true text-green-dark border text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                  {label}
+                </div>
+              </Link>
+            );
+          })}
         </nav>
       </aside>
     </>
