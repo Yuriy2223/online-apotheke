@@ -52,13 +52,22 @@ export function RecentCustomers() {
         <table className="min-w-full border-collapse">
           <thead>
             <tr className="bg-gray-light divide-x divide-gray-300">
-              <th className="px-6 py-3 text-left text-base font-medium text-gray-dark">
+              <th
+                className="px-6 py-3 text-left text-base font-medium text-gray-dark"
+                scope="col"
+              >
                 Name
               </th>
-              <th className="px-6 py-3 text-left text-base font-medium text-gray-dark">
+              <th
+                className="px-6 py-3 text-left text-base font-medium text-gray-dark"
+                scope="col"
+              >
                 Email
               </th>
-              <th className="px-6 py-3 text-left text-base font-medium text-gray-dark">
+              <th
+                className="px-6 py-3 text-left text-base font-medium text-gray-dark"
+                scope="col"
+              >
                 Spent
               </th>
             </tr>
@@ -82,7 +91,11 @@ export function RecentCustomers() {
                   {c.email}
                 </td>
                 <td className="px-6 py-3 text-sm font-medium text-black-true">
-                  {c.spent.toLocaleString("en-US", {
+                  {/* {c.spent.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })} */}
+                  {c.spent.toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}
