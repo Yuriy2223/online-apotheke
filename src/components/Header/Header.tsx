@@ -34,7 +34,7 @@ export const Header = () => {
             className="desktop:hidden transition-transform duration-200 hover:scale-110 "
             aria-label="Open menu"
           >
-            <Menu className="w-8 h-8 text-white transition-transform duration-300 ease-in-out hover:rotate-360 hover:scale-110 active:scale-95" />
+            <Menu className="w-8 h-8 text-white-true transition-transform duration-300 ease-in-out hover:rotate-360 hover:scale-110 active:scale-95" />
           </button>
         </div>
       </Container>
