@@ -22,7 +22,6 @@ export const NavBar: React.FC<NavBarProps> = ({ isMobile, onItemClick }) => {
   return (
     <>
       {navItems.map((item) => {
-        // const isActive = pathname === item.href;
         const isActive =
           pathname === item.href || pathname.startsWith(item.href + "/");
 
