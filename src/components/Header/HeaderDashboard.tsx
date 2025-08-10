@@ -29,7 +29,7 @@ export const HeaderDashboard = () => {
         <div className="hidden desktop:block">
           <button
             onClick={handleLogout}
-            className="px-6 py-2 text-green-dark bg-white border border-white rounded-full hover:bg-gray-100 transition-colors"
+            className="px-6 py-2 text-green-dark bg-white-true border border-white rounded-full hover:bg-gray-100 transition-colors"
           >
             Logout
           </button>
