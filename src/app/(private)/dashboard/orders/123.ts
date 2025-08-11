@@ -1,20 +1,5 @@
-export interface Order {
-  _id: string;
-  photo: string;
-  name: string;
-  address: string;
-  products: string;
-  price: string;
-  status: string;
-  order_date: string;
-}
-export const statusClasses: Record<string, string> = {
-  Completed: "bg-green-100 text-green-700",
-  Pending: "bg-orange-100 text-orange-700",
-  Shipped: "bg-blue-100 text-blue-700",
-  Cancelled: "bg-red-100 text-red-700",
-  Default: "bg-gray-100 text-gray-700",
-};
+import { Order } from "@/types/orders";
+
 export const orders: Order[] = [
   {
     _id: "1",
