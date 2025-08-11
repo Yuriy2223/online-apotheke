@@ -80,7 +80,7 @@ export function CustomersPageTable({
             </td>
 
             <td className="px-6 py-3 text-sm font-medium text-black-true">
-              {new Date(c.date).toLocaleDateString("en-US", {
+              {new Date(c.date).toLocaleDateString(undefined, {
                 year: "numeric",
                 month: "short",
                 day: "numeric",
