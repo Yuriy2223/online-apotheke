@@ -1,10 +1,10 @@
 export interface Customer {
   _id: string;
-  image: string;
+  photo: string;
   name: string;
   email: string;
-  spent: string;
+  spent: number;
   phone: string;
   address: string;
-  register_date: string;
+  date: string;
 }
