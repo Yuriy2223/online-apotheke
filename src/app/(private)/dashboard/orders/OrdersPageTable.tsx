@@ -1,4 +1,5 @@
-import { Order, orders, statusClasses } from "./123";
+import { Order } from "@/types/orders";
+import { orders } from "./123";
 
 export function OrdersPageTable({
   singleOrder,
@@ -8,6 +9,14 @@ export function OrdersPageTable({
   highlightId?: string;
 }) {
   const data = singleOrder ? [singleOrder] : orders;
+
+  const statusClasses: Record<string, string> = {
+    Completed: "bg-green-100 text-green-700",
+    Pending: "bg-orange-100 text-orange-700",
+    Shipped: "bg-blue-100 text-blue-700",
+    Cancelled: "bg-red-100 text-red-700",
+    Default: "bg-gray-100 text-gray-700",
+  };
 
   return (
     <table className="w-[1300px] desktop:w-full border-collapse">

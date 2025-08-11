@@ -7,18 +7,6 @@ import { FilterProductsPage } from "./FilterProductsPage";
 import { ProductsPageTable } from "./ProductsPageTable";
 import { AddProductButton } from "./AddProductButton";
 
-export interface MedicineAllProducts {
-  _id: string;
-  photo: string;
-  name: string;
-  category: string;
-  stock: number;
-  suppliers: string;
-  price: number;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
 export default function ProductsPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 

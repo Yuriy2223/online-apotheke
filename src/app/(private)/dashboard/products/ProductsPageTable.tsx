@@ -1,20 +1,9 @@
+import { MedicineProduct } from "@/types/medicine-products";
 import { products } from "./123";
 import { Edit, Trash2 } from "lucide-react";
 
-export interface MedicineAllProducts {
-  _id: string;
-  photo: string;
-  name: string;
-  category: string;
-  stock: number;
-  suppliers: string;
-  price: number;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
 export interface ProductsPageTableProps {
-  singleProduct?: MedicineAllProducts;
+  singleProduct?: MedicineProduct;
   highlightId?: string;
   onEditProduct: (productId: string) => void;
   onDeleteProduct: (productId: string) => void;
@@ -81,7 +70,7 @@ export function ProductsPageTable({
               >
                 {product.name
                   .split(" ")
-                  .map((n) => n[0])
+                  .map((n: string) => n[0])
                   .join("")
                   .toUpperCase()}
               </div>
