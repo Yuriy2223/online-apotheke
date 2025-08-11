@@ -1,6 +1,6 @@
-import { MedicineAllProducts } from "./page";
+import { MedicineProduct } from "@/types/medicine-products";
 
-export const products: MedicineAllProducts[] = [
+export const products: MedicineProduct[] = [
   {
     _id: "1",
     photo: "/images/product1.jpg",

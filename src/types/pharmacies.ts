@@ -10,15 +10,6 @@ export interface Pharmacie {
   closeTime: string;
 }
 
-// export interface Pharmacie {
-//   _id: string;
-//   name: string;
-//   city: string;
-//   phone: string;
-//   address: string;
-//   rating: string;
-//   status: "OPEN" | "CLOSE";
-// }
 export interface PharmacieNearest {
   _id: string;
   name: string;
