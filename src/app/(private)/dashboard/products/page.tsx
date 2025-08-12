@@ -6,24 +6,38 @@ import { Container } from "@/shared/Container";
 import { FilterProductsPage } from "./FilterProductsPage";
 import { ProductsPageTable } from "./ProductsPageTable";
 import { AddProductButton } from "./AddProductButton";
+import { useAppDispatch } from "@/redux/store";
+import { openModal } from "@/redux/modal/slice";
 
 export default function ProductsPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const dispatch = useAppDispatch();
 
   const handleFilterChange = (filterValue: string) => {
     console.log("Filter value changed:", filterValue);
   };
 
   const handleAddProduct = () => {
-    console.log("Adding new product...");
+    dispatch(
+      openModal({
+        type: "ModalAddProduct",
+      })
+    );
+  };
+  const handleEditProduct = () => {
+    dispatch(
+      openModal({
+        type: "ModalEditProduct",
+      })
+    );
   };
 
-  const handleEditProduct = (productId: string) => {
-    console.log("Edit product:", productId);
-  };
-
-  const handleDeleteProduct = (productId: string) => {
-    console.log("Delete product:", productId);
+  const handleDeleteProduct = () => {
+    dispatch(
+      openModal({
+        type: "ModalDeleteProduct",
+      })
+    );
   };
 
   return (

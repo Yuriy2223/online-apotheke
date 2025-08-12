@@ -1,4 +1,5 @@
 import { HeaderDashboard } from "@/components/Header/HeaderDashboard";
+import { ModalUniversal } from "@/modals/UniversalModal";
 
 export default function PrivateLayout({
   children,
@@ -10,7 +11,9 @@ export default function PrivateLayout({
       <header className="bg-green-light">
         <HeaderDashboard />
       </header>
-      <main className="bg-gray-light">{children}</main>
+      <main className="bg-gray-light">
+        {children} <ModalUniversal />
+      </main>
     </>
   );
 }
