@@ -65,39 +65,47 @@ export const ModalDeleteProduct = ({
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-md">
-      <div className="flex items-center gap-4">
+    <div className="flex flex-col gap-4 min-[375px]:gap-5 min-[768px]:gap-6 min-[1440px]:gap-8">
+      <div className="flex items-center gap-3 min-[375px]:gap-4 min-[768px]:gap-5">
         <div
-          className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center ${
+          className={`flex-shrink-0 w-10 h-10 min-[375px]:w-12 min-[375px]:h-12 min-[768px]:w-14 min-[768px]:h-14 min-[1440px]:w-16 min-[1440px]:h-16 rounded-full flex items-center justify-center ${
             isDangerous ? "bg-red-100" : "bg-yellow-100"
           }`}
         >
           {isDangerous ? (
-            <Trash2 size={24} className="text-red-600" />
+            <Trash2
+              size={20}
+              className="min-[375px]:text-[24px] min-[768px]:text-[28px] min-[1440px]:text-[32px] text-red-600"
+            />
           ) : (
-            <AlertTriangle size={24} className="text-yellow-600" />
+            <AlertTriangle
+              size={20}
+              className="min-[375px]:text-[24px] min-[768px]:text-[28px] min-[1440px]:text-[32px] text-yellow-600"
+            />
           )}
         </div>
         <div>
-          <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+          <h2 className="text-lg min-[375px]:text-xl min-[768px]:text-2xl min-[1440px]:text-3xl font-semibold text-gray-900 pr-8 min-[375px]:pr-10 min-[768px]:pr-12 min-[1440px]:pr-16">
+            {title}
+          </h2>
         </div>
       </div>
 
-      <div className="text-gray-600 leading-relaxed">
+      <div className="text-gray-600 leading-relaxed text-sm min-[375px]:text-base min-[768px]:text-lg">
         <p>{displayMessage}</p>
         {isDangerous && (
-          <p className="mt-2 text-sm text-red-600 font-medium">
+          <p className="mt-2 min-[375px]:mt-3 min-[768px]:mt-4 text-xs min-[375px]:text-sm min-[768px]:text-base text-red-600 font-medium">
             This action is permanent and cannot be reversed.
           </p>
         )}
       </div>
 
-      <div className="flex gap-3 pt-2">
+      <div className="flex gap-3 min-[375px]:gap-4 min-[1440px]:gap-5 pt-2 min-[768px]:pt-3 min-[1440px]:pt-4">
         <button
           type="button"
           onClick={handleCancel}
           disabled={isDeleting}
-          className="flex-1 bg-gray-200 text-gray-700 rounded-lg py-2.5 px-4 hover:bg-gray-300 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex-1 bg-gray-200 text-gray-700 rounded-lg py-2 min-[375px]:py-2.5 min-[768px]:py-3 min-[1440px]:py-3.5 px-4 min-[1440px]:px-6 hover:bg-gray-300 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all font-medium text-sm min-[768px]:text-base min-[1440px]:text-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {cancelText}
         </button>
@@ -105,7 +113,7 @@ export const ModalDeleteProduct = ({
           type="button"
           onClick={handleConfirm}
           disabled={isDeleting}
-          className={`flex-1 rounded-lg py-2.5 px-4 focus:ring-2 focus:ring-offset-2 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed ${
+          className={`flex-1 rounded-lg py-2 min-[375px]:py-2.5 min-[768px]:py-3 min-[1440px]:py-3.5 px-4 min-[1440px]:px-6 focus:ring-2 focus:ring-offset-2 transition-all font-medium text-sm min-[768px]:text-base min-[1440px]:text-lg disabled:opacity-50 disabled:cursor-not-allowed ${
             isDangerous
               ? "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500"
               : "bg-yellow-600 text-white hover:bg-yellow-700 focus:ring-yellow-500"
@@ -113,8 +121,10 @@ export const ModalDeleteProduct = ({
         >
           {isDeleting ? (
             <div className="flex items-center justify-center gap-2">
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              Deleting...
+              <div className="w-3 h-3 min-[375px]:w-4 min-[375px]:h-4 min-[768px]:w-5 min-[768px]:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              <span className="text-xs min-[375px]:text-sm min-[768px]:text-base">
+                Deleting...
+              </span>
             </div>
           ) : (
             confirmText
