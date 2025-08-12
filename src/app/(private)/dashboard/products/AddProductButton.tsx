@@ -1,7 +1,7 @@
 import { Plus } from "lucide-react";
 
 interface AddProductButtonProps {
-  onClick?: () => void;
+  onClick: () => void;
   text?: string;
 }
 
@@ -10,8 +10,7 @@ export function AddProductButton({
   text = "Add a new product",
 }: AddProductButtonProps) {
   const handleClick = () => {
-    console.log("Add new product clicked");
-    onClick?.();
+    onClick();
   };
 
   return (
