@@ -30,7 +30,7 @@ export function FilterOrdersPage({
           placeholder={placeholder}
           value={filterValue}
           onChange={handleInputChange}
-          className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-light focus:border-transparent placeholder-gray-400 text-sm"
+          className="w-full px-4 py-2.5 border border-gray-soft rounded-lg focus:outline-none focus:ring-2 focus:ring-green-light focus:border-transparent placeholder-gray-soft text-sm"
         />
       </div>
       <button

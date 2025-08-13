@@ -41,11 +41,11 @@ export function ProductsPageTable({
           </th>
         </tr>
       </thead>
-      <tbody className="divide-y divide-gray-300">
+      <tbody className="divide-y divide-gray-soft">
         {data.map((product) => (
           <tr
             key={product._id}
-            className={`divide-x divide-gray-300 ${
+            className={`divide-x divide-gray-soft ${
               highlightId === product._id ? "bg-yellow-100" : ""
             }`}
           >

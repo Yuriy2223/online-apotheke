@@ -96,29 +96,29 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
-  try {
-    await connectDB();
+// export async function DELETE(request: NextRequest, { params }: RouteParams) {
+//   try {
+//     await connectDB();
 
-    const { id } = await params;
+//     const { id } = await params;
 
-    const deletedProduct = await MedicineProduct.findByIdAndDelete(id);
+//     const deletedProduct = await MedicineProduct.findByIdAndDelete(id);
 
-    if (!deletedProduct) {
-      return NextResponse.json({ error: "Product not found" }, { status: 404 });
-    }
+//     if (!deletedProduct) {
+//       return NextResponse.json({ error: "Product not found" }, { status: 404 });
+//     }
 
-    await MedicineProductReviewModel.deleteMany({ productId: id });
+//     await MedicineProductReviewModel.deleteMany({ productId: id });
 
-    return NextResponse.json({
-      message: "Product deleted successfully",
-      success: true,
-    });
-  } catch (error) {
-    console.error("Error deleting product:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
-  }
-}
+//     return NextResponse.json({
+//       message: "Product deleted successfully",
+//       success: true,
+//     });
+//   } catch (error) {
+//     console.error("Error deleting product:", error);
+//     return NextResponse.json(
+//       { error: "Internal server error" },
+//       { status: 500 }
+//     );
+//   }
+// }
