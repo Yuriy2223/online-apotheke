@@ -5,9 +5,10 @@ import { Sidebar } from "@/components/Sidebar/Sidebar";
 import { Container } from "@/shared/Container";
 import { FilterProductsPage } from "./FilterProductsPage";
 import { ProductsPageTable } from "./ProductsPageTable";
-import { AddProductButton } from "./AddProductButton";
+// import { AddProductButton } from "./AddProductButton";
 import { useAppDispatch } from "@/redux/store";
 import { openModal } from "@/redux/modal/slice";
+import { Plus } from "lucide-react";
 
 export default function ProductsPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -51,7 +52,13 @@ export default function ProductsPage() {
 
         <div className="py-5 flex flex-col gap-6 tablet:flex-row tablet:justify-between">
           <FilterProductsPage onFilterChange={handleFilterChange} />
-          <AddProductButton onClick={handleAddProduct} />
+          <button
+            onClick={handleAddProduct}
+            className="flex items-center justify-center gap-2 bg-green-light hover:bg-green-dark text-white-true px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium"
+          >
+            <Plus size={20} />
+            Add a new product
+          </button>
         </div>
 
         <button
