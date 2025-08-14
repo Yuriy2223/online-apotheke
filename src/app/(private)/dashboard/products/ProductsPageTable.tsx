@@ -1,5 +1,10 @@
+import {
+  selectLoading,
+  selectProducts,
+} from "@/redux/dashboard-product/selectors";
+import { useAppSelector } from "@/redux/store";
+import { Spinner } from "@/shared/Spinner";
 import { MedicineProduct } from "@/types/medicine-products";
-import { products } from "./123";
 import { Edit, Trash2 } from "lucide-react";
 
 export interface ProductsPageTableProps {
@@ -15,7 +20,13 @@ export function ProductsPageTable({
   onEditProduct,
   onDeleteProduct,
 }: ProductsPageTableProps) {
+  const products = useAppSelector(selectProducts);
+  const loading = useAppSelector(selectLoading);
   const data = singleProduct ? [singleProduct] : products;
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <table className="w-[1300px] desktop:w-full border-collapse">

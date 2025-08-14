@@ -54,17 +54,17 @@ export interface MedicineProductDetails extends MedicineProduct {
 //     limit: number;
 //   };
 // }
-export interface MedicineProductDetailsReview {
-  _id: string;
-  productId: string;
-  userId: string;
-  rating: number;
-  comment: string;
-  commentDate: string;
-  description?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+// export interface MedicineProductDetailsReview {
+//   _id: string;
+//   productId: string;
+//   userId: string;
+//   rating: number;
+//   comment: string;
+//   commentDate: string;
+//   description?: string;
+//   createdAt: string;
+//   updatedAt: string;
+// }
 export interface MedicineProductDetailsReview {
   _id: string;
   productId: string;
