@@ -1,25 +1,99 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
 import { Container } from "@/shared/Container";
 import { ProductsPageTable } from "./ProductsPageTable";
-import { useAppDispatch } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { openModal } from "@/redux/modal/slice";
 import { Filter, Plus } from "lucide-react";
+import { fetchDashboardProducts } from "@/redux/dashboard-product/operations";
+import { setFilters } from "@/redux/dashboard-product/slice";
+import { Pagination } from "@/components/Pagination/Pagination";
+import { usePagination } from "@/hooks/usePagination";
+import {
+  selectFilters,
+  selectPagination,
+  selectLoading,
+} from "@/redux/dashboard-product/selectors";
 
 export default function ProductsPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [filterValue, setFilterValue] = useState("");
   const dispatch = useAppDispatch();
+  const filters = useAppSelector(selectFilters);
+  const paginationData = useAppSelector(selectPagination);
+  const loading = useAppSelector(selectLoading);
+
+  const { currentPage, deviceLimit, handlePageChange } = usePagination({
+    responsiveLimits: {
+      mobile: 6,
+      tablet: 8,
+      desktop: 12,
+    },
+  });
+
+  const lastFetchParams = useRef<string>("");
+  const isInitialRender = useRef(true);
+
+  useEffect(() => {
+    const fetchKey = `${currentPage}-${deviceLimit}-${filters.search}-${filters.category}-${filters.sortBy}`;
+
+    if (lastFetchParams.current === fetchKey) {
+      return;
+    }
+
+    if (loading) {
+      return;
+    }
+
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      const timer = setTimeout(() => {
+        if (lastFetchParams.current !== fetchKey) {
+          lastFetchParams.current = fetchKey;
+          dispatch(
+            fetchDashboardProducts({
+              ...filters,
+              page: currentPage,
+              limit: deviceLimit,
+            })
+          );
+        }
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+
+    lastFetchParams.current = fetchKey;
+    dispatch(
+      fetchDashboardProducts({
+        ...filters,
+        page: currentPage,
+        limit: deviceLimit,
+      })
+    );
+  }, [dispatch, currentPage, deviceLimit, filters, loading]);
+
+  useEffect(() => {
+    return () => {
+      lastFetchParams.current = "";
+    };
+  }, []);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterValue(e.target.value);
+    dispatch(setFilters({ search: e.target.value, page: 1 }));
   };
 
   const handleFilterClick = () => {
-    console.log("Filter applied:", filterValue);
+    dispatch(
+      fetchDashboardProducts({
+        ...filters,
+        page: currentPage,
+        limit: deviceLimit,
+      })
+    );
   };
+
   const handleAddProduct = () => {
     dispatch(
       openModal({
@@ -27,6 +101,7 @@ export default function ProductsPage() {
       })
     );
   };
+
   const handleEditProduct = (productId: string) => {
     dispatch(
       openModal({
@@ -45,6 +120,11 @@ export default function ProductsPage() {
     );
   };
 
+  const handleProductPageChange = (page: number) => {
+    dispatch(setFilters({ page }));
+    handlePageChange(page);
+  };
+
   return (
     <Container className="grid grid-cols-1 desktop:grid-cols-[110px_1fr] relative desktop:pl-0 desktop:pr-4 pb-10">
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
@@ -60,7 +140,7 @@ export default function ProductsPage() {
               <input
                 type="text"
                 placeholder="Product Name"
-                value={filterValue}
+                value={filters.search}
                 onChange={handleFilterChange}
                 className="w-full px-4 py-2.5 border border-gray-soft rounded-lg focus:outline-none focus:ring-2 focus:ring-green-light focus:border-transparent placeholder-gray-soft text-sm"
               />
@@ -108,6 +188,15 @@ export default function ProductsPage() {
             </div>
           </div>
         </div>
+
+        {paginationData && paginationData.totalPages > 1 && (
+          <Pagination
+            currentPage={paginationData.currentPage}
+            totalPages={paginationData.totalPages}
+            onPageChange={handleProductPageChange}
+            className="mt-8"
+          />
+        )}
       </div>
     </Container>
   );

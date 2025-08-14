@@ -50,8 +50,8 @@ export async function GET(request: NextRequest) {
         sortOption = { name: 1 };
     }
 
-    const totalItems = await MedicineProduct.countDocuments(filter);
-    const totalPages = Math.ceil(totalItems / limit);
+    const totalCount = await MedicineProduct.countDocuments(filter);
+    const totalPages = Math.ceil(totalCount / limit);
 
     const products = await MedicineProduct.find(filter)
       .sort(sortOption)
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
       pagination: {
         currentPage: page,
         totalPages,
-        totalItems,
+        totalCount,
         hasNextPage: page < totalPages,
         hasPrevPage: page > 1,
         limit,
