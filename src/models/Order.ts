@@ -155,7 +155,7 @@ orderSchema.index({ userId: 1 });
 orderSchema.index({ status: 1 });
 orderSchema.index({ orderDate: -1 });
 
-const Order: Model<OrderDocument> =
+const OrderModel: Model<OrderDocument> =
   mongoose.models.Order || mongoose.model("Order", orderSchema);
 
-export default Order;
+export default OrderModel;
