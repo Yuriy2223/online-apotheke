@@ -16,7 +16,8 @@ const medicineProductSchema = new Schema<MedicineProductDocument>(
   {
     photo: {
       type: String,
-      required: true,
+      // required: true,
+      required: false,
       trim: true,
     },
     name: {

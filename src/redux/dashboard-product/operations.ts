@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 interface FetchProductsParams {
   search?: string;
@@ -85,9 +86,10 @@ export const createDashboardProduct = createAsyncThunk(
       if (!data.success) {
         throw new Error(data.error || "Failed to create product");
       }
-
+      toast.success("Product created successfully!");
       return data;
     } catch (error) {
+      toast.error("Failed to create product");
       return rejectWithValue(handleApiError(error, "Failed to create product"));
     }
   }
@@ -115,9 +117,10 @@ export const updateDashboardProduct = createAsyncThunk(
       if (!responseData.success) {
         throw new Error(responseData.error || "Failed to update product");
       }
-
+      toast.success("Product updated successfully!");
       return responseData;
     } catch (error) {
+      toast.error("Failed to update product");
       return rejectWithValue(handleApiError(error, "Failed to update product"));
     }
   }
@@ -143,9 +146,10 @@ export const deleteDashboardProduct = createAsyncThunk(
       if (!data.success) {
         throw new Error(data.error || "Failed to delete product");
       }
-
+      toast.success("Product deleted successfully!");
       return id;
     } catch (error) {
+      toast.error("Failed to delete product");
       return rejectWithValue(handleApiError(error, "Failed to delete product"));
     }
   }

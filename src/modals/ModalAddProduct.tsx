@@ -1,11 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useAppDispatch } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { closeModal } from "@/redux/modal/slice";
+import { selectCategories } from "@/redux/dashboard-product/selectors";
+import { createDashboardProduct } from "@/redux/dashboard-product/operations";
 
 export const ModalAddProduct = () => {
   const dispatch = useAppDispatch();
+  const categories = useAppSelector(selectCategories);
   const [formData, setFormData] = useState({
     name: "",
     category: "",
@@ -23,7 +26,15 @@ export const ModalAddProduct = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log("Add product:", formData);
+    const submissionData = {
+      name: formData.name,
+      category: formData.category,
+      stock: Number(formData.stock),
+      suppliers: formData.suppliers,
+      price: Number(formData.price),
+    };
+
+    dispatch(createDashboardProduct(submissionData));
     dispatch(closeModal());
   };
 
@@ -59,11 +70,11 @@ export const ModalAddProduct = () => {
             required
           >
             <option value="">Category</option>
-            <option value="electronics">Electronics</option>
-            <option value="food">Food</option>
-            <option value="clothes">Clothes</option>
-            <option value="medicine">Medicine</option>
-            <option value="supplements">Supplements</option>
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
           </select>
         </div>
 

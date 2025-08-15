@@ -62,7 +62,6 @@ const dashboardProductSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Fetch Products
     builder
       .addCase(fetchDashboardProducts.pending, (state) => {
         state.loading = true;
@@ -79,7 +78,6 @@ const dashboardProductSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Create Product
       .addCase(createDashboardProduct.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -96,7 +94,6 @@ const dashboardProductSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Update Product
       .addCase(updateDashboardProduct.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -115,7 +112,6 @@ const dashboardProductSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Delete Product
       .addCase(deleteDashboardProduct.pending, (state) => {
         state.loading = true;
         state.error = null;
