@@ -13,6 +13,7 @@ import { medicineProductsReducer } from "./medicine/slice";
 import { medicineProductDetailsReducer } from "./medicine-product/slice";
 import { cartReducer } from "./cart/slice";
 import { dashboardProductReducer } from "./dashboard-product/slice";
+import { dashboardOrdersReducer } from "./orders/slice";
 
 // const authPersistConfig = {
 //   key: "auth",
@@ -34,6 +35,7 @@ export const store = configureStore({
     medicineProductDetails: medicineProductDetailsReducer,
     cart: cartReducer,
     dashboardProducts: dashboardProductReducer,
+    dashboardOrders: dashboardOrdersReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

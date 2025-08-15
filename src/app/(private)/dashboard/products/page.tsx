@@ -193,7 +193,7 @@ export default function ProductsPage() {
                 <ProductsPageTable
                   onEditProduct={handleEditProduct}
                   onDeleteProduct={handleDeleteProduct}
-                  onClearSearch={handleClearSearch}
+                  // onClearSearch={handleClearSearch}
                 />
               </div>
             </div>
