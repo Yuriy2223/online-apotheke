@@ -3,7 +3,7 @@ import MedicineProduct from "@/models/MedicineProduct";
 import { connectDB } from "@/database/MongoDB";
 
 interface FilterOptions {
-  $or?: Array<{ [key: string]: { $regex: string; $options: string } }>;
+  name?: { $regex: string; $options: string };
   category?: string;
 }
 
@@ -21,10 +21,7 @@ export async function GET(request: NextRequest) {
     const filter: FilterOptions = {};
 
     if (search) {
-      filter.$or = [
-        { name: { $regex: search, $options: "i" } },
-        { suppliers: { $regex: search, $options: "i" } },
-      ];
+      filter.name = { $regex: search, $options: "i" };
     }
 
     if (

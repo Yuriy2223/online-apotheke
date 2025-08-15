@@ -1,25 +1,28 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Sidebar } from "@/components/Sidebar/Sidebar";
-import { Container } from "@/shared/Container";
-import { ProductsPageTable } from "./ProductsPageTable";
+import { usePagination } from "@/hooks/usePagination";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { openModal } from "@/redux/modal/slice";
-import { Filter, Plus } from "lucide-react";
+import { Sidebar } from "@/components/Sidebar/Sidebar";
+import { Container } from "@/shared/Container";
+import { ProductsPageTable } from "@/components/Dashboard/ProductsPageTable";
+import { ProductsPageFilter } from "@/components/Dashboard/ProductsPageFilter";
 import { fetchDashboardProducts } from "@/redux/dashboard-product/operations";
 import { setFilters } from "@/redux/dashboard-product/slice";
 import { Pagination } from "@/components/Pagination/Pagination";
-import { usePagination } from "@/hooks/usePagination";
 import {
   selectFilters,
   selectPagination,
   selectLoading,
+  selectProducts,
 } from "@/redux/dashboard-product/selectors";
 
 export default function ProductsPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
   const dispatch = useAppDispatch();
+  const products = useAppSelector(selectProducts);
   const filters = useAppSelector(selectFilters);
   const paginationData = useAppSelector(selectPagination);
   const loading = useAppSelector(selectLoading);
@@ -34,6 +37,10 @@ export default function ProductsPage() {
 
   const lastFetchParams = useRef<string>("");
   const isInitialRender = useRef(true);
+
+  useEffect(() => {
+    setSearchInput(filters.search);
+  }, [filters.search]);
 
   useEffect(() => {
     const fetchKey = `${currentPage}-${deviceLimit}-${filters.search}-${filters.category}-${filters.sortBy}`;
@@ -81,15 +88,31 @@ export default function ProductsPage() {
   }, []);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setFilters({ search: e.target.value, page: 1 }));
+    setSearchInput(e.target.value);
   };
 
   const handleFilterClick = () => {
     dispatch(
-      fetchDashboardProducts({
-        ...filters,
-        page: currentPage,
-        limit: deviceLimit,
+      setFilters({
+        search: searchInput,
+        page: 1,
+      })
+    );
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleFilterClick();
+    }
+  };
+
+  const handleClearSearch = () => {
+    setSearchInput("");
+    dispatch(
+      setFilters({
+        search: "",
+        category: "",
+        page: 1,
       })
     );
   };
@@ -103,19 +126,24 @@ export default function ProductsPage() {
   };
 
   const handleEditProduct = (productId: string) => {
+    const product = products.find((p) => p._id === productId);
     dispatch(
       openModal({
         type: "ModalEditProduct",
-        props: { productId },
+        props: { product },
       })
     );
   };
 
   const handleDeleteProduct = (productId: string) => {
+    const product = products.find((p) => p._id === productId);
     dispatch(
       openModal({
         type: "ModalDeleteProduct",
-        props: { productId },
+        props: {
+          productId,
+          productName: product?.name,
+        },
       })
     );
   };
@@ -134,33 +162,15 @@ export default function ProductsPage() {
           <h1 className="text-green-light text-4xl">All products</h1>
         </div>
 
-        <div className="py-5 flex flex-col gap-6 tablet:flex-row tablet:justify-between">
-          <div className="flex flex-col tablet:flex-row gap-6 tablet:items-center tablet:w-[450px]">
-            <div className="relative flex-1 max-w-sm">
-              <input
-                type="text"
-                placeholder="Product Name"
-                value={filters.search}
-                onChange={handleFilterChange}
-                className="w-full px-4 py-2.5 border border-gray-soft rounded-lg focus:outline-none focus:ring-2 focus:ring-green-light focus:border-transparent placeholder-gray-soft text-sm"
-              />
-            </div>
-            <button
-              onClick={handleFilterClick}
-              className="flex items-center justify-center gap-2 bg-green-light hover:bg-green-dark text-white-true px-6 py-2.5 rounded-lg transition-colors duration-200 text-sm font-medium min-w-fit"
-            >
-              <Filter size={16} />
-              Filter
-            </button>
-          </div>
-          <button
-            onClick={handleAddProduct}
-            className="flex items-center justify-center gap-2 bg-green-light hover:bg-green-dark text-white-true px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium"
-          >
-            <Plus size={20} />
-            Add a new product
-          </button>
-        </div>
+        <ProductsPageFilter
+          searchInput={searchInput}
+          loading={loading}
+          onFilterChange={handleFilterChange}
+          onKeyPress={handleKeyPress}
+          onFilterClick={handleFilterClick}
+          onAddProduct={handleAddProduct}
+          onClearSearch={handleClearSearch}
+        />
 
         <button
           className="absolute top-2 left-0 z-20 bg-green-light hover:bg-green-dark text-white-true px-3 py-2 rounded-md desktop:hidden"
@@ -183,6 +193,7 @@ export default function ProductsPage() {
                 <ProductsPageTable
                   onEditProduct={handleEditProduct}
                   onDeleteProduct={handleDeleteProduct}
+                  onClearSearch={handleClearSearch}
                 />
               </div>
             </div>

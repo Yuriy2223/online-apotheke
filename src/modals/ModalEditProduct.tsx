@@ -1,22 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { useAppDispatch } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { closeModal } from "@/redux/modal/slice";
+import { selectCategories } from "@/redux/dashboard-product/selectors";
+import { updateDashboardProduct } from "@/redux/dashboard-product/operations";
 
 interface EditProductProps {
   product?: {
+    _id: string;
     name: string;
     category: string;
     stock: number;
     suppliers: string;
     price: number;
   };
-  onSave?: (data: any) => void;
 }
 
-export const ModalEditProduct = ({ product, onSave }: EditProductProps) => {
+export const ModalEditProduct = ({ product }: EditProductProps) => {
   const dispatch = useAppDispatch();
+  const categories = useAppSelector(selectCategories);
   const [formData, setFormData] = useState({
     name: product?.name || "",
     category: product?.category || "",
@@ -39,7 +42,14 @@ export const ModalEditProduct = ({ product, onSave }: EditProductProps) => {
       price: Number(formData.price),
     };
 
-    if (onSave) onSave(submissionData);
+    if (product?._id) {
+      dispatch(
+        updateDashboardProduct({
+          id: product._id,
+          data: submissionData,
+        })
+      );
+    }
     dispatch(closeModal());
   };
 
@@ -74,11 +84,11 @@ export const ModalEditProduct = ({ product, onSave }: EditProductProps) => {
             required
           >
             <option value="">Category</option>
-            <option value="electronics">Electronics</option>
-            <option value="food">Food</option>
-            <option value="clothes">Clothes</option>
-            <option value="medicine">Medicine</option>
-            <option value="supplements">Supplements</option>
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
           </select>
         </div>
 
