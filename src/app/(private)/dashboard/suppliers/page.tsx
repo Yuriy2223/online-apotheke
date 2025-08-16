@@ -1,25 +1,149 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
 import { Container } from "@/shared/Container";
-import { AddSuppliersButton } from "./AddSuppliersButton";
-import { FilterSuppliersPage } from "./FilterSuppliersPage";
-import { SuppliersPageTable } from "./SuppliersPageTable";
+import { Pagination } from "@/components/Pagination/Pagination";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { usePagination } from "@/hooks/usePagination";
+import {
+  selectFilters,
+  selectLoading,
+  selectPagination,
+  selectSuppliers,
+} from "@/redux/suppliers/selectors";
+import { fetchDashboardSuppliers } from "@/redux/suppliers/operations";
+import { setFilters } from "@/redux/suppliers/slice";
+import { openModal } from "@/redux/modal/slice";
+import { SuppliersPageFilter } from "@/components/Dashboard/SuppliersPageFilter";
+import { SuppliersPageTable } from "@/components/Dashboard/SuppliersPageTable";
 
 export default function SuppliersPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const dispatch = useAppDispatch();
+  const suppliers = useAppSelector(selectSuppliers);
+  const filters = useAppSelector(selectFilters);
+  const paginationData = useAppSelector(selectPagination);
+  const loading = useAppSelector(selectLoading);
 
-  const handleFilterChange = (filterValue: string) => {
-    console.log("Filter value changed:", filterValue);
+  const { currentPage, deviceLimit, handlePageChange } = usePagination({
+    responsiveLimits: {
+      mobile: 6,
+      tablet: 8,
+      desktop: 12,
+    },
+  });
+
+  const lastFetchParams = useRef<string>("");
+  const isInitialRender = useRef(true);
+
+  useEffect(() => {
+    setSearchInput(filters.search);
+  }, [filters.search]);
+
+  useEffect(() => {
+    const fetchKey = `${currentPage}-${deviceLimit}-${filters.search}-${filters.status}-${filters.sortBy}`;
+
+    if (lastFetchParams.current === fetchKey) {
+      return;
+    }
+
+    if (loading) {
+      return;
+    }
+
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      const timer = setTimeout(() => {
+        if (lastFetchParams.current !== fetchKey) {
+          lastFetchParams.current = fetchKey;
+          dispatch(
+            fetchDashboardSuppliers({
+              ...filters,
+              page: currentPage,
+              limit: deviceLimit,
+            })
+          );
+        }
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+
+    lastFetchParams.current = fetchKey;
+    dispatch(
+      fetchDashboardSuppliers({
+        ...filters,
+        page: currentPage,
+        limit: deviceLimit,
+      })
+    );
+  }, [dispatch, currentPage, deviceLimit, filters, loading]);
+
+  useEffect(() => {
+    return () => {
+      lastFetchParams.current = "";
+    };
+  }, []);
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleFilterClick();
+    }
+  };
+  const handleFilterClick = () => {
+    dispatch(
+      setFilters({
+        search: searchInput,
+        page: 1,
+      })
+    );
+  };
+  const handleClearSearch = () => {
+    setSearchInput("");
+    dispatch(
+      setFilters({
+        search: "",
+        status: "",
+        page: 1,
+      })
+    );
+  };
   const handleAddSupplier = () => {
-    console.log("Adding new product...");
+    dispatch(
+      openModal({
+        type: "ModalAddSupplier",
+      })
+    );
   };
-
   const handleEditSupplier = (supplierId: string) => {
-    console.log("Edit product:", supplierId);
+    const supplier = suppliers.find((p) => p._id === supplierId);
+    dispatch(
+      openModal({
+        type: "ModalEditSupplier",
+        props: { supplier },
+      })
+    );
+  };
+  const handleDeleteSupplier = (supplierId: string) => {
+    const supplier = suppliers.find((p) => p._id === supplierId);
+    dispatch(
+      openModal({
+        type: "ModalDeleteSupplier",
+        props: {
+          supplierId,
+          supplierName: supplier?.name,
+        },
+      })
+    );
+  };
+  const handleSupplierPageChange = (page: number) => {
+    dispatch(setFilters({ page }));
+    handlePageChange(page);
   };
 
   return (
@@ -32,8 +156,15 @@ export default function SuppliersPage() {
         </div>
 
         <div className="py-5 flex flex-col gap-6 tablet:flex-row tablet:justify-between">
-          <FilterSuppliersPage onFilterChange={handleFilterChange} />
-          <AddSuppliersButton onClick={handleAddSupplier} />
+          <SuppliersPageFilter
+            onFilterChange={handleFilterChange}
+            searchInput={searchInput}
+            loading={loading}
+            onKeyPress={handleKeyPress}
+            onFilterClick={handleFilterClick}
+            onAddSupplier={handleAddSupplier}
+            onClearSearch={handleClearSearch}
+          />
         </div>
 
         <button
@@ -54,11 +185,22 @@ export default function SuppliersPage() {
               </header>
 
               <div className="overflow-x-auto">
-                <SuppliersPageTable onEditSupplier={handleEditSupplier} />
+                <SuppliersPageTable
+                  onEditSupplier={handleEditSupplier}
+                  onDeleteSupplier={handleDeleteSupplier}
+                />
               </div>
             </div>
           </div>
         </div>
+        {paginationData && paginationData.totalPages > 1 && (
+          <Pagination
+            currentPage={paginationData.currentPage}
+            totalPages={paginationData.totalPages}
+            onPageChange={handleSupplierPageChange}
+            className="mt-8"
+          />
+        )}
       </div>
     </Container>
   );

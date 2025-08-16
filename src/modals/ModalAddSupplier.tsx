@@ -7,12 +7,13 @@ import { toast } from "react-toastify";
 import { useAppDispatch } from "@/redux/store";
 import { closeModal } from "@/redux/modal/slice";
 import { Calendar, ChevronDown } from "lucide-react";
+import { createDashboardSupplier } from "@/redux/suppliers/operations";
 
 interface SupplierFormData {
   name: string;
   address: string;
   company: string;
-  deliveryDate: string;
+  date: string;
   amount: number;
   status: string;
 }
@@ -24,7 +25,7 @@ const supplierSchema = yup.object({
     .min(2, "Name must be at least 2 characters"),
   address: yup.string().required("Address is required"),
   company: yup.string().required("Company is required"),
-  deliveryDate: yup.string().required("Delivery date is required"),
+  date: yup.string().required("Delivery date is required"),
   amount: yup
     .number()
     .required("Amount is required")
@@ -46,7 +47,7 @@ export const ModalAddSupplier = () => {
       name: "",
       address: "",
       company: "",
-      deliveryDate: "",
+      date: "",
       amount: 0,
       status: "",
     },
@@ -54,9 +55,7 @@ export const ModalAddSupplier = () => {
 
   const onSubmit = async (data: SupplierFormData) => {
     try {
-      console.log("Add supplier:", data);
-
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await dispatch(createDashboardSupplier(data)).unwrap();
 
       toast.success("Supplier added successfully!");
       reset();
@@ -132,10 +131,10 @@ export const ModalAddSupplier = () => {
           <div className="flex flex-col">
             <div className="relative">
               <input
-                {...register("deliveryDate")}
+                {...register("date")}
                 type="date"
                 className={`w-full border rounded-lg px-4 py-2 pr-10 text-sm outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all ${
-                  errors.deliveryDate ? "border-red-500" : "border-gray-300"
+                  errors.date ? "border-red-500" : "border-gray-300"
                 }`}
               />
               <Calendar
@@ -143,9 +142,9 @@ export const ModalAddSupplier = () => {
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
               />
             </div>
-            {errors.deliveryDate && (
+            {errors.date && (
               <span className="text-red-500 text-xs mt-1">
-                {errors.deliveryDate.message}
+                {errors.date.message}
               </span>
             )}
           </div>
@@ -177,10 +176,9 @@ export const ModalAddSupplier = () => {
                   errors.status ? "border-red-500" : "border-gray-300"
                 }`}
               >
-                <option value="">Status</option>
-                <option value="pending">Pending</option>
-                <option value="active">Active</option>
-                <option value="delivered">Delivered</option>
+                <option value="">Select status</option>
+                <option value="Active">Active</option>
+                <option value="Deactive">Deactive</option>
               </select>
               <ChevronDown
                 size={18}
