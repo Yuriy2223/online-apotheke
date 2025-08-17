@@ -6,17 +6,17 @@ import { Container } from "@/shared/Container";
 import { Pagination } from "@/components/Pagination/Pagination";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { usePagination } from "@/hooks/usePagination";
+import { fetchDashboardSuppliers } from "@/redux/suppliers/operations";
+import { setFilters } from "@/redux/suppliers/slice";
+import { openModal } from "@/redux/modal/slice";
+import { SuppliersPageFilter } from "@/components/Dashboard/SuppliersPageFilter";
+import { SuppliersPageTable } from "@/components/Dashboard/SuppliersPageTable";
 import {
   selectFilters,
   selectLoading,
   selectPagination,
   selectSuppliers,
 } from "@/redux/suppliers/selectors";
-import { fetchDashboardSuppliers } from "@/redux/suppliers/operations";
-import { setFilters } from "@/redux/suppliers/slice";
-import { openModal } from "@/redux/modal/slice";
-import { SuppliersPageFilter } from "@/components/Dashboard/SuppliersPageFilter";
-import { SuppliersPageTable } from "@/components/Dashboard/SuppliersPageTable";
 
 export default function SuppliersPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -42,44 +42,6 @@ export default function SuppliersPage() {
     setSearchInput(filters.search);
   }, [filters.search]);
 
-  // useEffect(() => {
-  //   const fetchKey = `${currentPage}-${deviceLimit}-${filters.search}-${filters.status}-${filters.sortBy}`;
-
-  //   if (lastFetchParams.current === fetchKey) {
-  //     return;
-  //   }
-
-  //   if (loading) {
-  //     return;
-  //   }
-
-  //   if (isInitialRender.current) {
-  //     isInitialRender.current = false;
-  //     const timer = setTimeout(() => {
-  //       if (lastFetchParams.current !== fetchKey) {
-  //         lastFetchParams.current = fetchKey;
-  //         dispatch(
-  //           fetchDashboardSuppliers({
-  //             ...filters,
-  //             page: currentPage,
-  //             limit: deviceLimit,
-  //           })
-  //         );
-  //       }
-  //     }, 100);
-
-  //     return () => clearTimeout(timer);
-  //   }
-
-  //   lastFetchParams.current = fetchKey;
-  //   dispatch(
-  //     fetchDashboardSuppliers({
-  //       ...filters,
-  //       page: currentPage,
-  //       limit: deviceLimit,
-  //     })
-  //   );
-  // }, [dispatch, currentPage, deviceLimit, filters, loading]);
   useEffect(() => {
     const fetchKey = `${currentPage}-${deviceLimit}-${filters.search}-${filters.status}-${filters.sortBy}`;
     if (lastFetchParams.current === fetchKey || loading) {
@@ -209,8 +171,8 @@ export default function SuppliersPage() {
 
         <div className="flex-1">
           <div className="w-full mx-auto">
-            <div className="bg-white-true rounded-lg shadow border border-gray-300 p-2">
-              <header className="bg-green-soft px-4 py-3 border-b border-gray-300">
+            <div className="bg-white-true rounded-lg shadow border border-gray-soft p-2">
+              <header className="bg-green-soft px-4 py-3 border-b border-gray-soft">
                 <h2 className="text-lg font-semibold text-black-true">
                   All suppliers
                 </h2>
