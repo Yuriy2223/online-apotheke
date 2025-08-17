@@ -28,7 +28,7 @@ export default function DashboardPage() {
           <div className="w-full mx-auto ">
             <Statistics />
 
-            <div className="grid grid-cols-1 desktop:grid-cols-2 gap-6  desktop:gap-2">
+            <div className="grid grid-cols-1 desktop:grid-cols-2 gap-6 desktop:gap-2">
               <RecentCustomers />
               <IncomeExpenses />
             </div>
