@@ -5,7 +5,6 @@ import { Trash2 } from "lucide-react";
 import { useAppDispatch } from "@/redux/store";
 import { closeModal } from "@/redux/modal/slice";
 import { deleteDashboardSupplier } from "@/redux/suppliers/operations";
-import { toast } from "react-toastify";
 
 interface DeleteSupplierProps {
   supplierId?: string;
@@ -24,18 +23,11 @@ export const ModalDeleteSupplier = ({
     : `Are you sure you want to delete this supplier? This action cannot be undone.`;
 
   const handleConfirm = async () => {
-    if (!supplierId) {
-      dispatch(closeModal());
-      return;
-    }
-
+    if (!supplierId) return dispatch(closeModal());
+    setIsDeleting(true);
     try {
-      setIsDeleting(true);
       await dispatch(deleteDashboardSupplier(supplierId)).unwrap();
-      toast.success("Supplier deleted successfully!");
       dispatch(closeModal());
-    } catch {
-      toast.error("Failed to delete supplier. Please try again.");
     } finally {
       setIsDeleting(false);
     }
@@ -53,12 +45,12 @@ export const ModalDeleteSupplier = ({
         <div className="flex-shrink-0 w-10 h-10 min-[375px]:w-12 min-[375px]:h-12 min-[768px]:w-14 min-[768px]:h-14 min-[1440px]:w-16 min-[1440px]:h-16 rounded-full flex items-center justify-center bg-red-100">
           <Trash2
             size={20}
-            className="min-[375px]:text-[24px] min-[768px]:text-[28px] min-[1440px]:text-[32px] text-red-600"
+            className="min-[375px]:text-[24px] min-[768px]:text-[28px] min-[1440px]:text-[32px] text-red-dark"
           />
         </div>
         <div>
           <h2 className="text-lg min-[375px]:text-xl min-[768px]:text-2xl min-[1440px]:text-3xl font-semibold text-gray-900 pr-8 min-[375px]:pr-10 min-[768px]:pr-12 min-[1440px]:pr-16">
-            Delete confirmation
+            Delete Supplier
           </h2>
         </div>
       </div>

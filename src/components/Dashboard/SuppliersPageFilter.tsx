@@ -25,7 +25,7 @@ export const SuppliersPageFilter: React.FC<ProductsFilterProps> = ({
         <div className="relative flex-1 max-w-sm">
           <input
             type="text"
-            placeholder="Product Name"
+            placeholder="Supplier Name"
             value={searchInput}
             onChange={onFilterChange}
             onKeyPress={onKeyPress}

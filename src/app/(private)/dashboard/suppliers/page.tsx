@@ -42,43 +42,75 @@ export default function SuppliersPage() {
     setSearchInput(filters.search);
   }, [filters.search]);
 
+  // useEffect(() => {
+  //   const fetchKey = `${currentPage}-${deviceLimit}-${filters.search}-${filters.status}-${filters.sortBy}`;
+
+  //   if (lastFetchParams.current === fetchKey) {
+  //     return;
+  //   }
+
+  //   if (loading) {
+  //     return;
+  //   }
+
+  //   if (isInitialRender.current) {
+  //     isInitialRender.current = false;
+  //     const timer = setTimeout(() => {
+  //       if (lastFetchParams.current !== fetchKey) {
+  //         lastFetchParams.current = fetchKey;
+  //         dispatch(
+  //           fetchDashboardSuppliers({
+  //             ...filters,
+  //             page: currentPage,
+  //             limit: deviceLimit,
+  //           })
+  //         );
+  //       }
+  //     }, 100);
+
+  //     return () => clearTimeout(timer);
+  //   }
+
+  //   lastFetchParams.current = fetchKey;
+  //   dispatch(
+  //     fetchDashboardSuppliers({
+  //       ...filters,
+  //       page: currentPage,
+  //       limit: deviceLimit,
+  //     })
+  //   );
+  // }, [dispatch, currentPage, deviceLimit, filters, loading]);
   useEffect(() => {
     const fetchKey = `${currentPage}-${deviceLimit}-${filters.search}-${filters.status}-${filters.sortBy}`;
-
-    if (lastFetchParams.current === fetchKey) {
+    if (lastFetchParams.current === fetchKey || loading) {
       return;
     }
 
-    if (loading) {
-      return;
-    }
+    const executeRequest = () => {
+      lastFetchParams.current = fetchKey;
+      dispatch(
+        fetchDashboardSuppliers({
+          ...filters,
+          page: currentPage,
+          limit: deviceLimit,
+        })
+      );
+    };
 
     if (isInitialRender.current) {
       isInitialRender.current = false;
+
       const timer = setTimeout(() => {
-        if (lastFetchParams.current !== fetchKey) {
-          lastFetchParams.current = fetchKey;
-          dispatch(
-            fetchDashboardSuppliers({
-              ...filters,
-              page: currentPage,
-              limit: deviceLimit,
-            })
-          );
+        const currentFetchKey = `${currentPage}-${deviceLimit}-${filters.search}-${filters.status}-${filters.sortBy}`;
+        if (lastFetchParams.current !== currentFetchKey && !loading) {
+          executeRequest();
         }
       }, 100);
 
       return () => clearTimeout(timer);
+    } else {
+      executeRequest();
     }
-
-    lastFetchParams.current = fetchKey;
-    dispatch(
-      fetchDashboardSuppliers({
-        ...filters,
-        page: currentPage,
-        limit: deviceLimit,
-      })
-    );
   }, [dispatch, currentPage, deviceLimit, filters, loading]);
 
   useEffect(() => {

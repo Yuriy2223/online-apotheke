@@ -32,7 +32,6 @@ export const ModalDeleteProduct = ({
       setIsDeleting(true);
       await dispatch(deleteDashboardProduct(productId)).unwrap();
       dispatch(closeModal());
-    } catch {
     } finally {
       setIsDeleting(false);
     }

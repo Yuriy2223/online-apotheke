@@ -1,94 +1,71 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { toast } from "react-toastify";
 import { useAppDispatch } from "@/redux/store";
 import { closeModal } from "@/redux/modal/slice";
 import { Calendar, ChevronDown } from "lucide-react";
 import { createDashboardSupplier } from "@/redux/suppliers/operations";
-
-interface SupplierFormData {
-  name: string;
-  address: string;
-  company: string;
-  date: string;
-  amount: number;
-  status: string;
-}
-
-const supplierSchema = yup.object({
-  name: yup
-    .string()
-    .required("Supplier name is required")
-    .min(2, "Name must be at least 2 characters"),
-  address: yup.string().required("Address is required"),
-  company: yup.string().required("Company is required"),
-  date: yup.string().required("Delivery date is required"),
-  amount: yup
-    .number()
-    .required("Amount is required")
-    .min(0.01, "Amount must be greater than 0"),
-  status: yup.string().required("Status is required"),
-});
+import { createSupplierSchema } from "@/validation/suppliers";
+import { SupplierFormData } from "@/types/suppliers";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useState } from "react";
 
 export const ModalAddSupplier = () => {
   const dispatch = useAppDispatch();
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
     reset,
   } = useForm<SupplierFormData>({
-    resolver: yupResolver(supplierSchema),
+    resolver: yupResolver(createSupplierSchema),
     defaultValues: {
       name: "",
       address: "",
       company: "",
       date: "",
       amount: 0,
-      status: "",
+      status: "Active",
     },
   });
 
   const onSubmit = async (data: SupplierFormData) => {
-    try {
-      await dispatch(createDashboardSupplier(data)).unwrap();
-
-      toast.success("Supplier added successfully!");
-      reset();
-      dispatch(closeModal());
-    } catch {
-      toast.error("Failed to add supplier. Please try again.");
-    }
+    await dispatch(createDashboardSupplier(data)).unwrap();
+    reset();
+    setSelectedDate(null);
+    dispatch(closeModal());
   };
 
   const handleCancel = () => {
     reset();
+    setSelectedDate(null);
     dispatch(closeModal());
   };
 
   return (
     <div className="flex flex-col gap-6">
-      <h2 className="text-xl font-semibold text-gray-800">
+      <h2 className="text-xl font-semibold text-black-true">
         Add a new supplier
       </h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
+        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-8">
           <div className="flex flex-col">
             <input
               {...register("name")}
               type="text"
               placeholder="Supplier Info"
-              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all ${
-                errors.name ? "border-red-500" : "border-gray-300"
+              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-green-light focus:border-transparent transition-all ${
+                errors.name ? "border-red-dark" : "border-gray-soft"
               }`}
             />
             {errors.name && (
-              <span className="text-red-500 text-xs mt-1">
+              <span className="text-red-dark text-xs mt-1">
                 {errors.name.message}
               </span>
             )}
@@ -99,30 +76,31 @@ export const ModalAddSupplier = () => {
               {...register("address")}
               type="text"
               placeholder="Address"
-              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all ${
-                errors.address ? "border-red-500" : "border-gray-300"
+              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-green-light focus:border-transparent transition-all ${
+                errors.address ? "border-red-dark" : "border-gray-soft"
               }`}
             />
             {errors.address && (
-              <span className="text-red-500 text-xs mt-1">
+              <span className="text-red-dark text-xs mt-1">
                 {errors.address.message}
               </span>
             )}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-8">
           <div className="flex flex-col">
             <input
               {...register("company")}
               type="text"
               placeholder="Company"
-              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all ${
-                errors.company ? "border-red-500" : "border-gray-300"
-              }`}
+              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-green-light
+                 focus:border-transparent transition-all ${
+                   errors.company ? "border-red-dark" : "border-gray-soft"
+                 }`}
             />
             {errors.company && (
-              <span className="text-red-500 text-xs mt-1">
+              <span className="text-red-dark text-xs mt-1">
                 {errors.company.message}
               </span>
             )}
@@ -130,39 +108,70 @@ export const ModalAddSupplier = () => {
 
           <div className="flex flex-col">
             <div className="relative">
-              <input
-                {...register("date")}
-                type="date"
-                className={`w-full border rounded-lg px-4 py-2 pr-10 text-sm outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all ${
-                  errors.date ? "border-red-500" : "border-gray-300"
-                }`}
+              <Controller
+                name="date"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={(date: Date | null) => {
+                      setSelectedDate(date);
+                      if (date) {
+                        const formatted = date.toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        });
+                        field.onChange(formatted);
+                      } else {
+                        field.onChange("");
+                      }
+                    }}
+                    dateFormat="MMMM d, yyyy"
+                    placeholderText="August 1, 2023"
+                    customInput={
+                      <input
+                        className={`w-full border rounded-lg px-4 py-2 pr-10 text-sm outline-none focus:ring-2
+                           focus:ring-green-light focus:border-transparent transition-all ${
+                             errors.date
+                               ? "border-red-dark"
+                               : "border-gray-soft"
+                           }`}
+                      />
+                    }
+                  />
+                )}
               />
               <Calendar
-                size={18}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+                size={20}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-green-light pointer-events-none"
               />
             </div>
             {errors.date && (
-              <span className="text-red-500 text-xs mt-1">
+              <span className="text-red-dark text-xs mt-1">
                 {errors.date.message}
               </span>
             )}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-8">
           <div className="flex flex-col">
             <input
               {...register("amount", { valueAsNumber: true })}
               type="number"
               step="0.01"
+              min="0"
               placeholder="Amount"
-              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all ${
-                errors.amount ? "border-red-500" : "border-gray-300"
-              }`}
+              className={`border rounded-lg px-4 py-2 
+                text-sm outline-none focus:ring-2
+                 focus:ring-green-light focus:border-transparent 
+                 transition-all ${
+                   errors.amount ? "border-red-dark" : "border-gray-soft"
+                 }`}
             />
             {errors.amount && (
-              <span className="text-red-500 text-xs mt-1">
+              <span className="text-red-dark text-xs mt-1">
                 {errors.amount.message}
               </span>
             )}
@@ -172,21 +181,20 @@ export const ModalAddSupplier = () => {
             <div className="relative">
               <select
                 {...register("status")}
-                className={`appearance-none w-full border rounded-lg px-4 py-2 pr-10 text-sm outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all ${
-                  errors.status ? "border-red-500" : "border-gray-300"
+                className={`appearance-none w-full border rounded-lg px-4 py-2 pr-10 text-sm outline-none focus:ring-2 focus:ring-green-light focus:border-transparent transition-all ${
+                  errors.status ? "border-red-dark" : "border-gray-soft"
                 }`}
               >
-                <option value="">Select status</option>
                 <option value="Active">Active</option>
                 <option value="Deactive">Deactive</option>
               </select>
               <ChevronDown
-                size={18}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+                size={20}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-green-light pointer-events-none"
               />
             </div>
             {errors.status && (
-              <span className="text-red-500 text-xs mt-1">
+              <span className="text-red-dark text-xs mt-1">
                 {errors.status.message}
               </span>
             )}
@@ -197,7 +205,7 @@ export const ModalAddSupplier = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex-1 bg-green-500 text-white rounded-lg py-2 px-4 hover:bg-green-600 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 bg-green-light text-white-true rounded-lg py-2 px-4 hover:bg-green-dark focus:ring-2 focus:ring-green-dark focus:ring-offset-2 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? "Adding..." : "Add"}
           </button>
@@ -205,7 +213,7 @@ export const ModalAddSupplier = () => {
             type="button"
             onClick={handleCancel}
             disabled={isSubmitting}
-            className="flex-1 bg-gray-200 text-gray-700 rounded-lg py-2 px-4 hover:bg-gray-300 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 bg-gray-soft text-black-true rounded-lg py-2 px-4 hover:bg-gray-dark hover:text-white-true focus:ring-2 focus:ring-gray-dark focus:ring-offset-2 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>

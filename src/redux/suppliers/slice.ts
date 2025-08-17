@@ -5,6 +5,7 @@ import {
   fetchDashboardSuppliers,
   createDashboardSupplier,
   updateDashboardSupplier,
+  deleteDashboardSupplier,
 } from "./operations";
 
 export interface SuppliersState {
@@ -105,8 +106,32 @@ const dashboardSupplierSlice = createSlice({
         if (index !== -1) {
           state.suppliers[index] = action.payload.supplier;
         }
+        // const index = state.suppliers.findIndex(
+        //   (p) => p._id === action.meta.arg.id
+        // );
+        // if (index !== -1) {
+        //   state.suppliers[index] = action.payload.supplier;
+        // }
       })
       .addCase(updateDashboardSupplier.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      .addCase(deleteDashboardSupplier.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteDashboardSupplier.fulfilled, (state, action) => {
+        state.loading = false;
+        state.suppliers = state.suppliers.filter(
+          (p) => p._id !== action.meta.arg
+        );
+        if (state.pagination) {
+          state.pagination.totalCount -= 1;
+        }
+      })
+      .addCase(deleteDashboardSupplier.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

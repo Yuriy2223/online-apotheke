@@ -10,6 +10,7 @@ import { ModalEditProduct } from "./ModalEditProduct";
 import { ModalAddSupplier } from "./ModalAddSupplier";
 import { ModalEditSupplier } from "./ModalEditSupplier";
 import { ModalDeleteProduct } from "./ModalDeleteProduct";
+import { ModalDeleteSupplier } from "./ModalDeleteSupplier";
 import {
   selectIsModalOpen,
   selectModalProps,
@@ -53,6 +54,8 @@ export const ModalUniversal = () => {
         return <ModalAddSupplier {...modalProps} />;
       case "ModalEditSupplier":
         return <ModalEditSupplier {...modalProps} />;
+      case "ModalDeleteSupplier":
+        return <ModalDeleteSupplier {...modalProps} />;
       default:
         return null;
     }
