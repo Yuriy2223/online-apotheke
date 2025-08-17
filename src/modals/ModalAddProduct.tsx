@@ -44,7 +44,7 @@ export const ModalAddProduct = () => {
 
   return (
     <div className="flex flex-col gap-4 max-tablet:gap-5 tablet:gap-6">
-      <h2 className="text-lg max-tablet:text-xl tablet:text-2xl  font-semibold text-black-true pr-8 max-tablet:pr-10 tablet:pr-12">
+      <h2 className="text-lg max-tablet:text-xl tablet:text-2xl font-semibold text-black-true pr-8 max-tablet:pr-10 tablet:pr-12">
         Add a new product
       </h2>
 

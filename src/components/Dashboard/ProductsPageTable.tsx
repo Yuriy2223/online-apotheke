@@ -13,7 +13,6 @@ export interface ProductsPageTableProps {
   highlightId?: string;
   onEditProduct: (productId: string) => void;
   onDeleteProduct: (productId: string) => void;
-  // onClearSearch?: () => void;
 }
 
 export function ProductsPageTable({

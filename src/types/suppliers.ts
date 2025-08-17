@@ -9,3 +9,11 @@ export interface Supplier {
   createdAt?: string;
   updatedAt?: string;
 }
+export interface SupplierFormData {
+  name: string;
+  address: string;
+  company: string;
+  date: string;
+  amount: number;
+  status: string;
+}

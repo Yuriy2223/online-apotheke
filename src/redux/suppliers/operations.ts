@@ -1,3 +1,4 @@
+import { SupplierFormData } from "@/types/suppliers";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
@@ -9,31 +10,10 @@ interface FetchSuppliersParams {
   limit?: number;
 }
 
-interface SupplierData {
-  name: string;
-  address: string;
-  company: string;
-  date: string;
-  amount: number;
-  status: string;
-}
-
 interface UpdateSupplierParams {
   id: string;
-  data: Partial<SupplierData>;
+  data: Partial<SupplierFormData>;
 }
-
-// export interface Supplier {
-//   _id: string;
-// name: string;
-// address: string;
-// company: string;
-// date: string;
-// amount: number;
-// status: string;
-//   createdAt?: string;
-//   updatedAt?: string;
-// }
 
 const handleApiError = (error: unknown, defaultMessage: string): string => {
   if (error instanceof Error) {
@@ -80,7 +60,7 @@ export const fetchDashboardSuppliers = createAsyncThunk(
 
 export const createDashboardSupplier = createAsyncThunk(
   "dashboardSuppliers/createDashboardSupplier",
-  async (supplierData: SupplierData, { rejectWithValue }) => {
+  async (supplierData: SupplierFormData, { rejectWithValue }) => {
     try {
       const response = await fetch("/api/dashboard/suppliers", {
         method: "POST",

@@ -17,7 +17,7 @@ export const selectLoading = (state: RootState) =>
 
 export const selectError = (state: RootState) => state.dashboardSuppliers.error;
 
-export const selectSupplierById = (state: RootState, supplierId: string) =>
-  state.dashboardSuppliers.suppliers.find(
-    (supplier) => supplier._id === supplierId
-  );
+// export const selectSupplierById = (state: RootState, supplierId: string) =>
+//   state.dashboardSuppliers.suppliers.find(
+//     (supplier) => supplier._id === supplierId
+//   );

@@ -36,7 +36,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     return NextResponse.json({
-      product: updatedSupplier,
+      supplier: updatedSupplier,
       message: "Supplier updated successfully",
       success: true,
     });
