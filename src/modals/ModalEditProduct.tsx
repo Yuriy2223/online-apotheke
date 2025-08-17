@@ -58,29 +58,29 @@ export const ModalEditProduct = ({ product }: EditProductProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-4 min-[375px]:gap-5 min-[768px]:gap-6 min-[1440px]:gap-8">
-      <h2 className="text-lg min-[375px]:text-xl min-[768px]:text-2xl min-[1440px]:text-3xl font-semibold text-gray-800 pr-8 min-[375px]:pr-10 min-[768px]:pr-12 min-[1440px]:pr-16">
+    <div className="flex flex-col gap-4 max-tablet:gap-5 tablet:gap-6 ">
+      <h2 className="text-lg max-tablet:text-xl tablet:text-3xl font-semibold text-black-true pr-8 max-tablet:pr-10 tablet:pr-12">
         Edit product
       </h2>
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-3 min-[375px]:gap-4 min-[768px]:gap-5 min-[1440px]:gap-6"
+        className="flex flex-col gap-3 max-tablet:gap-4 tablet:gap-5"
       >
-        <div className="grid grid-cols-1 min-[768px]:grid-cols-2 gap-3 min-[375px]:gap-4 min-[1440px]:gap-5">
+        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-3 max-tablet:gap-4">
           <input
             name="name"
             value={formData.name}
             onChange={handleChange}
             placeholder="Product Info"
-            className="border border-gray-300 rounded-lg px-3 py-2 min-[375px]:px-4 min-[375px]:py-2.5 min-[768px]:px-4 min-[768px]:py-3 min-[1440px]:px-5 min-[1440px]:py-3.5 text-sm min-[768px]:text-base min-[1440px]:text-lg outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+            className="border border-gray-soft rounded-lg px-3 py-2 max-tablet:px-4 max-tablet:py-2.5 tablet:px-4 tablet:py-2 text-sm tablet:text-base outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
             required
           />
           <select
             name="category"
             value={formData.category}
             onChange={handleChange}
-            className="border border-gray-300 rounded-lg px-3 py-2 min-[375px]:px-4 min-[375px]:py-2.5 min-[768px]:px-4 min-[768px]:py-3 min-[1440px]:px-5 min-[1440px]:py-3.5 text-sm min-[768px]:text-base min-[1440px]:text-lg outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+            className="border border-gray-soft rounded-lg px-3 py-2 min-[375px]:px-4 min-[375px]:py-2.5 min-[768px]:px-4 min-[768px]:py-3 text-sm min-[768px]:text-base outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
             required
           >
             <option value="">Category</option>
@@ -100,7 +100,7 @@ export const ModalEditProduct = ({ product }: EditProductProps) => {
             placeholder="Stock"
             type="number"
             min="0"
-            className="border border-gray-300 rounded-lg px-3 py-2 min-[375px]:px-4 min-[375px]:py-2.5 min-[768px]:px-4 min-[768px]:py-3 min-[1440px]:px-5 min-[1440px]:py-3.5 text-sm min-[768px]:text-base min-[1440px]:text-lg outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+            className="border border-gray-soft rounded-lg px-3 py-2 max-tablet:px-4 max-tablet:py-2.5 tablet:px-4 tablet:py-2 text-sm tablet:text-base outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
             required
           />
           <input
@@ -108,7 +108,7 @@ export const ModalEditProduct = ({ product }: EditProductProps) => {
             value={formData.suppliers}
             onChange={handleChange}
             placeholder="Suppliers"
-            className="border border-gray-300 rounded-lg px-3 py-2 min-[375px]:px-4 min-[375px]:py-2.5 min-[768px]:px-4 min-[768px]:py-3 min-[1440px]:px-5 min-[1440px]:py-3.5 text-sm min-[768px]:text-base min-[1440px]:text-lg outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+            className="border border-gray-soft rounded-lg px-3 py-2 max-tablet:px-4 max-tablet:py-2.5 tablet:px-4 tablet:py-2 text-sm tablet:text-base outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
             required
           />
         </div>
@@ -121,21 +121,21 @@ export const ModalEditProduct = ({ product }: EditProductProps) => {
           type="number"
           step="0.01"
           min="0"
-          className="border border-gray-300 rounded-lg px-3 py-2 min-[375px]:px-4 min-[375px]:py-2.5 min-[768px]:px-4 min-[768px]:py-3 min-[1440px]:px-5 min-[1440px]:py-3.5 text-sm min-[768px]:text-base min-[1440px]:text-lg outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+          className="border border-gray-soft rounded-lg px-3 py-2 max-tablet:px-4 max-tablet:py-2.5 tablet:px-4 tablet:py-2 text-sm tablet:text-base outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
           required
         />
 
-        <div className="flex gap-3 min-[375px]:gap-4 min-[1440px]:gap-5 pt-2 min-[768px]:pt-3 min-[1440px]:pt-4">
+        <div className="flex gap-3 pt-2">
           <button
             type="submit"
-            className="flex-1 bg-green-500 text-white rounded-lg py-2 min-[375px]:py-2.5 min-[768px]:py-3 min-[1440px]:py-3.5 px-4 min-[1440px]:px-6 hover:bg-green-600 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all font-medium text-sm min-[768px]:text-base min-[1440px]:text-lg"
+            className="flex-1 bg-green-light text-white-true rounded-lg py-2 px-4 hover:bg-green-dark focus:ring-2 focus:ring-green-dark focus:ring-offset-2 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Save Changes
+            Save
           </button>
           <button
             type="button"
             onClick={handleCancel}
-            className="flex-1 bg-gray-200 text-gray-700 rounded-lg py-2 min-[375px]:py-2.5 min-[768px]:py-3 min-[1440px]:py-3.5 px-4 min-[1440px]:px-6 hover:bg-gray-300 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all font-medium text-sm min-[768px]:text-base min-[1440px]:text-lg"
+            className="flex-1 bg-gray-soft text-black-true rounded-lg py-2 px-4 hover:bg-gray-dark hover:text-white-true focus:ring-2 focus:ring-gray-dark focus:ring-offset-2 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>
