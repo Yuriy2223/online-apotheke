@@ -44,3 +44,29 @@ export const fetchDashboardCustomers = createAsyncThunk(
     }
   }
 );
+
+export const fetchRecentCustomers = createAsyncThunk(
+  "dashboardCustomers/fetchRecentDashboardCustomers",
+  async (_, { rejectWithValue }) => {
+    try {
+      const searchParams = new URLSearchParams();
+      searchParams.set("sortBy", "spent");
+      searchParams.set("limit", "7");
+      searchParams.set("page", "1");
+
+      const response = await fetch(`/api/dashboard/customers?${searchParams}`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      return data.customers;
+    } catch (error) {
+      return rejectWithValue(
+        handleApiError(error, "Failed to fetch recent customers")
+      );
+    }
+  }
+);
