@@ -209,7 +209,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    // Обробка callback queries (inline кнопки)
+    // Обробка inline кнопки
     if (body.callback_query) {
       const callbackQuery = body.callback_query;
       const chatId = callbackQuery.from.id;

@@ -3,9 +3,7 @@
 // const bot = new Bot(process.env.TELEGRAM_TOKEN!);
 
 // async function main() {
-//   await bot.api.setWebhook(
-//   "https://online-pharmacy-alpha.vercel.app/api/bot"
-//   );
+//   await bot.api.setWebhook("https://online-pharmacy-alpha.vercel.app/api/bot");
 //   console.log("Webhook встановлено!");
 // }
 
