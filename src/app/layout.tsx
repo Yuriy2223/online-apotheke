@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Roboto } from "next/font/google";
 import { Providers } from "@/providers/Providers";
 import "./globals.css";
+import TelegramHelpWidget from "@/components/TelegramHelpWidget/TelegramHelpWidget";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,7 +29,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${roboto.variable} antialiased`}>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <TelegramHelpWidget />
+        </Providers>
       </body>
     </html>
   );
