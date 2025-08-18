@@ -1,16 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
 import { Container } from "@/shared/Container";
-import { CustomersPageTable } from "./CustomersPageTable";
-import { FilterCustomersPage } from "./FilterCustomersPage";
+import { AppDispatch } from "@/redux/store";
+import { setFilters } from "@/redux/customers/slice";
+import { fetchDashboardCustomers } from "@/redux/customers/operations";
+import { CustomersPageFilter } from "@/components/Dashboard/CustomersPageFilter";
+import { CustomersPageTable } from "@/components/Dashboard/CustomersPageTable";
+import {
+  selectCustomers,
+  selectFilters,
+  selectLoading,
+} from "@/redux/customers/selectors";
 
 export default function CustomersPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const customers = useSelector(selectCustomers);
+  const loading = useSelector(selectLoading);
+  const filters = useSelector(selectFilters);
+
+  useEffect(() => {
+    dispatch(fetchDashboardCustomers(filters));
+  }, [dispatch, filters]);
 
   const handleFilterChange = (filterValue: string) => {
-    console.log("Filter value changed:", filterValue);
+    dispatch(setFilters({ search: filterValue }));
   };
 
   return (
@@ -23,7 +40,7 @@ export default function CustomersPage() {
         </div>
 
         <div className="py-5">
-          <FilterCustomersPage onFilterChange={handleFilterChange} />
+          <CustomersPageFilter onFilterChange={handleFilterChange} />
         </div>
 
         <button
@@ -39,12 +56,18 @@ export default function CustomersPage() {
             <div className="bg-white-true rounded-lg shadow border border-gray-300 p-2">
               <header className="bg-green-soft px-4 py-3 border-b border-gray-300">
                 <h2 className="text-lg font-semibold text-black-true">
-                  Customers Data
+                  All customers
                 </h2>
               </header>
 
               <div className="overflow-x-auto">
-                <CustomersPageTable />
+                {loading ? (
+                  <div className="flex items-center justify-center p-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-light"></div>
+                  </div>
+                ) : (
+                  <CustomersPageTable customers={customers} />
+                )}
               </div>
             </div>
           </div>
