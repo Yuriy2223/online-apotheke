@@ -1,13 +1,16 @@
-import { customers } from "./123";
 import { Customer } from "@/types/customers";
 
-export function CustomersPageTable({
-  singleCustomer,
-  highlightId,
-}: {
+interface CustomersTableProps {
+  customers: Customer[];
   singleCustomer?: Customer;
   highlightId?: string;
-}) {
+}
+
+export function CustomersPageTable({
+  customers,
+  singleCustomer,
+  highlightId,
+}: CustomersTableProps) {
   const data = singleCustomer ? [singleCustomer] : customers;
 
   return (
