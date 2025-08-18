@@ -2,9 +2,10 @@
 // import { Bot } from "grammy";
 
 // const bot = new Bot(process.env.TELEGRAM_TOKEN);
+// const webhookUrl = `https://${process.env.VERCEL_URL}/api/telegram`;
 
 // async function main() {
-//   await bot.api.setWebhook("https://online-pharmacy-alpha.vercel.app/api/bot");
+//   await bot.api.setWebhook(webhookUrl);
 //   console.log("Webhook встановлено!");
 // }
 
@@ -12,5 +13,4 @@
 
 // запуск командою і раз і видаляєш усе
 
-// ts-node setWebhook.ts
 // node setWebhook.js
