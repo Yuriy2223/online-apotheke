@@ -1,33 +1,136 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect, useRef } from "react";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
 import { Container } from "@/shared/Container";
-import { AppDispatch } from "@/redux/store";
 import { setFilters } from "@/redux/customers/slice";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { usePagination } from "@/hooks/usePagination";
 import { fetchDashboardCustomers } from "@/redux/customers/operations";
 import { CustomersPageFilter } from "@/components/Dashboard/CustomersPageFilter";
 import { CustomersPageTable } from "@/components/Dashboard/CustomersPageTable";
+import { Pagination } from "@/components/Pagination/Pagination";
 import {
   selectCustomers,
   selectFilters,
   selectLoading,
+  selectPagination,
 } from "@/redux/customers/selectors";
 
 export default function CustomersPage() {
+  // const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  // const dispatch = useDispatch<AppDispatch>();
+  // const customers = useSelector(selectCustomers);
+  // const loading = useSelector(selectLoading);
+  // const filters = useSelector(selectFilters);
+
+  // useEffect(() => {
+  //   dispatch(fetchDashboardCustomers(filters));
+  // }, [dispatch, filters]);
+
+  // const handleFilterChange = (filterValue: string) => {
+  //   dispatch(setFilters({ search: filterValue }));
+  // };
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
-  const customers = useSelector(selectCustomers);
-  const loading = useSelector(selectLoading);
-  const filters = useSelector(selectFilters);
+  const [searchInput, setSearchInput] = useState("");
+  const dispatch = useAppDispatch();
+  const customers = useAppSelector(selectCustomers);
+  const filters = useAppSelector(selectFilters);
+  const paginationData = useAppSelector(selectPagination);
+  const loading = useAppSelector(selectLoading);
+
+  const { currentPage, deviceLimit, handlePageChange } = usePagination({
+    responsiveLimits: {
+      mobile: 6,
+      tablet: 8,
+      desktop: 12,
+    },
+  });
+
+  const lastFetchParams = useRef<string>("");
+  const isInitialRender = useRef(true);
 
   useEffect(() => {
-    dispatch(fetchDashboardCustomers(filters));
-  }, [dispatch, filters]);
+    setSearchInput(filters.search);
+  }, [filters.search]);
 
-  const handleFilterChange = (filterValue: string) => {
-    dispatch(setFilters({ search: filterValue }));
+  useEffect(() => {
+    const fetchKey = `${currentPage}-${deviceLimit}-${filters.search}-${filters.sortBy}`;
+
+    if (lastFetchParams.current === fetchKey) {
+      return;
+    }
+
+    if (loading) {
+      return;
+    }
+
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      const timer = setTimeout(() => {
+        if (lastFetchParams.current !== fetchKey) {
+          lastFetchParams.current = fetchKey;
+          dispatch(
+            fetchDashboardCustomers({
+              ...filters,
+              page: currentPage,
+              limit: deviceLimit,
+            })
+          );
+        }
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+
+    lastFetchParams.current = fetchKey;
+    dispatch(
+      fetchDashboardCustomers({
+        ...filters,
+        page: currentPage,
+        limit: deviceLimit,
+      })
+    );
+  }, [dispatch, currentPage, deviceLimit, filters, loading]);
+
+  useEffect(() => {
+    return () => {
+      lastFetchParams.current = "";
+    };
+  }, []);
+
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
+  };
+
+  const handleFilterClick = () => {
+    dispatch(
+      setFilters({
+        search: searchInput,
+        page: 1,
+      })
+    );
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleFilterClick();
+    }
+  };
+
+  const handleClearSearch = () => {
+    setSearchInput("");
+    dispatch(
+      setFilters({
+        search: "",
+        page: 1,
+      })
+    );
+  };
+
+  const handleCustomersPageChange = (page: number) => {
+    dispatch(setFilters({ page }));
+    handlePageChange(page);
   };
 
   return (
@@ -40,7 +143,14 @@ export default function CustomersPage() {
         </div>
 
         <div className="py-5">
-          <CustomersPageFilter onFilterChange={handleFilterChange} />
+          <CustomersPageFilter
+            searchInput={searchInput}
+            loading={loading}
+            onFilterChange={handleFilterChange}
+            onKeyPress={handleKeyPress}
+            onFilterClick={handleFilterClick}
+            onClearSearch={handleClearSearch}
+          />
         </div>
 
         <button
@@ -72,6 +182,15 @@ export default function CustomersPage() {
             </div>
           </div>
         </div>
+
+        {paginationData && paginationData.totalPages > 1 && (
+          <Pagination
+            currentPage={paginationData.currentPage}
+            totalPages={paginationData.totalPages}
+            onPageChange={handleCustomersPageChange}
+            className="mt-8"
+          />
+        )}
       </div>
     </Container>
   );

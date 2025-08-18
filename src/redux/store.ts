@@ -16,6 +16,8 @@ import { dashboardProductReducer } from "./dashboard-product/slice";
 import { dashboardOrdersReducer } from "./orders/slice";
 import { dashboardSupplierReducer } from "./suppliers/slice";
 import { dashboardCustomersReducer } from "./customers/slice";
+import { dashboardStatisticsReducer } from "./dashboard-statistics/slice";
+import { dashboardTransactionsReducer } from "./dashboard-transactions/slice";
 
 // const authPersistConfig = {
 //   key: "auth",
@@ -40,6 +42,8 @@ export const store = configureStore({
     dashboardOrders: dashboardOrdersReducer,
     dashboardSuppliers: dashboardSupplierReducer,
     dashboardCustomers: dashboardCustomersReducer,
+    dashboardStatistics: dashboardStatisticsReducer,
+    dashboardTransactions: dashboardTransactionsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
