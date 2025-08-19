@@ -8,7 +8,7 @@ export const AddPharmacyPromo = () => {
   const router = useRouter();
 
   const handleBuyMedicineClick = () => {
-    router.push("/medicine-store");
+    router.push("/pharmacies");
   };
 
   return (
@@ -28,7 +28,8 @@ export const AddPharmacyPromo = () => {
 
             <button
               onClick={handleBuyMedicineClick}
-              className="bg-white-true/20 hover:bg-white-true/30 text-white-true px-8 py-3 rounded-full font-medium transition-colors border border-white-true/20"
+              className="bg-white-true/20 hover:bg-white-true/30 text-white-true px-8 py-3 rounded-full font-medium
+               transition-colors border border-white-true/20"
             >
               Buy medicine
             </button>
@@ -40,7 +41,8 @@ export const AddPharmacyPromo = () => {
               alt="Woman using pharmacy app on tablet"
               width={608}
               height={406}
-              className="object-cover h-[294px] w-[334px] rounded-[24px] tablet:rounded-[0_24px_24px_0] tablet:h-[406px] tablet:w-full  desktop:w-[608px] desktop:h-[406px]"
+              className="object-cover h-[294px] w-[334px] rounded-[24px] tablet:rounded-[0_24px_24px_0] tablet:h-[406px]
+               tablet:w-full  desktop:w-[608px] desktop:h-[406px]"
             />
           </div>
         </div>
