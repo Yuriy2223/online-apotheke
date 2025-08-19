@@ -9,8 +9,8 @@ import { usePagination } from "@/hooks/usePagination";
 import { fetchDashboardSuppliers } from "@/redux/suppliers/operations";
 import { setFilters } from "@/redux/suppliers/slice";
 import { openModal } from "@/redux/modal/slice";
-import { SuppliersPageFilter } from "@/components/Dashboard/SuppliersPageFilter";
-import { SuppliersPageTable } from "@/components/Dashboard/SuppliersPageTable";
+import { SuppliersPageFilter } from "@/components/Filters/SuppliersPageFilter";
+import { SuppliersPageTable } from "@/components/Table/SuppliersPageTable";
 import {
   selectFilters,
   selectLoading,

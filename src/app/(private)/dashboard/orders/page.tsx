@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
 import { Container } from "@/shared/Container";
 import { Pagination } from "@/components/Pagination/Pagination";
-import { OrdersPageFilter } from "@/components/Dashboard/OrdersPageFilter";
+import { OrdersPageFilter } from "@/components/Filters/OrdersPageFilter";
 import { usePagination } from "@/hooks/usePagination";
 import { fetchDashboardOrders } from "@/redux/orders/operations";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { setFilters } from "@/redux/orders/slice";
-import { OrdersPageTable } from "@/components/Dashboard/OrdersPageTable";
+import { OrdersPageTable } from "@/components/Table/OrdersPageTable";
 import {
   selectFilters,
   selectLoading,

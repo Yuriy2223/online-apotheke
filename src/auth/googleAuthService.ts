@@ -28,8 +28,8 @@ export async function processGoogleAuth(
       if (user.provider === "local") {
         return {
           success: false,
-          error: "Акаунт з цим email вже існує",
-          details: "Будь ласка, увійдіть так як зареєструвались",
+          error: "An account with this email already exists",
+          details: "Please log in as you registered",
           statusCode: 409,
         };
       }
@@ -88,7 +88,7 @@ export async function processGoogleAuth(
     return {
       success: true,
       data: {
-        message: "Успішний вхід через Google!",
+        message: "Successful Google login!",
         user: userResponse,
         accessToken,
         refreshToken,
@@ -100,7 +100,7 @@ export async function processGoogleAuth(
     console.error("Google OAuth processing error:", error);
     return {
       success: false,
-      error: "Помилка входу через Google",
+      error: "Google login error",
       statusCode: 500,
     };
   }
