@@ -4,60 +4,55 @@ import * as yup from "yup";
 export const registerSchema = yup.object({
   name: yup
     .string()
-    .required("Імʼя обовʼязкове")
-    .min(2, "Імʼя повинно містити мінімум 2 символи")
-    .max(50, "Імʼя не повинно перевищувати 50 символів")
+    .required("Name is required")
+    .min(2, "Name must be at least 2 characters")
+    .max(50, "Name must not exceed 50 characters")
     .trim(),
   email: yup
     .string()
-    .required("Email обовʼязковий")
-    .email("Невалідний формат email")
-    .max(100, "Максимум 100 символів")
+    .required("Email is required")
+    .email("Invalid email format")
+    .max(100, "Maximum 100 characters")
     .lowercase()
     .trim(),
-  // phone: yup
-  //   .string()
-  //   .required("Телефон обовʼязковий")
-  //   .matches(/^\+?[1-9]\d{1,14}$/, "Невалідний формат телефону")
-  //   .trim(),
   password: yup
     .string()
-    .required("Пароль обовʼязковий")
-    .min(6, "Пароль повинен містити мінімум 6 символів")
-    .max(128, "Пароль не повинен перевищувати 128 символів")
+    .required("Password is required")
+    .min(6, "Password must be at least 6 characters")
+    .max(128, "Password must not exceed 128 characters")
     .trim(),
   confirmPassword: yup
     .string()
-    .required("Підтвердження пароля обовʼязкове")
-    .oneOf([yup.ref("password")], "Паролі повинні співпадати"),
+    .required("Password confirmation required")
+    .oneOf([yup.ref("password")], "Passwords must match"),
 });
 
 export const loginSchema = yup.object({
   email: yup
     .string()
-    .required("Email обовʼязковий")
-    .email("Невалідний формат email")
-    .max(100, "Максимум 100 символів")
+    .required("Email required")
+    .email("Invalid email format")
+    .max(100, "Maximum 100 characters")
     .lowercase()
     .trim(),
   password: yup
     .string()
-    .required("Пароль обовʼязковий")
-    .min(6, "Пароль повинен містити мінімум 6 символів")
-    .max(32, "Пароль не повинен перевищувати 32 символи")
+    .required("Password required")
+    .min(6, "Password must be at least 6 characters")
+    .max(32, "Password must not exceed 32 characters")
     .trim(),
 });
 
 export const verifyEmailSchema = yup.object({
-  token: yup.string().required("Токен верифікації обовʼязковий"),
+  token: yup.string().required("Verification token required"),
 });
 
 export const schemaForgotPassword = yup.object().shape({
   email: yup
     .string()
-    .required("Email обовʼязковий")
-    .email("Невалідний формат email")
-    .max(100, "Максимум 100 символів")
+    .required("Email required")
+    .email("Invalid email format")
+    .max(100, "Maximum 100 characters")
     .lowercase()
     .trim(),
 });
@@ -65,26 +60,26 @@ export const schemaForgotPassword = yup.object().shape({
 export const schemaResetPassword = yup.object().shape({
   password: yup
     .string()
-    .required("Пароль обовʼязковий")
-    .min(6, "Пароль повинен містити мінімум 6 символів")
-    .max(32, "Пароль не повинен перевищувати 32 символи")
+    .required("Password required")
+    .min(6, "Password must be at least 6 characters long")
+    .max(32, "Password must not exceed 32 characters long")
     .trim(),
   confirmPassword: yup
     .string()
-    .required("Підтвердження пароля обовʼязкове")
-    .oneOf([yup.ref("password")], "Паролі повинні співпадати"),
+    .required("Password confirmation required")
+    .oneOf([yup.ref("password")], "Passwords must match"),
 });
 
 export const refreshTokenSchema = yup.object({
-  refreshToken: yup.string().min(1, "Refresh token обов'язковий"),
+  refreshToken: yup.string().min(1, "Refresh token required"),
 });
 
 export const userProfileSchema: yup.ObjectSchema<ProfileFormData> = yup.object({
   name: yup
     .string()
-    .required("Ім'я обов'язкове")
-    .min(2, "Мінімум 2 символи")
-    .max(50, "Максимум 50 символів")
+    .required("Name required")
+    .min(2, "Minimum 2 characters")
+    .max(50, "Maximum 50 characters")
     .trim(),
   phone: yup
     .string()
@@ -92,7 +87,7 @@ export const userProfileSchema: yup.ObjectSchema<ProfileFormData> = yup.object({
     .optional()
     .transform((value) => (value === "" ? null : value))
     .matches(/^\+?[1-9]\d{7,14}$/, {
-      message: "Невалідний номер телефону",
+      message: "Invalid phone number",
     })
     .trim(),
   address: yup
@@ -100,10 +95,11 @@ export const userProfileSchema: yup.ObjectSchema<ProfileFormData> = yup.object({
     .nullable()
     .optional()
     .transform((value) => (value === "" ? null : value))
-    .min(5, "Адреса має містити мінімум 5 символів")
-    .max(200, "Адреса має містити максимум 200 символів")
+    .min(5, "Address must contain at least 5 characters")
+    .max(200, "Address must contain a maximum of 200 characters")
     .matches(/^[a-zA-Zа-яА-ЯіІїЇєЄ0-9\s,./№]+$/, {
-      message: "Адреса може містити літери, цифри, пробіли та символи: , . / №",
+      message:
+        "Address can contain letters, numbers, spaces and symbols: , . / №",
     })
     .trim(),
   avatar: yup

@@ -3,28 +3,28 @@ import * as yup from "yup";
 export const cartSchema = yup.object({
   name: yup
     .string()
-    .required("Ім'я обовʼязкове")
-    .min(2, "Ім'я має містити принаймні 2 символи")
-    .max(50, "Ім'я не повинно перевищувати 50 символів")
+    .required("Name is required")
+    .min(2, "Name must be at least 2 characters")
+    .max(50, "Name must not exceed 50 characters")
     .trim(),
 
   email: yup
     .string()
-    .required("Email обовʼязковий")
-    .email("Невірний формат email")
-    .max(100, "Максимум 100 символів")
+    .required("Email is required")
+    .email("Invalid email format")
+    .max(100, "Maximum 100 characters")
     .trim(),
 
   phone: yup
     .string()
-    .required("Телефон обовʼязковий")
-    .matches(/^\+?[\d\s\-\(\)]{10,}$/, "Невірний формат телефону")
+    .required("Phone is required")
+    .matches(/^\+?[\d\s\-\(\)]{10,}$/, "Invalid phone format")
     .trim(),
 
   address: yup
     .string()
-    .required("Адреса обовʼязкова")
-    .min(10, "Адреса має містити принаймні 10 символів")
-    .max(150, "Адреса не повинна перевищувати 150 символів")
+    .required("Address required")
+    .min(10, "Address must be at least 10 characters long")
+    .max(150, "Address must not exceed 150 characters long")
     .trim(),
 });

@@ -45,26 +45,6 @@ export interface MedicineProductDetails extends MedicineProduct {
     digestiveAid?: string;
   };
 }
-// export interface MedicineProductReviewsResponse {
-//   reviews: MedicineProductDetailsReview[];
-//   pagination: {
-//     currentPage: number;
-//     totalPages: number;
-//     totalCount: number;
-//     limit: number;
-//   };
-// }
-// export interface MedicineProductDetailsReview {
-//   _id: string;
-//   productId: string;
-//   userId: string;
-//   rating: number;
-//   comment: string;
-//   commentDate: string;
-//   description?: string;
-//   createdAt: string;
-//   updatedAt: string;
-// }
 export interface MedicineProductDetailsReview {
   _id: string;
   productId: string;
@@ -76,13 +56,11 @@ export interface MedicineProductDetailsReview {
   createdAt: string;
   updatedAt: string;
 }
-
 export interface MedicineProductDetailsReviewWithUser
   extends MedicineProductDetailsReview {
   userName: string;
   userAvatar: string | null;
 }
-
 export interface MedicineProductReviewsResponse {
   reviews: MedicineProductDetailsReviewWithUser[];
   pagination: {

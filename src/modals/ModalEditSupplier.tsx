@@ -7,7 +7,7 @@ import { updateDashboardSupplier } from "@/redux/suppliers/operations";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useState } from "react";
-import { editSupplierSchema } from "@/validation/suppliers";
+import { supplierSchema } from "@/validation/suppliers";
 import { SupplierFormData } from "@/types/suppliers";
 
 interface EditSupplierProps {
@@ -36,7 +36,8 @@ export const ModalEditSupplier = ({ supplier }: EditSupplierProps) => {
     formState: { errors, isSubmitting },
     reset,
   } = useForm<SupplierFormData>({
-    resolver: yupResolver(editSupplierSchema),
+    resolver: yupResolver(supplierSchema),
+    mode: "onChange",
     defaultValues: {
       name: supplier?.name || "",
       address: supplier?.address || "",
@@ -69,36 +70,42 @@ export const ModalEditSupplier = ({ supplier }: EditSupplierProps) => {
     <div className="flex flex-col gap-6">
       <h2 className="text-xl font-semibold text-black-true">Edit supplier</h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
         <div className="grid grid-cols-1 tablet:grid-cols-2 gap-8">
           <div className="flex flex-col">
             <input
               {...register("name")}
               placeholder="Suppliers info"
-              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-green-light focus:border-transparent transition-all ${
-                errors.name ? "border-red-dark" : "border-gray-soft"
-              }`}
+              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2
+                 focus:ring-green-light focus:border-transparent transition-all ${
+                   errors.name ? "border-red-dark" : "border-gray-soft"
+                 }`}
             />
-            {errors.name && (
-              <span className="text-red-dark text-xs mt-1">
-                {errors.name.message}
-              </span>
-            )}
+            <div className="h-5 mt-1">
+              {errors.name && (
+                <span className="text-red-dark text-xs mt-1">
+                  {errors.name.message}
+                </span>
+              )}
+            </div>
           </div>
 
           <div className="flex flex-col">
             <input
               {...register("address")}
               placeholder="Address"
-              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-green-light focus:border-transparent transition-all ${
-                errors.address ? "border-red-dark" : "border-gray-soft"
-              }`}
+              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2
+                 focus:ring-green-light focus:border-transparent transition-all ${
+                   errors.address ? "border-red-dark" : "border-gray-soft"
+                 }`}
             />
-            {errors.address && (
-              <span className="text-red-dark text-xs mt-1">
-                {errors.address.message}
-              </span>
-            )}
+            <div className="h-5 mt-1">
+              {errors.address && (
+                <span className="text-red-dark text-xs mt-1">
+                  {errors.address.message}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -107,16 +114,19 @@ export const ModalEditSupplier = ({ supplier }: EditSupplierProps) => {
             <input
               {...register("company")}
               placeholder="Company"
-              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-green-light
+              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2
+                 focus:ring-green-light
                  focus:border-transparent transition-all ${
                    errors.company ? "border-red-dark" : "border-gray-soft"
                  }`}
             />
-            {errors.company && (
-              <span className="text-red-dark text-xs mt-1">
-                {errors.company.message}
-              </span>
-            )}
+            <div className="h-5 mt-1">
+              {errors.company && (
+                <span className="text-red-dark text-xs mt-1">
+                  {errors.company.message}
+                </span>
+              )}
+            </div>
           </div>
 
           <div className="flex flex-col">
@@ -160,11 +170,13 @@ export const ModalEditSupplier = ({ supplier }: EditSupplierProps) => {
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-green-light pointer-events-none"
               />
             </div>
-            {errors.date && (
-              <span className="text-red-dark text-xs mt-1">
-                {errors.date.message}
-              </span>
-            )}
+            <div className="h-5 mt-1">
+              {errors.date && (
+                <span className="text-red-dark text-xs mt-1">
+                  {errors.date.message}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -183,20 +195,24 @@ export const ModalEditSupplier = ({ supplier }: EditSupplierProps) => {
                    errors.amount ? "border-red-dark" : "border-gray-soft"
                  }`}
             />
-            {errors.amount && (
-              <span className="text-red-dark text-xs mt-1">
-                {errors.amount.message}
-              </span>
-            )}
+            <div className="h-5 mt-1">
+              {errors.amount && (
+                <span className="text-red-dark text-xs mt-1">
+                  {errors.amount.message}
+                </span>
+              )}
+            </div>
           </div>
 
           <div className="flex flex-col">
             <div className="relative">
               <select
                 {...register("status")}
-                className={`appearance-none w-full border rounded-lg px-4 py-2 pr-10 text-sm outline-none focus:ring-2 focus:ring-green-light focus:border-transparent transition-all ${
-                  errors.status ? "border-red-dark" : "border-gray-soft"
-                }`}
+                className={`appearance-none w-full border rounded-lg px-4 py-2 pr-10 text-sm
+                   outline-none focus:ring-2 focus:ring-green-light 
+                   focus:border-transparent transition-all ${
+                     errors.status ? "border-red-dark" : "border-gray-soft"
+                   }`}
               >
                 <option value="Active">Active</option>
                 <option value="Deactive">Deactive</option>
@@ -206,11 +222,13 @@ export const ModalEditSupplier = ({ supplier }: EditSupplierProps) => {
                 className="absolute right-2 top-1/2 -translate-y-1/2 text-green-light pointer-events-none"
               />
             </div>
-            {errors.status && (
-              <span className="text-red-dark text-xs mt-1">
-                {errors.status.message}
-              </span>
-            )}
+            <div className="h-5 mt-1">
+              {errors.status && (
+                <span className="text-red-dark text-xs mt-1">
+                  {errors.status.message}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -218,7 +236,9 @@ export const ModalEditSupplier = ({ supplier }: EditSupplierProps) => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex-1 bg-green-light text-white-true rounded-lg py-2 px-4 hover:bg-green-dark focus:ring-2 focus:ring-green-dark focus:ring-offset-2 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 bg-green-light text-white-true rounded-lg py-2 px-4
+             hover:bg-green-dark focus:ring-2 focus:ring-green-dark focus:ring-offset-2
+              transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? "Saving..." : "Save"}
           </button>
@@ -226,7 +246,10 @@ export const ModalEditSupplier = ({ supplier }: EditSupplierProps) => {
             type="button"
             onClick={handleCancel}
             disabled={isSubmitting}
-            className="flex-1 bg-gray-soft text-black-true rounded-lg py-2 px-4 hover:bg-gray-dark hover:text-white-true focus:ring-2 focus:ring-gray-dark focus:ring-offset-2 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 bg-gray-soft text-black-true rounded-lg py-2 px-4
+             hover:bg-gray-dark hover:text-white-true focus:ring-2 focus:ring-gray-dark 
+             focus:ring-offset-2 transition-all font-medium disabled:opacity-50 
+             disabled:cursor-not-allowed"
           >
             Cancel
           </button>

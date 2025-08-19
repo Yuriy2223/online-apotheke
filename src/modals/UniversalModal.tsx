@@ -70,11 +70,15 @@ export const ModalUniversal = () => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative min-w-[300px] max-w-[360px] tablet:min-w-[600px] tablet:max-w-[600px] bg-white-true rounded-xl max-tablet:p-5 tablet:p-8 shadow-2xl z-10"
+        className="relative min-w-[300px] max-w-[360px] tablet:min-w-[600px] 
+        tablet:max-w-[600px] bg-white-true rounded-xl max-tablet:p-5 tablet:p-8
+         shadow-2xl z-10"
       >
         <button
           onClick={closeHandler}
-          className="absolute top-2 right-2 w-11 h-11 flex items-center justify-center bg-transparent rounded-full transition-colors duration-200 text-black-true hover:text-green-light"
+          className="absolute top-2 right-2 w-12 h-12 flex items-center justify-center 
+          bg-transparent rounded-full transition-colors duration-200 text-black-true
+           hover:text-red-dark"
           aria-label="Close"
         >
           <X size={32} />

@@ -2,15 +2,6 @@
 @import "swiper/css";
 @import "swiper/css/navigation";
 @import "swiper/css/pagination";
-/* rose-100    — дуже світло-рожевий  
-red-500     — насичений червоний  
-gray-50     — майже білий сірий  
-gray-300    — світло-сірий  
-green-500   — середньо-зелений  
-green-100   — дуже світло-зелений  
-white       — білий  
-zinc-900    — майже чорний
-yellow-400 або amber-300/400 */
 
 :root {
   --font-inter: "Inter", sans-serif;
