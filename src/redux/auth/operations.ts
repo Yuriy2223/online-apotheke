@@ -28,21 +28,20 @@ export const registerUser = createAsyncThunk<
     const result = await res.json();
 
     if (!res.ok || !result.success) {
-      toast.error(result.error || "Помилка реєстрації");
-      return rejectWithValue(result.error || "Помилка реєстрації");
+      toast.error(result.error || "Registration error");
+      return rejectWithValue(result.error || "Registration error");
     }
 
     if (!result.data.user) {
-      toast.success(result.data.message || "Перевірте пошту для підтвердження");
-      return rejectWithValue("Підтвердьте email для завершення реєстрації");
+      toast.success(result.data.message || "Check your email for confirmation");
+      return rejectWithValue("Confirm email to complete registration");
     }
 
-    toast.success("Реєстрація успішна!");
+    toast.success("Registration successful!");
     return { user: result.data.user };
-  } catch (error) {
-    console.error("Register error:", error);
-    toast.error("Помилка з'єднання з сервером");
-    return rejectWithValue("Помилка з'єднання з сервером");
+  } catch {
+    toast.error("Server connection error");
+    return rejectWithValue("Server connection error");
   }
 });
 
@@ -62,16 +61,15 @@ export const loginUser = createAsyncThunk<
     const result = await response.json();
 
     if (!response.ok || !result.success) {
-      toast.error(result.error || "Помилка входу");
-      return rejectWithValue(result.error || "Помилка входу");
+      toast.error(result.error || "Login error");
+      return rejectWithValue(result.error || "Login error");
     }
 
-    toast.success(`Вітаємо, ${result.data.user.name}!`);
+    toast.success(`Welcome, ${result.data.user.name}!`);
     return { user: result.data.user };
-  } catch (error) {
-    console.error("Login error:", error);
-    toast.error("Помилка з'єднання з сервером");
-    return rejectWithValue("Помилка з'єднання з сервером");
+  } catch {
+    toast.error("Server connection error");
+    return rejectWithValue("Server connection error");
   }
 });
 
@@ -89,12 +87,12 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
         console.warn("Server logout failed");
       }
 
-      toast.success("Ви вийшли з акаунту");
+      toast.success("You have logged out");
       return;
     } catch (error) {
       console.warn("Logout error:", error);
-      toast.success("Ви вийшли з акаунту");
-      return rejectWithValue("Помилка при виході");
+      toast.success("You have logged out");
+      return rejectWithValue("Error during logout");
     }
   }
 );
@@ -145,16 +143,15 @@ export const forgotPassword = createAsyncThunk<
     const result = await response.json();
 
     if (!response.ok || !result.success) {
-      toast.error(result.error || "Помилка при надсиланні листа");
-      return rejectWithValue(result.error || "Помилка при надсиланні листа");
+      toast.error(result.error || "Error sending email");
+      return rejectWithValue(result.error || "Error sending email");
     }
 
-    toast.success("Лист відправлено на вашу пошту");
-    return { message: result.message || "Лист відправлено" };
-  } catch (error) {
-    console.error("Forgot password error:", error);
-    toast.error("Помилка мережі. Спробуйте пізніше.");
-    return rejectWithValue("Помилка мережі. Спробуйте пізніше.");
+    toast.success("Email sent to your address");
+    return { message: result.message || "Email sent" };
+  } catch {
+    toast.error("Network error. Try again later.");
+    return rejectWithValue("Network error. Try again later.");
   }
 });
 
@@ -173,16 +170,15 @@ export const resetPassword = createAsyncThunk<
     const result = await response.json();
 
     if (!response.ok || !result.success) {
-      toast.error(result.error || "Помилка при зміні пароля");
-      return rejectWithValue(result.error || "Помилка при зміні пароля");
+      toast.error(result.error || "Error changing password");
+      return rejectWithValue(result.error || "Error changing password");
     }
 
-    toast.success("Пароль успішно змінено");
-    return { message: result.message || "Пароль змінено" };
-  } catch (error) {
-    console.error("Reset password error:", error);
-    toast.error("Помилка мережі. Спробуйте пізніше.");
-    return rejectWithValue("Помилка мережі. Спробуйте пізніше.");
+    toast.success("Password successfully changed");
+    return { message: result.message || "Password changed" };
+  } catch {
+    toast.error("Network error. Try again later.");
+    return rejectWithValue("Network error. Try again later.");
   }
 });
 
@@ -201,16 +197,15 @@ export const verifyEmail = createAsyncThunk<
     const result = await response.json();
 
     if (!response.ok || !result.success) {
-      toast.error(result.error || "Помилка верифікації");
-      return rejectWithValue(result.error || "Помилка верифікації");
+      toast.error(result.error || "Verification error");
+      return rejectWithValue(result.error || "Verification error");
     }
 
-    toast.success("Email успішно підтверджено!");
-    return { message: result.message || "Email підтверджено" };
-  } catch (error) {
-    console.error("Verify email error:", error);
-    toast.error("Помилка мережі");
-    return rejectWithValue("Помилка мережі");
+    toast.success("Email successfully verified!");
+    return { message: result.message || "Email verified" };
+  } catch {
+    toast.error("Network error");
+    return rejectWithValue("Network error");
   }
 });
 
@@ -222,7 +217,7 @@ export const uploadAvatar = createAsyncThunk<
   try {
     const cloudinaryUrl = await uploadImage(file);
     if (!cloudinaryUrl) {
-      throw new Error("Помилка при завантаженні зображення");
+      throw new Error("Error uploading image");
     }
 
     const response = await fetch("/api/user/upload-avatar", {
@@ -234,17 +229,17 @@ export const uploadAvatar = createAsyncThunk<
 
     const result = await response.json();
     if (!response.ok || !result.success) {
-      throw new Error(result.error || "Помилка при оновленні аватара");
+      throw new Error(result.error || "Error updating avatar");
     }
 
     const avatarUrl = result.data?.avatarUrl;
     if (!avatarUrl) {
-      throw new Error("Отримано невалідну відповідь від сервера");
+      throw new Error("Received invalid response from server");
     }
 
     return avatarUrl;
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Невідома помилка";
+    const message = error instanceof Error ? error.message : "Unknown error";
     return rejectWithValue(message);
   }
 });
@@ -264,12 +259,12 @@ export const removeAvatar = createAsyncThunk<
 
     const result = await response.json();
     if (!response.ok || !result.success) {
-      throw new Error(result.error || "Помилка при видаленні аватара");
+      throw new Error(result.error || "Error removing avatar");
     }
 
     return "";
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Невідома помилка";
+    const message = error instanceof Error ? error.message : "Unknown error";
     return rejectWithValue(message);
   }
 });
@@ -296,17 +291,17 @@ export const updateProfile = createAsyncThunk<
 
     const result = await response.json();
     if (!response.ok || !result.success) {
-      throw new Error(result.error || "Помилка при оновленні профілю");
+      throw new Error(result.error || "Error updating profile");
     }
 
     const updatedUser = result.data?.user;
     if (!updatedUser) {
-      throw new Error("Отримано невалідну відповідь від сервера");
+      throw new Error("Received invalid response from server");
     }
 
     return updatedUser;
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Невідома помилка";
+    const message = error instanceof Error ? error.message : "Unknown error";
     return rejectWithValue(message);
   }
 });
