@@ -47,7 +47,6 @@ const medicineProductSchema = new Schema<MedicineProductDocument>(
     },
     description: {
       type: String,
-      // required: true,
       trim: true,
     },
   },
@@ -66,11 +65,11 @@ medicineProductSchema.index({ category: 1 });
 medicineProductSchema.index({ price: 1 });
 medicineProductSchema.index({ createdAt: -1 });
 
-const MedicineProduct: Model<MedicineProductDocument> =
+const MedicineProductModel: Model<MedicineProductDocument> =
   mongoose.models.Medicine_product ||
   mongoose.model<MedicineProductDocument>(
     "Medicine_product",
     medicineProductSchema
   );
 
-export default MedicineProduct;
+export default MedicineProductModel;
