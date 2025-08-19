@@ -7,8 +7,8 @@ import { setFilters } from "@/redux/customers/slice";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { usePagination } from "@/hooks/usePagination";
 import { fetchDashboardCustomers } from "@/redux/customers/operations";
-import { CustomersPageFilter } from "@/components/Dashboard/CustomersPageFilter";
-import { CustomersPageTable } from "@/components/Dashboard/CustomersPageTable";
+import { CustomersPageFilter } from "@/components/Filters/CustomersPageFilter";
+import { CustomersPageTable } from "@/components/Table/CustomersPageTable";
 import { Pagination } from "@/components/Pagination/Pagination";
 import {
   selectCustomers,
@@ -18,19 +18,6 @@ import {
 } from "@/redux/customers/selectors";
 
 export default function CustomersPage() {
-  // const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  // const dispatch = useDispatch<AppDispatch>();
-  // const customers = useSelector(selectCustomers);
-  // const loading = useSelector(selectLoading);
-  // const filters = useSelector(selectFilters);
-
-  // useEffect(() => {
-  //   dispatch(fetchDashboardCustomers(filters));
-  // }, [dispatch, filters]);
-
-  // const handleFilterChange = (filterValue: string) => {
-  //   dispatch(setFilters({ search: filterValue }));
-  // };
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const dispatch = useAppDispatch();
