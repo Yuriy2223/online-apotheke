@@ -4,7 +4,6 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { Container } from "@/shared/Container";
-import { Spinner } from "@/shared/Spinner";
 import { ProductOverview } from "@/components/Medicine/ProductOverview";
 import { TabsContainer } from "@/components/Medicine/TabsContainer";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
