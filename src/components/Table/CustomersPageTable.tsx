@@ -34,11 +34,11 @@ export function CustomersPageTable({
           </th>
         </tr>
       </thead>
-      <tbody className="divide-y divide-gray-300">
+      <tbody className="divide-y divide-gray-soft">
         {data.map((c) => (
           <tr
             key={c._id}
-            className={`divide-x divide-gray-300 ${
+            className={`divide-x divide-gray-soft ${
               highlightId === c._id ? "bg-yellow-100" : ""
             }`}
           >
@@ -57,7 +57,10 @@ export function CustomersPageTable({
                 />
               )}
               {!c.photo && (
-                <div className="w-9 h-9 rounded-full bg-gray-light flex items-center justify-center text-xs font-medium text-gray-dark">
+                <div
+                  className="w-9 h-9 rounded-full bg-gray-light flex items-center justify-center
+                 text-xs font-medium text-gray-dark"
+                >
                   {c.name
                     .split(" ")
                     .map((n) => n[0])
