@@ -58,7 +58,8 @@ export function Statistics() {
         return (
           <li
             key={index}
-            className="bg-white-true rounded-lg p-6 border border-gray-light transition-all duration-200 cursor-pointer hover:border-green-light hover:shadow-sm"
+            className="bg-white-true rounded-lg p-6 border border-gray-light transition-all duration-200 
+            cursor-pointer hover:border-green-light hover:shadow-sm"
             role="group"
             aria-label={label}
           >
