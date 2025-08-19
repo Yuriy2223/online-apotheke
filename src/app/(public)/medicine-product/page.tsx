@@ -80,7 +80,7 @@ export default function MedicineProductPage() {
   }, [productId, dispatch]);
 
   if (loading) {
-    return <Spinner />;
+    return;
   }
 
   if (error || !product) {
