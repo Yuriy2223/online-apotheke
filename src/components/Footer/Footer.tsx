@@ -17,7 +17,10 @@ export const Footer = () => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-5 tablet:flex-row tablet:items-center tablet:justify-center">
+      <div
+        className="flex flex-col gap-5 tablet:flex-row tablet:items-center
+       tablet:justify-center"
+      >
         <p className="text-lg leading-relaxed max-w-2xl tablet:w-[50%]">
           Get the medicine to help you feel better, get back to your active
           life, and enjoy every moment.
@@ -25,28 +28,34 @@ export const Footer = () => {
         <div className="flex gap-6 items-center justify-center tablet:w-[50%]">
           <a
             href="https://www.facebook.com"
-            className="w-10 h-10 tablet:w-12 tablet:h-12 border border-white-true/30 rounded-lg flex items-center justify-center hover:bg-white-true/10 transition-colors"
+            className="w-10 h-10 tablet:w-12 tablet:h-12 border border-white-true/30 
+            rounded-lg flex items-center justify-center hover:bg-white-true/10 transition-colors"
             aria-label="Facebook"
           >
             <Facebook className="w-5 h-5 tablet:w-6 tablet:h-6" />
           </a>
           <a
             href="https://www.instagram.com"
-            className="w-10 h-10 tablet:w-12 tablet:h-12 border border-white-true/30 rounded-lg flex items-center justify-center hover:bg-white-true/10 transition-colors"
+            className="w-10 h-10 tablet:w-12 tablet:h-12 border border-white-true/30
+             rounded-lg flex items-center justify-center hover:bg-white-true/10 transition-colors"
             aria-label="Instagram"
           >
             <Instagram className="w-5 h-5 tablet:w-6 tablet:h-6" />
           </a>
           <a
             href="https://www.youtube.com"
-            className="w-10 h-10 tablet:w-12 tablet:h-12 border border-white-true/30 rounded-lg flex items-center justify-center hover:bg-white-true/10 transition-colors"
+            className="w-10 h-10 tablet:w-12 tablet:h-12 border border-white-true/30 
+            rounded-lg flex items-center justify-center hover:bg-white-true/10 transition-colors"
             aria-label="YouTube"
           >
             <Youtube className="w-5 h-5 tablet:w-6 tablet:h-6" />
           </a>
         </div>
       </div>
-      <div className="flex flex-col gap-5 border-t pt-4 border-white-true tablet:gap-0 tablet:flex-row-reverse tablet:items-center tablet:justify-center">
+      <div
+        className="flex flex-col gap-5 border-t pt-4 border-white-true tablet:gap-0
+       tablet:flex-row-reverse tablet:items-center tablet:justify-center"
+      >
         <div className="flex items-center justify-between">
           <a
             href="#"
