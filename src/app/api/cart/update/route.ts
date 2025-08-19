@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import Cart from "@/models/Cart";
+// import Cart from "@/models/Cart";
 import Product from "@/models/MedicineProduct";
 import mongoose from "mongoose";
 import { getUserId } from "@/auth/auth";
 import { connectDB } from "@/database/MongoDB";
 import { CartItem, CartData, CartProductInDb } from "@/types/cart";
+import CartModel from "@/models/Cart";
 
 class CartError extends Error {
   constructor(
@@ -52,9 +53,9 @@ export async function PUT(request: NextRequest) {
         throw new CartError("Продукт не знайдено", "PRODUCT_NOT_FOUND", 404);
       }
 
-      let cart = await Cart.findOne({ userId }).session(session);
+      let cart = await CartModel.findOne({ userId }).session(session);
       if (!cart) {
-        cart = new Cart({ userId, products: [] });
+        cart = new CartModel({ userId, products: [] });
       }
 
       const productIndex = cart.products.findIndex(
@@ -130,7 +131,7 @@ export async function PUT(request: NextRequest) {
 }
 
 async function getCartWithProducts(userId: string): Promise<CartData> {
-  const cartWithProducts = await Cart.aggregate([
+  const cartWithProducts = await CartModel.aggregate([
     {
       $match: { userId: new mongoose.Types.ObjectId(userId) },
     },
