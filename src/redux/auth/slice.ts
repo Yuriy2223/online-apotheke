@@ -118,7 +118,7 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Помилка реєстрації";
+        state.error = action.payload as string;
       })
 
       .addCase(loginUser.pending, (state) => {
@@ -132,7 +132,7 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Помилка входу";
+        state.error = action.payload as string;
       })
 
       .addCase(logoutUser.pending, (state) => {
@@ -162,7 +162,7 @@ const authSlice = createSlice({
       })
       .addCase(forgotPassword.rejected, (state, action) => {
         state.forgotPasswordLoading = false;
-        state.error = action.payload || "Помилка при надсиланні листа";
+        state.error = action.payload as string;
       })
 
       .addCase(resetPassword.pending, (state) => {
@@ -176,7 +176,7 @@ const authSlice = createSlice({
       })
       .addCase(resetPassword.rejected, (state, action) => {
         state.resetPasswordLoading = false;
-        state.error = action.payload || "Помилка при зміні пароля";
+        state.error = action.payload as string;
       })
 
       .addCase(verifyEmail.pending, (state) => {
@@ -190,7 +190,7 @@ const authSlice = createSlice({
       })
       .addCase(verifyEmail.rejected, (state, action) => {
         state.verifyEmailLoading = false;
-        state.error = action.payload || "Помилка верифікації";
+        state.error = action.payload as string;
       })
 
       .addCase(uploadAvatar.pending, (state) => {
