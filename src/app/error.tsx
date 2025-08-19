@@ -16,9 +16,12 @@ export default function Error({ error, reset }: ErrorProps) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
       <div className="max-w-md w-full text-center">
-        <div className="mx-auto w-24 h-24 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mb-8 pill-shadow">
+        <div
+          className="mx-auto w-24 h-24 bg-gradient-to-br from-green-light to-green-dark 
+        rounded-full flex items-center justify-center mb-8 pill-shadow"
+        >
           <svg
-            className="w-12 h-12 text-white"
+            className="w-12 h-12 text-white-true"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -34,15 +37,15 @@ export default function Error({ error, reset }: ErrorProps) {
 
         <div className="pharmacy-card p-8">
           <h1 className="text-2xl font-bold text-slate-900 mb-4">
-            Щось пішло не так
+            Something went wrong.
           </h1>
 
           <p className="text-slate-600 mb-6 leading-relaxed">
-            Вибачте за незручності. Сталася технічна помилка при завантаженні
-            сторінки. Наша команда вже працює над її усуненням.
+            Sorry for the inconvenience. There was a technical error loading the
+            page. Our team is already working on fixing it.
           </p>
 
-          {process.env.NODE_ENV === "development" && (
+          {/* {process.env.NODE_ENV === "development" && (
             <details className="mb-6 text-left">
               <summary className="cursor-pointer text-sm text-slate-500 hover:text-slate-700 mb-2">
                 Технічні деталі
@@ -58,7 +61,7 @@ export default function Error({ error, reset }: ErrorProps) {
                 )}
               </div>
             </details>
-          )}
+          )} */}
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
@@ -78,7 +81,7 @@ export default function Error({ error, reset }: ErrorProps) {
                   d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                 />
               </svg>
-              Спробувати знову
+              Try again
             </button>
 
             <Link
@@ -98,7 +101,7 @@ export default function Error({ error, reset }: ErrorProps) {
                   d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
                 />
               </svg>
-              На головну
+              To the main page
             </Link>
           </div>
         </div>
