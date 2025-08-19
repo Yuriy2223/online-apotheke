@@ -33,16 +33,20 @@ export const OrdersPageFilter: React.FC<OrdersFilterProps> = ({
             value={searchInput}
             onChange={onFilterChange}
             onKeyPress={onKeyPress}
-            className="w-full px-4 py-2.5 pr-10 border border-gray-soft rounded-lg focus:outline-none focus:ring-2 focus:ring-green-light focus:border-transparent placeholder-gray-soft text-sm"
+            className="w-full px-4 py-2.5 pr-10 border border-gray-soft rounded-lg
+             focus:outline-none focus:ring-2 focus:ring-green-light focus:border-transparent
+              placeholder-gray-light text-sm"
           />
           {searchInput && (
             <button
-              onClick={onClearSearch}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200 p-1 rounded-full"
-              aria-label="Clear search"
               type="button"
+              onClick={onClearSearch}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-dark
+             hover:text-red-dark hover:bg-red-light transition-all duration-200 p-1
+              rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Clear search"
             >
-              <X size={18} />
+              <X size={26} />
             </button>
           )}
         </div>
@@ -51,7 +55,8 @@ export const OrdersPageFilter: React.FC<OrdersFilterProps> = ({
           <select
             value={selectedStatus}
             onChange={onStatusChange}
-            className="w-full px-4 py-2.5 border border-gray-soft rounded-lg focus:outline-none focus:ring-2 focus:ring-green-light focus:border-transparent text-sm"
+            className="w-full px-4 py-2.5 border border-gray-soft rounded-lg focus:outline-none
+             focus:ring-2 focus:ring-green-light focus:border-transparent text-sm"
           >
             <option value="">All Statuses</option>
             {statuses.map((status) => (
