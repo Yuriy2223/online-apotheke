@@ -1,16 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAppDispatch } from "@/redux/store";
 import { closeModal } from "@/redux/modal/slice";
 import { Calendar, ChevronDown } from "lucide-react";
 import { createDashboardSupplier } from "@/redux/suppliers/operations";
-import { createSupplierSchema } from "@/validation/suppliers";
+import { supplierSchema } from "@/validation/suppliers";
 import { SupplierFormData } from "@/types/suppliers";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useState } from "react";
 
 export const ModalAddSupplier = () => {
   const dispatch = useAppDispatch();
@@ -23,13 +23,13 @@ export const ModalAddSupplier = () => {
     formState: { errors, isSubmitting },
     reset,
   } = useForm<SupplierFormData>({
-    resolver: yupResolver(createSupplierSchema),
+    resolver: yupResolver(supplierSchema),
     defaultValues: {
       name: "",
       address: "",
       company: "",
       date: "",
-      amount: 0,
+      amount: undefined,
       status: "Active",
     },
   });
@@ -53,22 +53,26 @@ export const ModalAddSupplier = () => {
         Add a new supplier
       </h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
-        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-x-8 gap-y-2">
           <div className="flex flex-col">
             <input
               {...register("name")}
               type="text"
               placeholder="Supplier Info"
-              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-green-light focus:border-transparent transition-all ${
-                errors.name ? "border-red-dark" : "border-gray-soft"
-              }`}
+              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2
+                 focus:ring-green-light
+                 focus:border-transparent transition-all ${
+                   errors.name ? "border-red-dark" : "border-gray-soft"
+                 }`}
             />
-            {errors.name && (
-              <span className="text-red-dark text-xs mt-1">
-                {errors.name.message}
-              </span>
-            )}
+            <div className="h-5 mt-1">
+              {errors.name && (
+                <span className="text-red-dark text-xs mt-1">
+                  {errors.name.message}
+                </span>
+              )}
+            </div>
           </div>
 
           <div className="flex flex-col">
@@ -76,34 +80,41 @@ export const ModalAddSupplier = () => {
               {...register("address")}
               type="text"
               placeholder="Address"
-              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-green-light focus:border-transparent transition-all ${
-                errors.address ? "border-red-dark" : "border-gray-soft"
-              }`}
+              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2
+                 focus:ring-green-light 
+                focus:border-transparent transition-all ${
+                  errors.address ? "border-red-dark" : "border-gray-soft"
+                }`}
             />
-            {errors.address && (
-              <span className="text-red-dark text-xs mt-1">
-                {errors.address.message}
-              </span>
-            )}
+            <div className="h-5 mt-1">
+              {errors.address && (
+                <span className="text-red-dark text-xs mt-1">
+                  {errors.address.message}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-x-8 gap-y-2">
           <div className="flex flex-col">
             <input
               {...register("company")}
               type="text"
               placeholder="Company"
-              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-green-light
+              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2
+                 focus:ring-green-light
                  focus:border-transparent transition-all ${
                    errors.company ? "border-red-dark" : "border-gray-soft"
                  }`}
             />
-            {errors.company && (
-              <span className="text-red-dark text-xs mt-1">
-                {errors.company.message}
-              </span>
-            )}
+            <div className="h-5 mt-1">
+              {errors.company && (
+                <span className="text-red-dark text-xs mt-1">
+                  {errors.company.message}
+                </span>
+              )}
+            </div>
           </div>
 
           <div className="flex flex-col">
@@ -131,7 +142,8 @@ export const ModalAddSupplier = () => {
                     placeholderText="August 1, 2023"
                     customInput={
                       <input
-                        className={`w-full border rounded-lg px-4 py-2 pr-10 text-sm outline-none focus:ring-2
+                        className={`w-full border rounded-lg max-tablet:px-9 tablet:px-8 py-2 pr-10 text-sm
+                           outline-none focus:ring-2
                            focus:ring-green-light focus:border-transparent transition-all ${
                              errors.date
                                ? "border-red-dark"
@@ -147,15 +159,17 @@ export const ModalAddSupplier = () => {
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-green-light pointer-events-none"
               />
             </div>
-            {errors.date && (
-              <span className="text-red-dark text-xs mt-1">
-                {errors.date.message}
-              </span>
-            )}
+            <div className="h-5 mt-1">
+              {errors.date && (
+                <span className="text-red-dark text-xs mt-1">
+                  {errors.date.message}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-x-8 gap-y-2">
           <div className="flex flex-col">
             <input
               {...register("amount", { valueAsNumber: true })}
@@ -170,11 +184,13 @@ export const ModalAddSupplier = () => {
                    errors.amount ? "border-red-dark" : "border-gray-soft"
                  }`}
             />
-            {errors.amount && (
-              <span className="text-red-dark text-xs mt-1">
-                {errors.amount.message}
-              </span>
-            )}
+            <div className="h-5 mt-1">
+              {errors.amount && (
+                <span className="text-red-dark text-xs mt-1">
+                  {errors.amount.message}
+                </span>
+              )}
+            </div>
           </div>
 
           <div className="flex flex-col">
@@ -193,11 +209,13 @@ export const ModalAddSupplier = () => {
                 className="absolute right-2 top-1/2 -translate-y-1/2 text-green-light pointer-events-none"
               />
             </div>
-            {errors.status && (
-              <span className="text-red-dark text-xs mt-1">
-                {errors.status.message}
-              </span>
-            )}
+            <div className="h-5 mt-1">
+              {errors.status && (
+                <span className="text-red-dark text-xs mt-1">
+                  {errors.status.message}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -205,7 +223,9 @@ export const ModalAddSupplier = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex-1 bg-green-light text-white-true rounded-lg py-2 px-4 hover:bg-green-dark focus:ring-2 focus:ring-green-dark focus:ring-offset-2 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 bg-green-light text-white-true rounded-lg py-2 px-4 hover:bg-green-dark
+             focus:ring-2 focus:ring-green-dark focus:ring-offset-2 transition-all font-medium 
+             disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? "Adding..." : "Add"}
           </button>
@@ -213,7 +233,9 @@ export const ModalAddSupplier = () => {
             type="button"
             onClick={handleCancel}
             disabled={isSubmitting}
-            className="flex-1 bg-gray-soft text-black-true rounded-lg py-2 px-4 hover:bg-gray-dark hover:text-white-true focus:ring-2 focus:ring-gray-dark focus:ring-offset-2 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 bg-gray-soft text-black-true rounded-lg py-2 px-4 hover:bg-gray-dark
+             hover:text-white-true focus:ring-2 focus:ring-gray-dark focus:ring-offset-2 transition-all
+              font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>

@@ -1,126 +1,237 @@
 "use client";
 
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useRef } from "react";
+import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { closeModal } from "@/redux/modal/slice";
 import { selectCategories } from "@/redux/dashboard-product/selectors";
 import { createDashboardProduct } from "@/redux/dashboard-product/operations";
+import { productSchema } from "@/validation/products";
+import { useCloudinaryUpload } from "@/hooks/useCloudinaryUpload";
+
+type ProductFormData = yup.InferType<typeof productSchema>;
 
 export const ModalAddProduct = () => {
   const dispatch = useAppDispatch();
   const categories = useAppSelector(selectCategories);
-  const [formData, setFormData] = useState({
-    name: "",
-    category: "",
-    stock: "",
-    suppliers: "",
-    price: "",
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { uploadImage, isUploading } = useCloudinaryUpload();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+    setValue,
+  } = useForm<ProductFormData>({
+    resolver: yupResolver(productSchema),
+    mode: "onChange",
+    defaultValues: {
+      photo: "",
+      name: "",
+      category: "",
+      stock: undefined,
+      suppliers: "",
+      price: undefined,
+    },
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("File size must not exceed 5MB");
+      return;
+    }
+
+    try {
+      const imageUrl = await uploadImage(file);
+      setValue("photo", imageUrl, { shouldValidate: true });
+    } catch {
+      toast.error("Load error");
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const submissionData = {
-      name: formData.name,
-      category: formData.category,
-      stock: Number(formData.stock),
-      suppliers: formData.suppliers,
-      price: Number(formData.price),
-    };
-
-    dispatch(createDashboardProduct(submissionData));
+  const onSubmit = async (data: ProductFormData) => {
+    await dispatch(createDashboardProduct(data)).unwrap();
+    reset();
     dispatch(closeModal());
   };
 
   const handleCancel = () => {
+    reset();
     dispatch(closeModal());
   };
 
   return (
-    <div className="flex flex-col gap-4 max-tablet:gap-5 tablet:gap-6">
-      <h2 className="text-lg max-tablet:text-xl tablet:text-2xl font-semibold text-black-true pr-8 max-tablet:pr-10 tablet:pr-12">
+    <div className="flex flex-col gap-6">
+      <h2 className="text-xl font-semibold text-black-true">
         Add a new product
       </h2>
-
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col gap-3 max-tablet:gap-4 tablet:gap-6"
-      >
-        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-3 tablet:gap-4">
-          <input
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            type="text"
-            placeholder="Product Info"
-            className="border border-gray-300 rounded-lg px-3 py-2 max-tablet:px-4 max-tablet:py-2.5 tablet:px-4 tablet:py-3  text-sm tablet:text-base outline-none focus:ring-2 focus:ring-green-light focus:border-transparent transition-all"
-            required
-          />
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            className="border border-gray-soft rounded-lg px-3 py-2 max-tablet:px-4 max-tablet:py-2.5 tablet:px-4 tablet:py-3  text-sm tablet:text-base outline-none focus:ring-2 focus:ring-green-light focus:border-transparent transition-all"
-            required
-          >
-            <option value="">Category</option>
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+        <div className="flex flex-col">
+          <div className="flex gap-2">
+            <input
+              {...register("photo")}
+              type="text"
+              placeholder="Product photo URL"
+              className={`w-full border rounded-lg px-4 py-2 text-sm outline-none
+                 focus:ring-2 focus:ring-green-light focus:border-transparent transition-all ${
+                   errors.photo ? "border-red-dark" : "border-gray-soft"
+                 }`}
+            />
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              disabled={isUploading}
+              className="hidden"
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isUploading}
+              className="px-4 py-2 bg-green-light text-white-true rounded-lg
+               hover:bg-green-dark transition-colors disabled:opacity-50 
+               disabled:cursor-not-allowed whitespace-nowrap"
+            >
+              {isUploading ? "Loading..." : "Load photo"}
+            </button>
+          </div>
+          <div className="h-5 mt-1">
+            {errors.photo && (
+              <span className="text-red-dark text-xs">
+                {errors.photo.message}
+              </span>
+            )}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-3 tablet:gap-4">
+        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-2">
+          <div className="flex flex-col">
+            <input
+              {...register("name")}
+              type="text"
+              placeholder="Product Info"
+              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-green-light
+                 focus:border-transparent transition-all ${
+                   errors.name ? "border-red-dark" : "border-gray-soft"
+                 }`}
+            />
+            <div className="h-5 mt-1">
+              {errors.name && (
+                <span className="text-red-dark text-xs">
+                  {errors.name.message}
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <select
+              {...register("category")}
+              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-green-light
+                focus:border-transparent transition-all ${
+                  errors.category ? "border-red-dark" : "border-gray-soft"
+                }`}
+            >
+              <option value="">Category</option>
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+            <div className="h-5 mt-1">
+              {errors.category && (
+                <span className="text-red-dark text-xs">
+                  {errors.category.message}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-2">
+          <div className="flex flex-col">
+            <input
+              {...register("stock", { valueAsNumber: true })}
+              type="number"
+              min="0"
+              placeholder="Stock"
+              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-green-light focus:border-transparent transition-all ${
+                errors.stock ? "border-red-dark" : "border-gray-soft"
+              }`}
+            />
+            <div className="h-5 mt-1">
+              {errors.stock && (
+                <span className="text-red-dark text-xs">
+                  {errors.stock.message}
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col">
+            <input
+              {...register("suppliers")}
+              type="text"
+              placeholder="Suppliers"
+              className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-green-light focus:border-transparent transition-all ${
+                errors.suppliers ? "border-red-dark" : "border-gray-soft"
+              }`}
+            />
+            <div className="h-5 mt-1">
+              {errors.suppliers && (
+                <span className="text-red-dark text-xs">
+                  {errors.suppliers.message}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col">
           <input
-            name="stock"
-            value={formData.stock}
-            onChange={handleChange}
+            {...register("price", { valueAsNumber: true })}
             type="number"
-            placeholder="Stock"
-            className="border border-gray-soft rounded-lg px-3 py-2 max-tablet:px-4 max-tablet:py-2.5 tablet:px-4 tablet:py-3  text-sm tablet:text-base outline-none focus:ring-2 focus:ring-green-light focus:border-transparent transition-all"
-            required
+            step="1"
+            min="1"
+            placeholder="Price"
+            className={`border rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-green-light focus:border-transparent transition-all ${
+              errors.price ? "border-red-dark" : "border-gray-soft"
+            }`}
           />
-          <input
-            name="suppliers"
-            value={formData.suppliers}
-            onChange={handleChange}
-            type="text"
-            placeholder="Suppliers"
-            className="border border-gray-soft rounded-lg px-3 py-2 max-tablet:px-4 max-tablet:py-2.5 tablet:px-4 tablet:py-3  text-sm tablet:text-base outline-none focus:ring-2 focus:ring-green-light focus:border-transparent transition-all"
-            required
-          />
+          <div className="h-5 mt-1">
+            {errors.price && (
+              <span className="text-red-dark text-xs">
+                {errors.price.message}
+              </span>
+            )}
+          </div>
         </div>
-
-        <input
-          name="price"
-          value={formData.price}
-          onChange={handleChange}
-          type="number"
-          step="0.01"
-          placeholder="Price"
-          className="border border-gray-soft rounded-lg px-3 py-2 max-tablet:px-4 max-tablet:py-2.5 tablet:px-4 tablet:py-3  text-sm tablet:text-base outline-none focus:ring-2 focus:ring-green-light focus:border-transparent transition-all"
-          required
-        />
-
-        <div className="flex gap-3 tablet:gap-4 pt-2 tablet:pt-3">
+        <div className="flex gap-3 pt-2">
           <button
             type="submit"
-            className="flex-1 bg-green-light text-white-true rounded-lg py-2 max-tablet:py-2.5 tablet:py-3 px-4 hover:bg-green-dark focus:ring-2 focus:ring-green-light focus:ring-offset-2 transition-all font-medium text-sm tablet:text-base"
+            disabled={isSubmitting || isUploading}
+            className="flex-1 bg-green-light text-white-true rounded-lg py-2 px-4 hover:bg-green-dark focus:ring-2 focus:ring-green-dark focus:ring-offset-2 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Add
+            {isSubmitting ? "Adding..." : "Add"}
           </button>
           <button
             type="button"
             onClick={handleCancel}
-            className="flex-1 bg-gray-light text-black-true rounded-lg py-2 max-tablet:py-2.5 tablet:py-3 px-4 hover:bg-gray-soft focus:ring-2 focus:ring-gray-dark focus:ring-offset-2 transition-all font-medium text-sm tablet:text-base"
+            disabled={isSubmitting || isUploading}
+            className="flex-1 bg-gray-soft text-black-true rounded-lg py-2 px-4 hover:bg-gray-dark hover:text-white-true focus:ring-2 focus:ring-gray-dark focus:ring-offset-2 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>
