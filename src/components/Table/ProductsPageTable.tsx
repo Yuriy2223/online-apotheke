@@ -44,10 +44,10 @@ export function ProductsPageTable({
               </div>
               <div className="space-y-6">
                 <p className="text-black-true text-xl max-w-lg">
-                  За вашими критеріями пошуку нічого не знайдено.
+                  Nothing was found for your search criteria.
                 </p>
                 <p className="text-gray-dark text-lg">
-                  Спробуйте змінити критерії пошуку або очистити фільтри.
+                  Try changing your search criteria or clearing your filters.
                 </p>
               </div>
             </>
@@ -58,11 +58,11 @@ export function ProductsPageTable({
               </div>
               <div className="space-y-6">
                 <h3 className="text-lg font-semibold text-black-true">
-                  Немає продуктів
+                  No products
                 </h3>
                 <p className="text-black-true max-w-lg">
-                  Поки що немає жодного продукту в системі. Додайте перший
-                  продукт, щоб почати.
+                  There are no products in the system yet. Add your first
+                  product to get started.
                 </p>
               </div>
             </>
