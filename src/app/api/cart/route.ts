@@ -3,11 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { getUserId } from "@/auth/auth";
 import { connectDB } from "@/database/MongoDB";
 import MedicineProduct from "@/models/MedicineProduct";
-import Cart from "@/models/Cart";
+import CartModel from "@/models/Cart";
 import { CartItem, CartProductInDb, CartData } from "@/types/cart";
 
 async function getCartWithProducts(userId: string): Promise<CartData> {
-  const cartWithProducts = await Cart.aggregate([
+  const cartWithProducts = await CartModel.aggregate([
     {
       $match: { userId: new mongoose.Types.ObjectId(userId) },
     },
@@ -121,11 +121,11 @@ export async function GET(request: NextRequest) {
     }
 
     const cartData = await getCartWithProducts(userId);
-    const cartDoc = await Cart.findOne({ userId });
+    const cartDoc = await CartModel.findOne({ userId });
     const storedProductCount = cartDoc?.products.length || 0;
 
     if (cartData.cartItems.length < storedProductCount) {
-      await Cart.updateOne(
+      await CartModel.updateOne(
         { userId },
         {
           products: cartData.cartItems.map(
@@ -202,9 +202,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let cart = await Cart.findOne({ userId });
+    let cart = await CartModel.findOne({ userId });
     if (!cart) {
-      cart = new Cart({ userId, products: [] });
+      cart = new CartModel({ userId, products: [] });
     }
 
     const existingProductIndex = cart.products.findIndex(

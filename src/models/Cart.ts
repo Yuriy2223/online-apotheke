@@ -41,8 +41,6 @@ const cartSchema = new Schema(
   }
 );
 
-// cartSchema.index({ userId: 1 });
-
 cartSchema.pre("save", function (this: CartDocument) {
   const seen = new Set<string>();
   const filteredProducts: CartProductDocument[] = [];
@@ -61,7 +59,7 @@ cartSchema.pre("save", function (this: CartDocument) {
   });
 });
 
-const Cart: Model<CartDocument> =
+const CartModel: Model<CartDocument> =
   mongoose.models.Cart || mongoose.model("Cart", cartSchema);
 
-export default Cart;
+export default CartModel;
