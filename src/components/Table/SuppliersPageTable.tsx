@@ -44,10 +44,10 @@ export function SuppliersPageTable({
               </div>
               <div className="space-y-6">
                 <p className="text-black-true text-xl max-w-lg">
-                  За вашими критеріями пошуку нічого не знайдено.
+                  Nothing was found for your search criteria.
                 </p>
                 <p className="text-gray-dark text-lg">
-                  Спробуйте змінити критерії пошуку або очистити фільтри.
+                  Try changing your search criteria or clearing your filters.
                 </p>
               </div>
             </>
@@ -58,11 +58,11 @@ export function SuppliersPageTable({
               </div>
               <div className="space-y-6">
                 <h3 className="text-lg font-semibold text-black-true">
-                  Немає постачальників
+                  No suppliers
                 </h3>
                 <p className="text-black-true max-w-lg">
-                  Поки що немає жодного постачальника в системі. Додайте першого
-                  постачальника, щоб почати.
+                  There are no suppliers in the system yet. Add your first
+                  supplier to get started.
                 </p>
               </div>
             </>
@@ -140,11 +140,12 @@ export function SuppliersPageTable({
 
               <td className="px-6 py-3">
                 <span
-                  className={`inline-flex items-center justify-center min-w-[80px] px-3 py-1 rounded-full text-sm font-medium ${
-                    supplier.status === "Active"
-                      ? "bg-green-soft text-green-light"
-                      : "bg-red-light text-red-dark"
-                  }`}
+                  className={`inline-flex items-center justify-center min-w-[80px] px-3 py-1 
+                    rounded-full text-sm font-medium ${
+                      supplier.status === "Active"
+                        ? "bg-green-soft text-green-light"
+                        : "bg-red-light text-red-dark"
+                    }`}
                 >
                   {supplier.status}
                 </span>
@@ -154,7 +155,9 @@ export function SuppliersPageTable({
                 <div className="flex items-center justify-between">
                   <button
                     onClick={() => onEditSupplier(supplier._id)}
-                    className="flex items-center justify-center w-8 h-8 text-green-light hover:text-white-true hover:bg-green-light rounded-md transition-all duration-200 border border-green-light group"
+                    className="flex items-center justify-center w-8 h-8 text-green-light
+                     hover:text-white-true hover:bg-green-light rounded-md transition-all
+                      duration-200 border border-green-light group"
                     aria-label="Edit product"
                     title="Edit supplier"
                   >
@@ -165,7 +168,9 @@ export function SuppliersPageTable({
                   </button>
                   <button
                     onClick={() => onDeleteSupplier(supplier._id)}
-                    className="flex items-center justify-center w-8 h-8 text-red-dark hover:text-white-true hover:bg-red-dark rounded-md transition-all duration-200 border border-red-dark group"
+                    className="flex items-center justify-center w-8 h-8 text-red-dark
+                     hover:text-white-true hover:bg-red-dark rounded-md transition-all
+                      duration-200 border border-red-dark group"
                     aria-label="Delete product"
                     title="Delete supplier"
                   >
