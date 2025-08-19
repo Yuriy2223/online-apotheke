@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { sortCategory } from "@/types/medicine-products";
 import { SearchFilter } from "@/components/Medicine/MedicineFilter";
-import { Spinner } from "@/shared/Spinner";
 import { MedicineProductCard } from "@/components/Medicine/MedicineProductCard";
 import { Container } from "@/shared/Container";
 import { Pagination } from "@/components/Pagination/Pagination";
@@ -87,7 +86,7 @@ export default function MedicinePage() {
   );
 
   if (loading) {
-    return <Spinner />;
+    return;
   }
 
   return (

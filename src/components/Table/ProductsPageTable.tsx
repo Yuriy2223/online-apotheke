@@ -124,7 +124,8 @@ export function ProductsPageTable({
                 ) : null}
 
                 <div
-                  className="w-9 h-9 rounded-full bg-gray-light flex items-center justify-center text-xs font-medium text-gray-dark"
+                  className="w-9 h-9 rounded-full bg-gray-light flex items-center justify-center 
+                  text-xs font-medium text-gray-dark"
                   style={{ display: product.photo ? "none" : "flex" }}
                 >
                   {product.name
@@ -162,7 +163,8 @@ export function ProductsPageTable({
                 <div className="flex items-center justify-between">
                   <button
                     onClick={() => onEditProduct(product._id)}
-                    className="flex items-center justify-center w-8 h-8 text-green-light hover:text-white-true hover:bg-green-light rounded-md transition-all duration-200 border border-green-light group"
+                    className="flex items-center justify-center w-8 h-8 text-green-light hover:text-white-true
+                     hover:bg-green-light rounded-md transition-all duration-200 border border-green-light group"
                     aria-label="Edit product"
                     title="Edit product"
                   >
@@ -173,7 +175,8 @@ export function ProductsPageTable({
                   </button>
                   <button
                     onClick={() => onDeleteProduct(product._id)}
-                    className="flex items-center justify-center w-8 h-8 text-red-dark hover:text-white-true hover:bg-red-dark rounded-md transition-all duration-200 border border-red-dark group"
+                    className="flex items-center justify-center w-8 h-8 text-red-dark hover:text-white-true
+                     hover:bg-red-dark rounded-md transition-all duration-200 border border-red-dark group"
                     aria-label="Delete product"
                     title="Delete product"
                   >

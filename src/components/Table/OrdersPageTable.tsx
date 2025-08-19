@@ -51,7 +51,7 @@ export function OrdersPageTable({
     <div className="overflow-x-auto">
       <table className="w-[1300px] desktop:w-full border-collapse">
         <thead>
-          <tr className="bg-gray-light divide-x divide-gray-300">
+          <tr className="bg-gray-light divide-x divide-gray-soft">
             <th className="px-6 py-3 text-left text-base font-medium text-gray-dark">
               User Info
             </th>
@@ -72,11 +72,11 @@ export function OrdersPageTable({
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-300">
+        <tbody className="divide-y divide-gray-soft">
           {data.map((order) => (
             <tr
               key={order._id}
-              className={`divide-x divide-gray-300 hover:bg-gray-50 ${
+              className={`divide-x divide-gray-soft hover:bg-gray-50 ${
                 highlightId === order._id ? "bg-yellow-100" : ""
               }`}
             >
@@ -98,7 +98,8 @@ export function OrdersPageTable({
                   ) : null}
 
                   <div
-                    className="w-10 h-10 rounded-full bg-green-light flex items-center justify-center text-xs font-medium text-white-true"
+                    className="w-10 h-10 rounded-full bg-green-light flex items-center justify-center
+                     text-xs font-medium text-white-true"
                     style={{ display: order.photo ? "none" : "flex" }}
                   >
                     {order.name
@@ -143,9 +144,8 @@ export function OrdersPageTable({
 
               <td className="px-6 py-3">
                 <span
-                  className={`flex items-center justify-center rounded-full text-sm font-medium w-24 h-8 ${getStatusClass(
-                    order.status
-                  )}`}
+                  className={`flex items-center justify-center rounded-full text-sm
+                     font-medium w-24 h-8 ${getStatusClass(order.status)}`}
                 >
                   {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                 </span>

@@ -7,7 +7,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { ShippingInfo } from "@/types/cart";
-import { Spinner } from "@/shared/Spinner";
 import { Container } from "@/shared/Container";
 import { ShippingForm } from "@/components/Cart/ShippingForm";
 import { PaymentMethod } from "@/components/Cart/PaymentMethod";
@@ -191,7 +190,7 @@ export default function CartPage() {
   );
 
   if (isAuthChecking || isLoadingCart) {
-    return <Spinner />;
+    return;
   }
 
   if (!isAuthenticated) {
