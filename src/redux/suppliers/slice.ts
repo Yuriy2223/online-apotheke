@@ -106,12 +106,6 @@ const dashboardSupplierSlice = createSlice({
         if (index !== -1) {
           state.suppliers[index] = action.payload.supplier;
         }
-        // const index = state.suppliers.findIndex(
-        //   (p) => p._id === action.meta.arg.id
-        // );
-        // if (index !== -1) {
-        //   state.suppliers[index] = action.payload.supplier;
-        // }
       })
       .addCase(updateDashboardSupplier.rejected, (state, action) => {
         state.loading = false;
