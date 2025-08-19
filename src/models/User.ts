@@ -4,7 +4,7 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 export interface UserDocument extends Document {
   name: string;
   email: string;
-  // phone?: string;
+  phone?: string;
   avatar?: string;
   address?: string;
   password: string;
@@ -47,14 +47,13 @@ const userSchema = new Schema<UserDocument>(
         "Invalid email format",
       ],
     },
-    // phone: {
-    //   type: String,
-    //   required(this: UserDocument) {
-    //     return this.provider === "local";
-    //   },
-    //   trim: true,
-    //   match: [/^\+?[1-9]\d{1,14}$/, "Invalid phone format"],
-    // },
+    phone: {
+      type: String,
+      required: false,
+      trim: true,
+      default: null,
+      match: [/^\+?[1-9]\d{1,14}$/, "Invalid phone format"],
+    },
     password: {
       type: String,
       required(this: UserDocument) {
