@@ -1,10 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
-import {
-  persistStore,
-  // persistReducer
-} from "redux-persist";
-// import storage from "redux-persist/lib/storage";
+import { persistStore } from "redux-persist";
 import { authReducer } from "./auth/slice";
 import { modalReducer } from "./modal/slice";
 import { pharmaciesReducer } from "./pharmacies/slice";
@@ -19,18 +15,8 @@ import { dashboardCustomersReducer } from "./customers/slice";
 import { dashboardStatisticsReducer } from "./dashboard-statistics/slice";
 import { dashboardTransactionsReducer } from "./dashboard-transactions/slice";
 
-// const authPersistConfig = {
-//   key: "auth",
-//   storage,
-//   // whitelist: ["user", "isAuthenticated"],
-//   whitelist: ["isAuthenticated"],
-// };
-
-// const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
-
 export const store = configureStore({
   reducer: {
-    // auth: persistedAuthReducer,
     auth: authReducer,
     modal: modalReducer,
     home: homeReducer,
