@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
-import Cart from "@/models/Cart";
+import CartModel from "@/models/Cart";
 import Product from "@/models/MedicineProduct";
 import Order from "@/models/Order";
 import { getUserId } from "@/auth/auth";
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     let totalAmount = 0;
 
     await session.withTransaction(async () => {
-      const cart = (await Cart.findOne({ userId }).session(
+      const cart = (await CartModel.findOne({ userId }).session(
         session
       )) as CartDocumentInDb | null;
       if (!cart || cart.products.length === 0) {
@@ -156,7 +156,7 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      await Cart.findOneAndDelete({ userId }, { session });
+      await CartModel.findOneAndDelete({ userId }, { session });
     });
 
     const estimatedDelivery = calculateEstimatedDelivery(paymentMethod);
