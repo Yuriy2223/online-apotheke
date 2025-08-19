@@ -61,7 +61,6 @@ const userSchema = new Schema<UserDocument>(
         return this.provider === "local";
       },
       minlength: 6,
-      // maxlength: 32,
       maxlength: 128,
       select: false,
     },

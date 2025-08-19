@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import MedicineProduct from "@/models/MedicineProduct";
 import MedicineProductReviewModel from "@/models/MedicineProductReview";
 import { connectDB } from "@/database/MongoDB";
+import MedicineProductModel from "@/models/MedicineProduct";
 
 interface RouteParams {
   params: Promise<{
@@ -15,14 +15,13 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     const { id } = await params;
 
-    const product = await MedicineProduct.findById(id).lean();
+    const product = await MedicineProductModel.findById(id).lean();
 
     if (!product) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
     const reviewsStats = await MedicineProductReviewModel.aggregate([
-      // { $match: { productId: product._id } },
       { $match: { productId: product._id.toString() } },
       {
         $group: {
@@ -73,7 +72,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     const body = await request.json();
 
-    const updatedProduct = await MedicineProduct.findByIdAndUpdate(
+    const updatedProduct = await MedicineProductModel.findByIdAndUpdate(
       id,
       { ...body, updatedAt: new Date() },
       { new: true, runValidators: true }
@@ -95,30 +94,3 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     );
   }
 }
-
-// export async function DELETE(request: NextRequest, { params }: RouteParams) {
-//   try {
-//     await connectDB();
-
-//     const { id } = await params;
-
-//     const deletedProduct = await MedicineProduct.findByIdAndDelete(id);
-
-//     if (!deletedProduct) {
-//       return NextResponse.json({ error: "Product not found" }, { status: 404 });
-//     }
-
-//     await MedicineProductReviewModel.deleteMany({ productId: id });
-
-//     return NextResponse.json({
-//       message: "Product deleted successfully",
-//       success: true,
-//     });
-//   } catch (error) {
-//     console.error("Error deleting product:", error);
-//     return NextResponse.json(
-//       { error: "Internal server error" },
-//       { status: 500 }
-//     );
-//   }
-// }

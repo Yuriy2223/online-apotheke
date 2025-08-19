@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import MedicineProduct from "@/models/MedicineProduct";
+import MedicineProductModel from "@/models/MedicineProduct";
 import { connectDB } from "@/database/MongoDB";
 
 interface FilterOptions {
@@ -43,10 +43,10 @@ export async function GET(request: NextRequest) {
       sortOption = { name: 1 };
     }
 
-    const totalItems = await MedicineProduct.countDocuments(filter);
+    const totalItems = await MedicineProductModel.countDocuments(filter);
     const totalPages = Math.ceil(totalItems / limit);
 
-    const products = await MedicineProduct.find(filter)
+    const products = await MedicineProductModel.find(filter)
       .sort(sortOption)
       .skip((page - 1) * limit)
       .limit(limit)
