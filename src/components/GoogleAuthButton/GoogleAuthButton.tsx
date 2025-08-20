@@ -20,8 +20,8 @@ interface GoogleAuthButtonProps {
 }
 
 export function GoogleAuthButton({
-  buttonText = "Увійти через Google",
-  loadingText = "Підключення до Google...",
+  buttonText = "Sign in with Google",
+  loadingText = "Connecting to Google...",
   disabled = false,
   onError,
   className = "",
@@ -38,7 +38,7 @@ export function GoogleAuthButton({
       });
 
       if (!response.ok) {
-        throw new Error(`Помилка сервера: ${response.status}`);
+        throw new Error(`Server error: ${response.status}`);
       }
 
       const data: GoogleAuthUrlResponse = await response.json();
@@ -46,7 +46,7 @@ export function GoogleAuthButton({
       if (data.success && data.data?.authUrl) {
         window.location.href = data.data.authUrl;
       } else {
-        const errorMessage = data.error || "Помилка отримання посилання Google";
+        const errorMessage = data.error || "Error retrieving Google link";
         if (onError) {
           onError(errorMessage);
         } else {
@@ -54,7 +54,7 @@ export function GoogleAuthButton({
         }
       }
     } catch (error) {
-      const errorMessage = "Помилка з'єднання з сервером Google";
+      const errorMessage = "Error connecting to Google server";
       console.error("Google auth error:", error);
       if (onError) {
         onError(errorMessage);
@@ -88,7 +88,10 @@ export function GoogleAuthButton({
       onClick={handleGoogleAuth}
       disabled={disabled || isLoading}
       className={`
-        w-full max-w-[400px] flex justify-center items-center rounded-lg shadow-sm font-medium text-white-true bg-green-light hover:bg-green-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors
+        w-full max-w-[400px] flex justify-center items-center rounded-lg shadow-sm
+         font-medium text-white-true bg-green-light hover:bg-green-dark 
+         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-dark
+          disabled:opacity-50 disabled:cursor-not-allowed transition-colors
         ${sizeClasses[size]}
         ${className}
       `}
