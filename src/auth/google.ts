@@ -14,12 +14,6 @@ if (
 ) {
   throw new Error("Google OAuth credentials and CLIENT_URL are required");
 }
-// В google.ts
-console.log("CLIENT_URL:", process.env.CLIENT_URL);
-console.log(
-  "Full redirect URI:",
-  `${process.env.CLIENT_URL}/api/user/google/callback`
-);
 
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
