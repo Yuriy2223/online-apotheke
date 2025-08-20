@@ -22,7 +22,6 @@ export async function GET(request: NextRequest) {
     const authResult = await processGoogleAuth(code);
 
     if (authResult.success && authResult.data) {
-      // const redirectResponse = NextResponse.redirect(`${baseUrl}/dashboard`);
       const redirectResponse = NextResponse.redirect(`${baseUrl}/`);
 
       redirectResponse.cookies.set("accessToken", authResult.data.accessToken, {
@@ -48,7 +47,7 @@ export async function GET(request: NextRequest) {
       return redirectResponse;
     } else {
       let errorType = "auth_failed";
-      let errorMessage = authResult.error || "Помилка авторизації";
+      let errorMessage = authResult.error || "Authorization error";
 
       if (authResult.statusCode === 409) {
         errorType = "email_exists_local";
@@ -67,7 +66,7 @@ export async function GET(request: NextRequest) {
     console.error("Google OAuth callback error:", error);
     return NextResponse.redirect(
       `${baseUrl}/login?error=server_error&message=${encodeURIComponent(
-        "Помилка сервера"
+        "Server error"
       )}`
     );
   }

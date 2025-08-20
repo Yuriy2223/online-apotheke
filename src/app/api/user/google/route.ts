@@ -19,7 +19,7 @@ export async function GET() {
     return NextResponse.json(
       {
         success: false,
-        error: "Помилка створення посилання Google",
+        error: "Error creating Google link",
       },
       { status: 500 }
     );
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Код авторизації відсутній",
+          error: "Authorization code missing",
         },
         { status: 400 }
       );
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        error: "Помилка входу через Google",
+        error: "Google login error",
       },
       { status: 500 }
     );
