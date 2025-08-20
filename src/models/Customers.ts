@@ -73,7 +73,6 @@ CustomersSchema.index({
   email: "text",
 });
 CustomersSchema.index({ name: 1 });
-CustomersSchema.index({ email: 1 }, { unique: true });
 CustomersSchema.index({ date: -1 });
 CustomersSchema.index({ spent: -1 });
 
