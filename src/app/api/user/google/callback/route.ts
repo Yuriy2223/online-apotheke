@@ -22,7 +22,8 @@ export async function GET(request: NextRequest) {
     const authResult = await processGoogleAuth(code);
 
     if (authResult.success && authResult.data) {
-      const redirectResponse = NextResponse.redirect(`${baseUrl}/dashboard`);
+      // const redirectResponse = NextResponse.redirect(`${baseUrl}/dashboard`);
+      const redirectResponse = NextResponse.redirect(`${baseUrl}/`);
 
       redirectResponse.cookies.set("accessToken", authResult.data.accessToken, {
         httpOnly: true,
