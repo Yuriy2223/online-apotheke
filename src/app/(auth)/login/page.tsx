@@ -27,7 +27,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      toast.success("Ласкаво просимо!");
+      toast.success("Welcome!");
       router.push("/");
     }
   }, [isAuthenticated, router]);
@@ -37,7 +37,7 @@ export default function LoginPage() {
   };
 
   const handleGoogleError = (error: string) => {
-    toast.error(`Помилка Google авторизації: ${error}`);
+    toast.error(`Google authorization error: ${error}`);
   };
 
   return (
@@ -66,21 +66,21 @@ export default function LoginPage() {
 
           <div className="mt-6 text-center space-y-2">
             <p className="text-center text-sm text-gray-dark mt-6">
-              Забули пароль?
+              Forgot your password?
               <Link
                 href="/forgot-password"
                 className="text-green-light hover:text-green-dark font-medium ml-2 transition-colors"
               >
-                Відновити
+                Restore
               </Link>
             </p>
             <p className="text-sm text-gray-600">
-              Немає акаунту?
+              Don&apos;t have an account?
               <Link
                 href="/register"
                 className="text-green-light hover:text-green-dark font-medium ml-2 transition-colors"
               >
-                Зареєструватися
+                Register
               </Link>
             </p>
           </div>
@@ -99,8 +99,8 @@ export default function LoginPage() {
 
             <div className="mt-4 mb-6 w-full max-w-[400px]">
               <GoogleAuthButton
-                buttonText="Увійти через Google"
-                loadingText="Підключення до Google..."
+                buttonText="Sign in with Google"
+                loadingText="Connecting to Google..."
                 disabled={loading}
                 onError={handleGoogleError}
                 size="md"
