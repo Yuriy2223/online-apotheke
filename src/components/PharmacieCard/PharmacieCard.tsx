@@ -25,7 +25,7 @@ export const PharmacieCard = ({ pharmacie }: PharmacieCardProps) => {
           <h3 className="text-lg font-semibold text-black-true overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
             {pharmacie.name}
           </h3>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+
           <img
             src="/images/logo-green.webp"
             alt="Pharmacy logo"
