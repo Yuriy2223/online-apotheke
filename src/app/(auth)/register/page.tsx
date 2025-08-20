@@ -24,13 +24,13 @@ export default function RegisterPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      toast.success("Ласкаво просимо!");
+      toast.success("Welcome!");
       router.push("/login");
     }
   }, [isAuthenticated, router]);
 
   const handleGoogleError = (error: string) => {
-    toast.error(`Помилка Google авторизації: ${error}`);
+    toast.error(`Google authorization error: ${error}`);
   };
 
   return (
@@ -57,12 +57,12 @@ export default function RegisterPage() {
         <div className="desktop:flex-1 desktop:shrink-0 tablet:px-10 desktop:px-1">
           <RegisterForm />
           <p className="text-center text-sm text-gray-dark mt-6">
-            Вже маєте акаунт?
+            Already have an account?
             <Link
               href="/login"
               className="text-green-light hover:text-green-dark font-medium ml-2 transition-colors"
             >
-              Увійти
+              Login
             </Link>
           </p>
           <div className="mt-4 flex flex-col items-center">
@@ -78,8 +78,8 @@ export default function RegisterPage() {
             </div>
             <div className="mt-4 mb-6 w-full max-w-[400px]">
               <GoogleAuthButton
-                buttonText="Увійти через Google"
-                loadingText="Підключення до Google..."
+                buttonText="Sign in with Google"
+                loadingText="Connecting to Google..."
                 disabled={loading}
                 onError={handleGoogleError}
                 size="md"
