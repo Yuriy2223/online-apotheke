@@ -31,10 +31,10 @@ export function ForgotPasswordForm({
     <>
       <div className="text-center mb-6">
         <h1 className="text-3xl font-bold text-black-true">
-          Відновлення пароля
+          Password recovery
         </h1>
         <p className="text-gray-dark mt-2 text-sm">
-          Введіть email, щоб отримати посилання на відновлення
+          Enter your email to receive a recovery link.
         </p>
       </div>
 
@@ -90,7 +90,7 @@ export function ForgotPasswordForm({
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Надсилання...
+              Sending...
             </>
           ) : (
             "Надіслати лист"

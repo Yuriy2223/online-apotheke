@@ -11,22 +11,22 @@ export function ForgotPasswordSuccess() {
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-2xl font-bold text-black-true">Лист відправлено</h2>
+        <h2 className="text-2xl font-bold text-black-true">Email sent</h2>
         <p className="text-gray-dark">
-          Ми надіслали посилання на відновлення пароля на вашу електронну пошту.
+          We have sent a password recovery link to your email.
         </p>
       </div>
 
       <p className="text-sm text-gray-dark">
-        Перевірте папку &quot;Спам&quot;, якщо лист не прийшов протягом кількох
-        хвилин.
+        Check your &quot;Spam&quot; folder if you don&apos;t receive the email
+        within a few minutes.
       </p>
 
       <Link
         href="/login"
         className="inline-block my-6 text-green-light hover:text-green-dark font-semibold transition-colors duration-200"
       >
-        Повернутися до входу
+        Return to login
       </Link>
     </div>
   );
