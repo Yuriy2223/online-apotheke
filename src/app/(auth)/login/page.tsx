@@ -27,7 +27,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      toast.success("Welcome!");
+      // toast.success("Welcome!");
       router.push("/");
     }
   }, [isAuthenticated, router]);

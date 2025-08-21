@@ -24,7 +24,6 @@ export default function RegisterPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      toast.success("Welcome!");
       router.push("/login");
     }
   }, [isAuthenticated, router]);

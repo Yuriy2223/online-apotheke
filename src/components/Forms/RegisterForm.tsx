@@ -35,19 +35,18 @@ export function RegisterForm() {
       const result = await dispatch(registerUser(data));
 
       if (registerUser.rejected.match(result)) {
-        if (result.payload === "Підтвердьте email для завершення реєстрації") {
-          toast.info("Перевірте вашу пошту для підтвердження реєстрації");
+        if (result.payload === "Confirm email to complete registration") {
           reset();
           setTimeout(() => {
             router.push("/login");
           }, 2000);
         }
       } else if (registerUser.fulfilled.match(result)) {
-        toast.success("Реєстрацію успішно завершено!");
+        toast.success("Registration successful!");
         reset();
       }
     } catch {
-      toast.error("Помилка реєстрації. Спробуйте ще раз.");
+      toast.error("Registration error. Please try again.");
     }
   };
 

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Edit3, Save, X as XIcon } from "lucide-react";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { ProfileFormData } from "@/types/users";
 import { updateProfile } from "@/redux/auth/operations";
@@ -76,7 +76,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
 
     dispatch(updateProfile(transformedData)).then((result) => {
       if (updateProfile.fulfilled.match(result)) {
-        toast.success("Профіль успішно оновлено!");
+        // toast.success("Профіль успішно оновлено!");
         onEditToggle(false);
       }
     });
@@ -86,7 +86,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold text-black-true">
-          Інформація профілю
+          Profile information
         </h2>
         {!isEditing && (
           <button
@@ -132,7 +132,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
               type="email"
               value={user.email}
               disabled
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed outline-none"
+              className="w-full px-4 py-2 border border-gray-soft rounded-lg bg-gray-50 cursor-not-allowed outline-none"
             />
           </div>
 
@@ -145,11 +145,13 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
               {...register("phone")}
               disabled={!isEditing}
               className={`w-full px-4 py-2 border rounded-lg outline-none transition-all duration-200 ${
-                !isEditing ? "bg-gray-50 cursor-not-allowed" : "bg-white-true"
+                !isEditing
+                  ? "bg-gray-light cursor-not-allowed"
+                  : "bg-white-true"
               } ${
                 errors.phone
                   ? "border-red-dark focus:border-red-dark focus:ring-2 focus:ring-red-light"
-                  : "border-gray-300 focus:border-green-light focus:ring-2 focus:ring-green-light/20"
+                  : "border-gray-soft focus:border-green-light focus:ring-2 focus:ring-green-light/20"
               }`}
               placeholder="+380123456789"
             />
@@ -170,14 +172,15 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
               {...register("address")}
               disabled={!isEditing}
               rows={3}
-              className={`w-full px-4 py-2 border rounded-lg outline-none resize-none transition-all duration-200 ${
-                !isEditing
-                  ? "bg-gray-light cursor-not-allowed"
-                  : "bg-white-true"
-              } ${
+              className={`w-full px-4 py-2 border rounded-lg outline-none resize-none 
+                transition-all duration-200 ${
+                  !isEditing
+                    ? "bg-gray-light cursor-not-allowed"
+                    : "bg-white-true"
+                } ${
                 errors.address
-                  ? "border-red-dark focus:border-red-dark focus:ring-2 focus:ring-red-200"
-                  : "border-gray-300 focus:border-green-light focus:ring-2 focus:ring-green-light/20"
+                  ? "border-red-dark focus:border-red-dark focus:ring-2 focus:ring-red-light"
+                  : "border-gray-soft focus:border-green-light focus:ring-2 focus:ring-green-light/20"
               }`}
               placeholder="Введіть вашу адресу"
             />
@@ -197,22 +200,25 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
               type="button"
               onClick={handleCancel}
               disabled={profileLoading}
-              className="px-6 py-2 border bg-green-soft border-green-light rounded-lg text-green-dark hover:text-white-true hover:bg-green-light disabled:opacity-50 transition-colors duration-200 flex items-center space-x-2"
+              className="px-6 py-2 border bg-green-soft border-green-light rounded-lg text-green-dark
+               hover:text-white-true hover:bg-green-light disabled:opacity-50 transition-colors
+                duration-200 flex items-center space-x-2"
             >
               <XIcon className="w-5 h-5" />
-              <span>Скасувати</span>
+              <span>Cancel</span>
             </button>
             <button
               type="submit"
               disabled={profileLoading || !isDirty}
-              className="px-6 py-2 bg-green-light text-white-true rounded-lg hover:bg-green-dark disabled:opacity-50 transition-colors duration-200 flex items-center space-x-2"
+              className="px-6 py-2 bg-green-light text-white-true rounded-lg hover:bg-green-dark 
+              disabled:opacity-50 transition-colors duration-200 flex items-center space-x-2"
             >
               {profileLoading ? (
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white-true"></div>
               ) : (
                 <Save className="w-4 h-4" />
               )}
-              <span>{profileLoading ? "Збереження..." : "Зберегти"}</span>
+              <span>{profileLoading ? "Saving..." : "Save"}</span>
             </button>
           </div>
         )}

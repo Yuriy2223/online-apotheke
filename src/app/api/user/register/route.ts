@@ -1,11 +1,11 @@
+import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import User from "@/models/User";
-import { sendVerificationEmail } from "@/email/email";
 import { connectDB } from "@/database/MongoDB";
+import { sendVerificationEmail } from "@/email/email";
 import { generateEmailVerificationToken } from "@/jwt/jwt";
 import { registerSchema } from "@/validation/users";
 import { ValidationError } from "yup";
-import mongoose from "mongoose";
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: "Помилка валідації",
+            error: "Validation error",
             details: validationError.errors,
           },
           { status: 400 }
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Невідома помилка валідації",
+          error: "Unknown validation error",
         },
         { status: 400 }
       );
@@ -48,9 +48,9 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: "Акаунт з цим email вже існує через Google",
+            error: "Account with this email already exists via Google",
             details: [
-              "Цей email вже зареєстрований через Google. Використайте кнопку 'Увійти через Google' для входу.",
+              "This email is already registered through Google. Use the 'Sign in with Google' button to log in.",
             ],
           },
           { status: 409 }
@@ -61,9 +61,9 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: "Акаунт з цим email вже існує",
+            error: "Account with this email already exists",
             details: [
-              "Користувач з цим email вже зареєстрований. Спробуйте увійти або відновити пароль.",
+              "User with this email is already registered. Try logging in or recovering your password.",
             ],
           },
           { status: 409 }
@@ -78,8 +78,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: "Користувач з цим номером телефону вже існує",
-            details: ["Цей номер телефону вже зареєстрований в системі."],
+            error: "User with this phone number already exists",
+            details: ["This phone number is already registered in the system."],
           },
           { status: 409 }
         );
@@ -103,9 +103,10 @@ export async function POST(request: NextRequest) {
 
       try {
         await sendVerificationEmail(email, emailVerificationToken);
-      } catch (emailError) {
-        console.error("Помилка при відправці email:", emailError);
-        throw new Error("Не вдалося відправити email підтвердження");
+      } catch {
+        // (emailError)
+        // console.error("Error sending email:", emailError);
+        throw new Error("Failed to send email verification");
       }
     });
 
@@ -115,18 +116,18 @@ export async function POST(request: NextRequest) {
       {
         success: true,
         data: {
-          message: "Реєстрація успішна. Перевірте email для підтвердження",
+          message: "Registration successful. Check your email for verification",
         },
       },
       { status: 201 }
     );
   } catch (error) {
-    console.error("Помилка реєстрації:", error);
+    // console.error("Registration error:", error);
 
     const errorMessage =
       error instanceof Error && error.message.includes("email")
-        ? "Помилка відправки email підтвердження"
-        : "Помилка сервера";
+        ? "Error sending email verification"
+        : "Server error";
 
     return NextResponse.json(
       {
