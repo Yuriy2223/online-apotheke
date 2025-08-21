@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState, useCallback, useRef } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  useCallback,
+  // useRef
+} from "react";
 import { useRouter } from "next/navigation";
 import { sortCategory } from "@/types/medicine-products";
 import { SearchFilter } from "@/components/Medicine/MedicineFilter";
@@ -10,7 +16,7 @@ import { Pagination } from "@/components/Pagination/Pagination";
 import { usePagination } from "@/hooks/usePagination";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { fetchMedicinesProducts } from "@/redux/medicine/operations";
-import { checkAuthStatus } from "@/redux/auth/operations";
+// import { checkAuthStatus } from "@/redux/auth/operations";
 import {
   selectMedicineProducts,
   selectMedicineProductsLoading,
@@ -25,7 +31,7 @@ export default function MedicinePage() {
   const paginationData = useAppSelector(selectMedicineProductsPagination);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Show all");
-  const hasCheckedAuth = useRef(false);
+  // const hasCheckedAuth = useRef(false);
   const { currentPage, deviceLimit, handlePageChange } = usePagination({
     responsiveLimits: {
       mobile: 6,
@@ -41,12 +47,12 @@ export default function MedicinePage() {
     return ["Show all", ...validCategories];
   }, []);
 
-  useEffect(() => {
-    if (!hasCheckedAuth.current) {
-      hasCheckedAuth.current = true;
-      dispatch(checkAuthStatus());
-    }
-  }, [dispatch]);
+  // useEffect(() => {
+  //   if (!hasCheckedAuth.current) {
+  //     hasCheckedAuth.current = true;
+  //     dispatch(checkAuthStatus());
+  //   }
+  // }, [dispatch]);
 
   useEffect(() => {
     const categoryParam =

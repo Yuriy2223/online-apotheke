@@ -1,13 +1,18 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import {
+  useEffect,
+  useState,
+  useCallback,
+  // useRef
+} from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { Container } from "@/shared/Container";
 import { ProductOverview } from "@/components/Medicine/ProductOverview";
 import { TabsContainer } from "@/components/Medicine/TabsContainer";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { checkAuthStatus } from "@/redux/auth/operations";
+// import { checkAuthStatus } from "@/redux/auth/operations";
 import { useAddToCart } from "@/hooks/useAddToCart";
 import {
   fetchMedicineProductDetails,
@@ -33,15 +38,15 @@ export default function MedicineProductPage() {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
   const productId = searchParams.get("id");
-  const hasCheckedAuth = useRef(false);
+  // const hasCheckedAuth = useRef(false);
   const { handleAddToCart, isUpdatingItem } = useAddToCart();
 
-  useEffect(() => {
-    if (!hasCheckedAuth.current) {
-      hasCheckedAuth.current = true;
-      dispatch(checkAuthStatus());
-    }
-  }, [dispatch]);
+  // useEffect(() => {
+  //   if (!hasCheckedAuth.current) {
+  //     hasCheckedAuth.current = true;
+  //     dispatch(checkAuthStatus());
+  //   }
+  // }, [dispatch]);
 
   useEffect(() => {
     if (productId) {

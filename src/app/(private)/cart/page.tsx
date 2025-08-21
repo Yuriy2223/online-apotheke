@@ -90,12 +90,12 @@ export default function CartPage() {
     }
   }, [user, reset]);
 
-  useEffect(() => {
-    if (!isAuthChecking && !isAuthenticated) {
-      toast.error("Для доступу до кошика необхідно авторизуватись");
-      router.push("/login");
-    }
-  }, [isAuthenticated, isAuthChecking, router]);
+  // useEffect(() => {
+  //   if (!isAuthChecking && !isAuthenticated) {
+  //     toast.error("Для доступу до кошика необхідно авторизуватись");
+  //     router.push("/login");
+  //   }
+  // }, [isAuthenticated, isAuthChecking, router]);
 
   useEffect(() => {
     if (isAuthenticated && !isAuthChecking) {
