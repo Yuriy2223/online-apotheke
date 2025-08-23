@@ -5,31 +5,43 @@ import {
   MedicineProductReviewsResponse,
 } from "@/types/medicine-products";
 
+export interface FetchProductDetailsParams {
+  productId: string;
+  discount?: number;
+}
+
 export const fetchMedicineProductDetails = createAsyncThunk<
   MedicineProductDetails,
-  string,
+  FetchProductDetailsParams,
   { rejectValue: string }
->("medicineProduct/fetchDetails", async (productId, { rejectWithValue }) => {
-  try {
-    const response = await fetch(`/api/medicine-products/${productId}`);
+>(
+  "medicineProduct/fetchDetails",
+  async ({ productId, discount }, { rejectWithValue }) => {
+    try {
+      const url = discount
+        ? `/api/medicine-products/${productId}?discount=${discount}`
+        : `/api/medicine-products/${productId}`;
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch product details");
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch product details");
+      }
+
+      const data = await response.json();
+
+      if (!data.success || !data.product) {
+        throw new Error(data.error || "Invalid product details response");
+      }
+
+      return data.product as MedicineProductDetails;
+    } catch (error) {
+      return rejectWithValue(
+        error instanceof Error ? error.message : "Unknown error occurred"
+      );
     }
-
-    const data = await response.json();
-
-    if (!data.success || !data.product) {
-      throw new Error(data.error || "Invalid product details response");
-    }
-
-    return data.product as MedicineProductDetails;
-  } catch (error) {
-    return rejectWithValue(
-      error instanceof Error ? error.message : "Unknown error occurred"
-    );
   }
-});
+);
 
 export const fetchMedicineProductReviews = createAsyncThunk<
   MedicineProductReviewsResponse,

@@ -5,6 +5,8 @@ export interface CartItem {
   name: string;
   photo: string;
   price: number;
+  originalPrice: number;
+  customPrice?: number;
   category: string;
   suppliers: string[];
   stock: number;
@@ -29,6 +31,7 @@ export interface UpdateCartItemParams {
   productId: string;
   quantity: number;
   action: "add" | "update" | "remove";
+  customPrice?: number;
 }
 
 export interface CheckoutRequest {
@@ -56,6 +59,7 @@ export interface OrderResponse {
 export interface CartProductInDb {
   _id: Types.ObjectId;
   quantity: number;
+  customPrice?: number;
 }
 
 export interface CartDocumentInDb {

@@ -32,11 +32,7 @@ export async function POST(request: NextRequest) {
 
     const userId = await getUserId(request);
     if (!userId) {
-      throw new CheckoutError(
-        "Користувач не авторизований",
-        "UNAUTHORIZED",
-        401
-      );
+      throw new CheckoutError("User not authorized", "UNAUTHORIZED", 401);
     }
 
     const body: CheckoutRequest = await request.json();
@@ -49,7 +45,7 @@ export async function POST(request: NextRequest) {
       !["Cash On Delivery", "Bank"].includes(paymentMethod)
     ) {
       throw new CheckoutError(
-        "Невірний спосіб оплати",
+        "Invalid payment method",
         "INVALID_PAYMENT_METHOD"
       );
     }
@@ -62,7 +58,7 @@ export async function POST(request: NextRequest) {
         session
       )) as CartDocumentInDb | null;
       if (!cart || cart.products.length === 0) {
-        throw new CheckoutError("Кошик порожній", "EMPTY_CART");
+        throw new CheckoutError("Cart is empty", "EMPTY_CART");
       }
 
       const productIds = cart.products.map((item: CartProductInDb) => item._id);
@@ -72,7 +68,7 @@ export async function POST(request: NextRequest) {
 
       if (productDocuments.length !== cart.products.length) {
         throw new CheckoutError(
-          "Деякі товари більше недоступні",
+          "Some products are no longer available",
           "PRODUCTS_UNAVAILABLE"
         );
       }
@@ -90,7 +86,7 @@ export async function POST(request: NextRequest) {
         const product = productMap.get(cartProduct._id.toString());
         if (!product) {
           throw new CheckoutError(
-            `Товар не знайдено: ${cartProduct._id}`,
+            `Product not found: ${cartProduct._id}`,
             "PRODUCT_NOT_FOUND"
           );
         }
@@ -98,7 +94,7 @@ export async function POST(request: NextRequest) {
         const availableStock = Number(product.stock);
         if (cartProduct.quantity > availableStock) {
           throw new CheckoutError(
-            `Недостатньо товару "${product.name}" на складі. Доступно: ${availableStock}`,
+            `Insufficient stock for "${product.name}". Available: ${availableStock}`,
             "INSUFFICIENT_STOCK"
           );
         }
@@ -150,7 +146,7 @@ export async function POST(request: NextRequest) {
 
         if (!updateResult) {
           throw new CheckoutError(
-            `Не вдалося оновити stock для товару ${cartProduct._id}`,
+            `Failed to update stock for product ${cartProduct._id}`,
             "STOCK_UPDATE_FAILED"
           );
         }
@@ -164,7 +160,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        message: "Замовлення успішно створено",
+        message: "Order created successfully",
         data: {
           orderId: orderId!.toString(),
           totalAmount: totalAmount,
@@ -188,11 +184,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.error("Помилка при оформленні замовлення:", error);
+    console.error("Error during order checkout:", error);
     return NextResponse.json(
       {
         success: false,
-        error: "Помилка сервера при оформленні замовлення",
+        error: "Server error during order checkout",
       },
       { status: 500 }
     );
@@ -204,7 +200,7 @@ export async function POST(request: NextRequest) {
 function validateShippingInfo(shippingInfo: ShippingInfo) {
   if (!shippingInfo) {
     throw new CheckoutError(
-      "Інформація про доставку обов'язкова",
+      "Shipping information is required",
       "MISSING_SHIPPING_INFO"
     );
   }
@@ -213,22 +209,22 @@ function validateShippingInfo(shippingInfo: ShippingInfo) {
 
   if (!name || name.trim().length < 2) {
     throw new CheckoutError(
-      "Ім'я має містити принаймні 2 символи",
+      "Name must contain at least 2 characters",
       "INVALID_NAME"
     );
   }
 
   if (!email || !/^\S+@\S+\.\S+$/.test(email.trim())) {
-    throw new CheckoutError("Невірний формат email", "INVALID_EMAIL");
+    throw new CheckoutError("Invalid email format", "INVALID_EMAIL");
   }
 
   if (!phone || !/^\+?[\d\s\-\(\)]{10,}$/.test(phone.trim())) {
-    throw new CheckoutError("Невірний формат телефону", "INVALID_PHONE");
+    throw new CheckoutError("Invalid phone format", "INVALID_PHONE");
   }
 
   if (!address || address.trim().length < 10) {
     throw new CheckoutError(
-      "Адреса має містити принаймні 10 символів",
+      "Address must contain at least 10 characters",
       "INVALID_ADDRESS"
     );
   }
@@ -241,7 +237,7 @@ function calculateEstimatedDelivery(paymentMethod: string): string {
 
   return `${deliveryDays}-${
     deliveryDays + 1
-  } робочих днів (до ${deliveryDate.toLocaleDateString("uk-UA")})`;
+  } business days (by ${deliveryDate.toLocaleDateString("en-US")})`;
 }
 
 function generateTrackingInfo(orderId: mongoose.Types.ObjectId) {
@@ -250,15 +246,15 @@ function generateTrackingInfo(orderId: mongoose.Types.ObjectId) {
     trackingNumber,
     trackingUrl: `/orders/${orderId}`,
     estimatedSteps: [
-      { status: "pending", name: "Обробка замовлення", completed: true },
-      { status: "confirmed", name: "Підтвердження", completed: false },
+      { status: "pending", name: "Processing order", completed: true },
+      { status: "confirmed", name: "Confirmation", completed: false },
       {
         status: "processing",
-        name: "Підготовка до відправки",
+        name: "Preparing for shipment",
         completed: false,
       },
-      { status: "shipped", name: "Відправлено", completed: false },
-      { status: "delivered", name: "Доставлено", completed: false },
+      { status: "shipped", name: "Shipped", completed: false },
+      { status: "delivered", name: "Delivered", completed: false },
     ],
   };
 }

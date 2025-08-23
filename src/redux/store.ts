@@ -14,6 +14,7 @@ import { dashboardSupplierReducer } from "./suppliers/slice";
 import { dashboardCustomersReducer } from "./customers/slice";
 import { dashboardStatisticsReducer } from "./dashboard-statistics/slice";
 import { dashboardTransactionsReducer } from "./dashboard-transactions/slice";
+import { searchReducer } from "./search/slice";
 
 export const store = configureStore({
   reducer: {
@@ -30,6 +31,7 @@ export const store = configureStore({
     dashboardCustomers: dashboardCustomersReducer,
     dashboardStatistics: dashboardStatisticsReducer,
     dashboardTransactions: dashboardTransactionsReducer,
+    search: searchReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

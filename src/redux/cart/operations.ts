@@ -8,42 +8,46 @@ import {
 
 export const addToCart = createAsyncThunk<
   CartData,
-  { productId: string; quantity: number },
+  { productId: string; quantity: number; discountPrice?: number },
   { rejectValue: string }
->("cart/addToCart", async ({ productId, quantity }, { rejectWithValue }) => {
-  try {
-    const response = await fetch("/api/cart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        productId,
-        quantity,
-      }),
-    });
+>(
+  "cart/addToCart",
+  async ({ productId, quantity, discountPrice }, { rejectWithValue }) => {
+    try {
+      const response = await fetch("/api/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          productId,
+          quantity,
+          customPrice: discountPrice,
+        }),
+      });
 
-    if (!response.ok) {
-      if (response.status === 401) {
-        throw new Error("Unauthorized");
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Unauthorized");
+        }
+        throw new Error("Failed to add item to cart");
       }
-      throw new Error("Failed to add item to cart");
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || "Failed to add item to cart");
+      }
+
+      return result.data as CartData;
+    } catch (error) {
+      return rejectWithValue(
+        error instanceof Error ? error.message : "Unknown error occurred"
+      );
     }
-
-    const result = await response.json();
-
-    if (!result.success) {
-      throw new Error(result.error || "Failed to add item to cart");
-    }
-
-    return result.data as CartData;
-  } catch (error) {
-    return rejectWithValue(
-      error instanceof Error ? error.message : "Unknown error occurred"
-    );
   }
-});
+);
 
 export const fetchCartData = createAsyncThunk<
   CartData,
@@ -82,11 +86,14 @@ export const fetchCartData = createAsyncThunk<
 
 export const updateCartData = createAsyncThunk<
   CartData,
-  UpdateCartItemParams,
+  UpdateCartItemParams & { discountPrice?: number },
   { rejectValue: string }
 >(
   "cart/updateCartItem",
-  async ({ productId, quantity, action }, { rejectWithValue }) => {
+  async (
+    { productId, quantity, action, discountPrice },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await fetch("/api/cart/update", {
         method: "PUT",
@@ -98,6 +105,7 @@ export const updateCartData = createAsyncThunk<
           productId,
           quantity,
           action,
+          customPrice: discountPrice,
         }),
       });
 

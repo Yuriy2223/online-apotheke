@@ -36,14 +36,19 @@ export interface MedicineProductDetails extends MedicineProduct {
   description: string;
   rating: number;
   reviewsCount: number;
-  medicalUses?: {
-    antioxidant?: string;
-    antiDiabetic?: string;
-    heartHealth?: string;
-    antiCancer?: string;
-    immuneSupport?: string;
-    digestiveAid?: string;
-  };
+  originalPrice?: number;
+  discountedPrice?: number;
+  discount?: number;
+  hasDiscount?: boolean;
+  savings?: number;
+  // medicalUses?: {
+  //   antioxidant?: string;
+  //   antiDiabetic?: string;
+  //   heartHealth?: string;
+  //   antiCancer?: string;
+  //   immuneSupport?: string;
+  //   digestiveAid?: string;
+  // };
 }
 export interface MedicineProductDetailsReview {
   _id: string;
@@ -69,4 +74,31 @@ export interface MedicineProductReviewsResponse {
     totalCount: number;
     limit: number;
   };
+}
+
+export interface Promotion {
+  _id: string;
+  productId: string;
+  discountPercent: number;
+  isActive: boolean;
+  promoType: "sale" | "flash" | "seasonal" | "clearance";
+  createdAt?: string;
+  updatedAt?: string;
+}
+export interface PromotionProduct extends MedicineProduct {
+  promotion?: {
+    discountPercent: number;
+    promoType: string;
+  };
+  finalPrice?: number;
+}
+export interface PromotionResponse {
+  products: PromotionProduct[];
+  pagination: PaginationData;
+}
+export interface PromotionParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  discount?: string;
 }

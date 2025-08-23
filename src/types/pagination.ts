@@ -6,7 +6,3 @@ export interface PaginationData {
   hasPrevPage: boolean;
   limit: number;
 }
-
-export interface ApiResponse<T> extends PaginationData {
-  data: T[];
-}
