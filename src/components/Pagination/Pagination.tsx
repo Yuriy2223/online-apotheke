@@ -72,20 +72,3 @@ export const Pagination: React.FC<PaginationProps> = ({
     </div>
   );
 };
-
-// breakLabel="..."
-// pageCount={totalPages}
-// marginPagesDisplayed={0}
-// pageRangeDisplayed={3}
-// onPageChange={handlePageClick}
-// forcePage={currentPage - 1}
-// containerClassName="flex items-center gap-2 bg-gray-50 rounded-xl p-2"
-// pageClassName="relative"
-// pageLinkClassName="flex items-center justify-center min-w-[40px] h-10 px-3 text-sm text-gray-700 hover:bg-white hover:text-purple-600 transition-all duration-200 rounded-lg shadow-sm hover:shadow-md"
-// previousClassName="mr-2"
-// nextClassName="ml-2"
-// breakClassName="relative"
-// breakLinkClassName="flex items-center justify-center min-w-[40px] h-10 px-3 text-sm text-gray-500 rounded-lg"
-// activeClassName="bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg"
-// activeLinkClassName="!text-white !bg-gradient-to-r !from-purple-500 !to-pink-500 rounded-lg"
-// disabledClassName="opacity-50 cursor-not-allowed"

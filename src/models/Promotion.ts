@@ -13,14 +13,6 @@ const promotionSchema = new mongoose.Schema(
       min: 0,
       max: 100,
     },
-    startDate: {
-      type: Date,
-      required: true,
-    },
-    endDate: {
-      type: Date,
-      required: true,
-    },
     isActive: {
       type: Boolean,
       default: true,
@@ -38,9 +30,17 @@ const promotionSchema = new mongoose.Schema(
 
 promotionSchema.index({
   isActive: 1,
-  startDate: 1,
-  endDate: 1,
   discountPercent: -1,
+});
+
+promotionSchema.index({
+  productId: 1,
+  isActive: 1,
+});
+
+promotionSchema.index({
+  discountPercent: 1,
+  isActive: 1,
 });
 
 const PromotionModel =

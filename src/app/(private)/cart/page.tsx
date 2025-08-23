@@ -90,13 +90,6 @@ export default function CartPage() {
     }
   }, [user, reset]);
 
-  // useEffect(() => {
-  //   if (!isAuthChecking && !isAuthenticated) {
-  //     toast.error("Для доступу до кошика необхідно авторизуватись");
-  //     router.push("/login");
-  //   }
-  // }, [isAuthenticated, isAuthChecking, router]);
-
   useEffect(() => {
     if (isAuthenticated && !isAuthChecking) {
       dispatch(fetchCartData());
@@ -132,7 +125,7 @@ export default function CartPage() {
       );
 
       if (updateCartData.fulfilled.match(result)) {
-        toast.success("Кількість товару оновлено");
+        toast.success("Product quantity updated");
       }
     },
     [dispatch]
@@ -145,7 +138,7 @@ export default function CartPage() {
       );
 
       if (updateCartData.fulfilled.match(result)) {
-        toast.success("Товар видалено з кошика");
+        toast.success("Item removed from cart");
       }
     },
     [dispatch]
@@ -155,8 +148,8 @@ export default function CartPage() {
     (method: "Cash On Delivery" | "Bank") => {
       dispatch(updatePaymentMethod(method));
       toast.info(
-        `Обрано метод оплати: ${
-          method === "Bank" ? "Банківський переказ" : "Оплата при отриманні"
+        `Payment method selected: ${
+          method === "Bank" ? "Bank transfer" : "Payment upon receipt"
         }`
       );
     },
@@ -166,7 +159,7 @@ export default function CartPage() {
   const onSubmit = useCallback(
     async (data: ShippingInfo) => {
       if (isCartEmpty) {
-        toast.error("Ваш кошик порожній");
+        toast.error("Your cart is empty");
         return;
       }
 
@@ -175,7 +168,7 @@ export default function CartPage() {
       );
 
       if (placeOrder.fulfilled.match(result)) {
-        toast.success("Замовлення успішно створено!");
+        toast.success("Order successfully created!");
 
         dispatch(resetOrderForm());
         dispatch(clearCart());

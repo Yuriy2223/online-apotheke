@@ -41,8 +41,36 @@ export function ProductOverview({
             <p className="text-sm text-gray-dark">Brand: {product.suppliers}</p>
           </div>
 
-          <div className="text-2xl tablet:text-3xl font-bold text-black-true">
-            $ {product.price}
+          <div className="space-y-2">
+            {product.hasDiscount ? (
+              <>
+                {product.discount && (
+                  <div
+                    className="inline-block bg-red-dark text-white px-3 py-1 rounded-full
+                   text-sm font-semibold"
+                  >
+                    -{product.discount}% OFF
+                  </div>
+                )}
+                <div className="flex items-center gap-3">
+                  <div className="text-2xl tablet:text-3xl font-bold text-green-light">
+                    $ {product.discountedPrice?.toFixed(2)}
+                  </div>
+                  <div className="text-xl text-red-dark line-through">
+                    $ {product.originalPrice?.toFixed(2)}
+                  </div>
+                </div>
+                {product.savings && product.savings > 0 && (
+                  <div className="text-sm text-green-light font-medium">
+                    You save $ {product.savings.toFixed(2)}
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="text-2xl tablet:text-3xl font-bold text-black-true">
+                $ {product.price}
+              </div>
+            )}
           </div>
 
           <div className="flex items-center gap-2">
@@ -58,18 +86,23 @@ export function ProductOverview({
                 <button
                   onClick={() => onQuantityChange(quantity - 1)}
                   disabled={quantity <= 1 || isAddingToCart}
-                  className="px-3 py-2 text-green-light hover:text-green-dark disabled:text-gray-dark disabled:cursor-not-allowed"
+                  className="px-3 py-2 text-green-light hover:text-green-dark disabled:text-gray-dark
+                   disabled:cursor-not-allowed"
                 >
                   <Minus className="w-5 h-5" />
                 </button>
-                <span className="px-4 py-1 text-lg text-black-true border-x border-green-light min-w-[60px] text-center">
+                <span
+                  className="px-4 py-1 text-lg text-black-true border-x border-green-light
+                 min-w-[60px] text-center"
+                >
                   {quantity}
                 </span>
 
                 <button
                   onClick={() => onQuantityChange(quantity + 1)}
                   disabled={isAddingToCart || quantity >= product.stock}
-                  className="px-3 py-2 text-green-light hover:text-green-dark disabled:text-gray-dark disabled:cursor-not-allowed"
+                  className="px-3 py-2 text-green-light hover:text-green-dark disabled:text-gray-dark
+                   disabled:cursor-not-allowed"
                 >
                   <Plus className="w-5 h-5" />
                 </button>
@@ -77,11 +110,16 @@ export function ProductOverview({
               <button
                 onClick={onAddToCart}
                 disabled={isAddingToCart}
-                className="flex-1 bg-green-light text-white-true px-6 py-2 rounded-lg hover:bg-green-dark transition-colors font-medium disabled:bg-gray-dark disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="flex-1 bg-green-light text-white-true px-6 py-2 rounded-lg hover:bg-green-dark 
+                transition-colors font-medium disabled:bg-gray-dark disabled:cursor-not-allowed flex items-center 
+                justify-center gap-2"
               >
                 {isAddingToCart ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-white-true border-t-transparent rounded-full animate-spin"></div>
+                    <div
+                      className="w-4 h-4 border-2 border-white-true border-t-transparent rounded-full 
+                    animate-spin"
+                    ></div>
                     Adding...
                   </>
                 ) : (

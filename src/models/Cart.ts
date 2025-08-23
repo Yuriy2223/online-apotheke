@@ -3,6 +3,7 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 export interface CartProductDocument extends Document {
   _id: mongoose.Types.ObjectId;
   quantity: number;
+  customPrice?: number;
 }
 
 export interface CartDocument extends Document {
@@ -22,6 +23,11 @@ const productSchema = new Schema({
     type: Number,
     required: [true, "Quantity is required"],
     min: [1, "Quantity must be at least 1"],
+  },
+  customPrice: {
+    type: Number,
+    required: false,
+    min: [0, "Custom price must be non-negative"],
   },
 });
 

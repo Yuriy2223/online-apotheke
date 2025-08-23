@@ -14,7 +14,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     await connectDB();
 
     const { id } = await params;
-
+    const url = new URL(request.url);
+    const discount = url.searchParams.get("discount");
     const product = await MedicineProductModel.findById(id).lean();
 
     if (!product) {
@@ -32,12 +33,24 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       },
     ]);
 
+    const originalPrice = Number(product.price) || 0;
+    const discountValue = discount ? Number(discount) : 0;
+    const discountedPrice =
+      discountValue > 0
+        ? originalPrice * (1 - discountValue / 100)
+        : originalPrice;
+
     const productWithDetails = {
       ...product,
       rating: reviewsStats[0]?.averageRating || 0,
       reviewsCount: reviewsStats[0]?.totalReviews || 0,
       description:
         product.description || generateDefaultDescription(product.name),
+      originalPrice,
+      discountedPrice: discountValue > 0 ? discountedPrice : undefined,
+      discount: discountValue > 0 ? discountValue : undefined,
+      hasDiscount: discountValue > 0,
+      savings: discountValue > 0 ? originalPrice - discountedPrice : 0,
     };
 
     return NextResponse.json({
@@ -86,8 +99,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       product: updatedProduct,
       success: true,
     });
-  } catch (error) {
-    console.error("Error updating product:", error);
+  } catch {
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

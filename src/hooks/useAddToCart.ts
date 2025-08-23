@@ -15,33 +15,39 @@ export const useAddToCart = () => {
   const isUpdatingItem = useAppSelector(selectIsUpdatingItem);
 
   const handleAddToCart = useCallback(
-    async (productId: string, quantity = 1) => {
+    async (productId: string, quantity = 1, discountPrice?: number) => {
       if (!productId) {
-        toast.error("Неможливо додати товар: ID товару не знайдено");
+        toast.error("Cannot add product: Product ID not found");
         return;
       }
 
       if (isAuthChecking) {
-        toast.info("Перевіряємо авторизацію...");
+        toast.info("Checking authorization...");
         return;
       }
 
       if (!isAuthenticated) {
-        toast.warn("Для додавання товарів у кошик зареєструйся.");
+        toast.warn("Please register to add products to cart.");
         return;
       }
 
       try {
-        const result = await dispatch(addToCart({ productId, quantity }));
+        const result = await dispatch(
+          addToCart({
+            productId,
+            quantity,
+            discountPrice,
+          })
+        );
 
         if (addToCart.fulfilled.match(result)) {
-          toast.success("Товар додано в кошик!");
+          toast.success("Product added to cart!");
         } else {
-          const errorMessage = result.payload || "Помилка додавання в кошик";
+          const errorMessage = result.payload || "Error adding to cart";
           toast.error(errorMessage);
         }
       } catch {
-        toast.error("Щось пішло не так");
+        toast.error("Something went wrong");
       }
     },
     [dispatch, isAuthenticated, isAuthChecking]

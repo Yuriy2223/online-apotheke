@@ -1,5 +1,5 @@
-import { ProfileFormData } from "@/types/users";
 import * as yup from "yup";
+import { ProfileFormData } from "@/types/users";
 
 export const registerSchema = yup.object({
   name: yup

@@ -1,18 +1,12 @@
 "use client";
 
-import {
-  useEffect,
-  useState,
-  useCallback,
-  // useRef
-} from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { Container } from "@/shared/Container";
 import { ProductOverview } from "@/components/Medicine/ProductOverview";
 import { TabsContainer } from "@/components/Medicine/TabsContainer";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-// import { checkAuthStatus } from "@/redux/auth/operations";
 import { useAddToCart } from "@/hooks/useAddToCart";
 import {
   fetchMedicineProductDetails,
@@ -38,26 +32,25 @@ export default function MedicineProductPage() {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
   const productId = searchParams.get("id");
-  // const hasCheckedAuth = useRef(false);
-  const { handleAddToCart, isUpdatingItem } = useAddToCart();
+  const discount = searchParams.get("discount");
 
-  // useEffect(() => {
-  //   if (!hasCheckedAuth.current) {
-  //     hasCheckedAuth.current = true;
-  //     dispatch(checkAuthStatus());
-  //   }
-  // }, [dispatch]);
+  const { handleAddToCart, isUpdatingItem } = useAddToCart();
 
   useEffect(() => {
     if (productId) {
-      dispatch(fetchMedicineProductDetails(productId));
+      const params: { productId: string; discount?: number } = { productId };
+      if (discount) {
+        params.discount = parseFloat(discount);
+      }
+
+      dispatch(fetchMedicineProductDetails(params));
       dispatch(fetchMedicineProductReviews({ productId, page: 1, limit: 5 }));
     }
-  }, [productId, dispatch]);
+  }, [productId, discount, dispatch]);
 
   useEffect(() => {
     if (error) {
-      toast.error(`Помилка завантаження товару: ${error}`);
+      toast.error(`Error loading product: ${error}`);
     }
   }, [error]);
 
@@ -69,22 +62,38 @@ export default function MedicineProductPage() {
 
   const handleAddToCartClick = useCallback(() => {
     if (!productId) {
-      toast.error("Неможливо додати товар: ID товару не знайдено");
+      toast.error("Unable to add product: Product ID not found");
       return;
     }
 
-    handleAddToCart(productId, quantity);
-  }, [productId, quantity, handleAddToCart]);
+    const discountedPrice =
+      discount && product
+        ? product.price * (1 - parseFloat(discount) / 100)
+        : undefined;
+
+    handleAddToCart(productId, quantity, discountedPrice);
+  }, [productId, quantity, discount, product, handleAddToCart]);
 
   const handleRetry = useCallback(() => {
     if (productId) {
-      dispatch(fetchMedicineProductDetails(productId));
+      const params: { productId: string; discount?: number } = { productId };
+      if (discount) {
+        params.discount = parseFloat(discount);
+      }
+
+      dispatch(fetchMedicineProductDetails(params));
       dispatch(fetchMedicineProductReviews({ productId, page: 1, limit: 5 }));
     }
-  }, [productId, dispatch]);
+  }, [productId, discount, dispatch]);
 
   if (loading) {
-    return;
+    return (
+      <Container className="py-8">
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="w-8 h-8 border-2 border-green-light border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      </Container>
+    );
   }
 
   if (error || !product) {

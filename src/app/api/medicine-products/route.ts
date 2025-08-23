@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import MedicineProductModel from "@/models/MedicineProduct";
+import PromotionModel from "@/models/Promotion";
 import { connectDB } from "@/database/MongoDB";
 
 interface FilterOptions {
   $or?: Array<{ [key: string]: { $regex: string; $options: string } }>;
   category?: string;
+  _id?: { $in: string[] };
 }
 
 export async function GET(request: NextRequest) {
@@ -17,6 +19,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || "";
     const category = searchParams.get("category") || "";
     const sortBy = searchParams.get("sortBy") || "name";
+    const discount = searchParams.get("discount") || "";
 
     const filter: FilterOptions = {};
 
@@ -35,6 +38,30 @@ export async function GET(request: NextRequest) {
       filter.category = category;
     }
 
+    if (discount) {
+      const activePromotions = await PromotionModel.find({
+        discountPercent: { $gte: parseInt(discount) },
+        isActive: true,
+      }).lean();
+
+      if (activePromotions.length > 0) {
+        const productIds = activePromotions.map((p) => p.productId.toString());
+        filter._id = { $in: productIds };
+      } else {
+        return NextResponse.json({
+          products: [],
+          pagination: {
+            currentPage: page,
+            totalPages: 0,
+            totalCount: 0,
+            hasNextPage: false,
+            hasPrevPage: false,
+            limit,
+          },
+        });
+      }
+    }
+
     let sortOption: { [key: string]: 1 | -1 };
 
     if (sortBy === "category") {
@@ -43,8 +70,8 @@ export async function GET(request: NextRequest) {
       sortOption = { name: 1 };
     }
 
-    const totalItems = await MedicineProductModel.countDocuments(filter);
-    const totalPages = Math.ceil(totalItems / limit);
+    const totalCount = await MedicineProductModel.countDocuments(filter);
+    const totalPages = Math.ceil(totalCount / limit);
 
     const products = await MedicineProductModel.find(filter)
       .sort(sortOption)
@@ -52,19 +79,52 @@ export async function GET(request: NextRequest) {
       .limit(limit)
       .lean();
 
+    const productIds = products.map((p) => p._id.toString());
+
+    const promotions = await PromotionModel.find({
+      productId: { $in: productIds },
+      isActive: true,
+    }).lean();
+
+    const promotionMap = new Map();
+    promotions.forEach((promo) => {
+      promotionMap.set(promo.productId.toString(), promo);
+    });
+
+    const productsWithPromotions = products.map((product) => {
+      const promotion = promotionMap.get(product._id.toString());
+
+      if (promotion) {
+        const finalPrice =
+          product.price * (1 - promotion.discountPercent / 100);
+        return {
+          ...product,
+          promotion: {
+            discountPercent: promotion.discountPercent,
+            promoType: promotion.promoType,
+          },
+          finalPrice: Math.round(finalPrice * 100) / 100,
+        };
+      }
+
+      return {
+        ...product,
+        finalPrice: product.price,
+      };
+    });
+
     return NextResponse.json({
-      products,
+      products: productsWithPromotions,
       pagination: {
         currentPage: page,
         totalPages,
-        totalItems,
+        totalCount,
         hasNextPage: page < totalPages,
         hasPrevPage: page > 1,
         limit,
       },
     });
-  } catch (error) {
-    console.error("Error fetching medicine products:", error);
+  } catch {
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

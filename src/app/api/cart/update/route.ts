@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
-// import Cart from "@/models/Cart";
-import Product from "@/models/MedicineProduct";
 import mongoose from "mongoose";
+import { NextRequest, NextResponse } from "next/server";
+import CartModel from "@/models/Cart";
+import Product from "@/models/MedicineProduct";
 import { getUserId } from "@/auth/auth";
 import { connectDB } from "@/database/MongoDB";
 import { CartItem, CartData, CartProductInDb } from "@/types/cart";
-import CartModel from "@/models/Cart";
+import { AggregationCartProduct, AggregationCartResult } from "../route";
 
 class CartError extends Error {
   constructor(
@@ -26,23 +26,23 @@ export async function PUT(request: NextRequest) {
 
     const userId = await getUserId(request);
     if (!userId) {
-      throw new CartError("Користувач не авторизований", "UNAUTHORIZED", 401);
+      throw new CartError("User is not authorized.", "UNAUTHORIZED", 401);
     }
 
     const body = await request.json();
-    const { productId, quantity, action } = body;
+    const { productId, quantity, action, customPrice } = body;
 
     if (!productId) {
-      throw new CartError("ID продукту обов'язковий", "MISSING_PRODUCT_ID");
+      throw new CartError("Product ID is required", "MISSING_PRODUCT_ID");
     }
 
     if (!mongoose.Types.ObjectId.isValid(productId)) {
-      throw new CartError("Невірний ID продукту", "INVALID_PRODUCT_ID");
+      throw new CartError("Invalid product ID", "INVALID_PRODUCT_ID");
     }
 
     if (!action || !["add", "update", "remove"].includes(action)) {
       throw new CartError(
-        "Невірна дія. Доступні: add, update, remove",
+        "Invalid action. Available actions: add, update, remove",
         "INVALID_ACTION"
       );
     }
@@ -50,7 +50,7 @@ export async function PUT(request: NextRequest) {
     await session.withTransaction(async () => {
       const product = await Product.findById(productId).session(session);
       if (!product) {
-        throw new CartError("Продукт не знайдено", "PRODUCT_NOT_FOUND", 404);
+        throw new CartError("Product not found", "PRODUCT_NOT_FOUND", 404);
       }
 
       let cart = await CartModel.findOne({ userId }).session(session);
@@ -59,7 +59,7 @@ export async function PUT(request: NextRequest) {
       }
 
       const productIndex = cart.products.findIndex(
-        (item: CartProductInDb) => item._id.toString() === productId
+        (item) => item._id.toString() === productId
       );
 
       if (action === "remove") {
@@ -69,7 +69,7 @@ export async function PUT(request: NextRequest) {
       } else if (action === "add" || action === "update") {
         if (!quantity || quantity < 1) {
           throw new CartError(
-            "Кількість має бути більше 0",
+            "Quantity must be greater than 0",
             "INVALID_QUANTITY"
           );
         }
@@ -77,18 +77,38 @@ export async function PUT(request: NextRequest) {
         const availableStock = Number(product.stock);
         if (quantity > availableStock) {
           throw new CartError(
-            `Недостатньо товару на складі. Доступно: ${availableStock}`,
+            `Not enough stock. Available: ${availableStock}`,
             "INSUFFICIENT_STOCK"
           );
         }
 
         if (productIndex > -1) {
           cart.products[productIndex].quantity = quantity;
+
+          if (
+            customPrice !== undefined &&
+            customPrice !== null &&
+            customPrice > 0
+          ) {
+            cart.products[productIndex].customPrice = customPrice;
+          } else if (customPrice === null || customPrice === 0) {
+            cart.products[productIndex].customPrice = undefined;
+          }
         } else {
-          cart.products.push({
+          const newProduct: CartProductInDb = {
             _id: new mongoose.Types.ObjectId(productId),
             quantity,
-          });
+          };
+
+          if (
+            customPrice !== undefined &&
+            customPrice !== null &&
+            customPrice > 0
+          ) {
+            newProduct.customPrice = customPrice;
+          }
+
+          cart.products.push(newProduct);
         }
       }
 
@@ -117,11 +137,10 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    console.error("Помилка при оновленні кошика:", error);
     return NextResponse.json(
       {
         success: false,
-        error: "Помилка сервера при оновленні кошика",
+        error: "Server error while updating cart",
       },
       { status: 500 }
     );
@@ -131,7 +150,7 @@ export async function PUT(request: NextRequest) {
 }
 
 async function getCartWithProducts(userId: string): Promise<CartData> {
-  const cartWithProducts = await CartModel.aggregate([
+  const cartWithProducts = (await CartModel.aggregate([
     {
       $match: { userId: new mongoose.Types.ObjectId(userId) },
     },
@@ -168,15 +187,45 @@ async function getCartWithProducts(userId: string): Promise<CartData> {
                   _id: "$$productInfo._id",
                   name: "$$productInfo.name",
                   photo: "$$productInfo.photo",
-                  price: "$$productInfo.price",
+                  price: {
+                    $cond: {
+                      if: {
+                        $and: [
+                          { $ne: ["$$cartProduct.customPrice", null] },
+                          { $ne: ["$$cartProduct.customPrice", undefined] },
+                          { $gt: ["$$cartProduct.customPrice", 0] },
+                        ],
+                      },
+                      then: "$$cartProduct.customPrice",
+                      else: { $ifNull: ["$$productInfo.price", 0] },
+                    },
+                  },
+                  originalPrice: { $ifNull: ["$$productInfo.price", 0] },
                   category: "$$productInfo.category",
                   suppliers: "$$productInfo.suppliers",
-                  stock: "$$productInfo.stock",
-                  quantity: "$$cartProduct.quantity",
+                  stock: { $ifNull: ["$$productInfo.stock", 0] },
+                  quantity: { $ifNull: ["$$cartProduct.quantity", 1] },
+                  customPrice: "$$cartProduct.customPrice",
                   totalPrice: {
                     $multiply: [
-                      { $toDouble: "$$productInfo.price" },
-                      "$$cartProduct.quantity",
+                      {
+                        $toDouble: {
+                          $cond: {
+                            if: {
+                              $and: [
+                                { $ne: ["$$cartProduct.customPrice", null] },
+                                {
+                                  $ne: ["$$cartProduct.customPrice", undefined],
+                                },
+                                { $gt: ["$$cartProduct.customPrice", 0] },
+                              ],
+                            },
+                            then: { $ifNull: ["$$cartProduct.customPrice", 0] },
+                            else: { $ifNull: ["$$productInfo.price", 0] },
+                          },
+                        },
+                      },
+                      { $ifNull: ["$$cartProduct.quantity", 1] },
                     ],
                   },
                 },
@@ -191,12 +240,17 @@ async function getCartWithProducts(userId: string): Promise<CartData> {
         products: {
           $filter: {
             input: "$products",
-            cond: { $ne: ["$$this._id", null] },
+            cond: {
+              $and: [
+                { $ne: ["$$this._id", null] },
+                { $ne: ["$$this._id", undefined] },
+              ],
+            },
           },
         },
       },
     },
-  ]);
+  ])) as AggregationCartResult[];
 
   const cart = cartWithProducts[0];
 
@@ -208,20 +262,39 @@ async function getCartWithProducts(userId: string): Promise<CartData> {
     };
   }
 
-  const cartItems = cart.products.map((item: CartItem) => ({
-    ...item,
-    _id: item._id.toString(),
-    totalPrice: Number(item.totalPrice.toFixed(2)),
-  }));
+  const cartItems = cart.products
+    .filter(
+      (
+        item: AggregationCartProduct
+      ): item is AggregationCartProduct & { _id: mongoose.Types.ObjectId } =>
+        item && item._id !== null && item._id !== undefined
+    )
+    .map(
+      (
+        item: AggregationCartProduct & { _id: mongoose.Types.ObjectId }
+      ): CartItem => ({
+        _id: item._id.toString(),
+        name: item.name || "",
+        photo: item.photo || "",
+        price: Number(item.price || 0),
+        originalPrice: Number(item.originalPrice || 0),
+        category: item.category || "",
+        suppliers: item.suppliers || [],
+        stock: Number(item.stock || 0),
+        quantity: Number(item.quantity || 1),
+        customPrice: item.customPrice,
+        totalPrice: Number((item.totalPrice || 0).toFixed(2)),
+      })
+    );
 
   const totalAmount = Number(
     cartItems
-      .reduce((sum: number, item: CartItem) => sum + item.totalPrice, 0)
+      .reduce((sum: number, item: CartItem) => sum + (item.totalPrice || 0), 0)
       .toFixed(2)
   );
 
   const totalItems = cartItems.reduce(
-    (sum: number, item: CartItem) => sum + item.quantity,
+    (sum: number, item: CartItem) => sum + (item.quantity || 0),
     0
   );
 
@@ -235,12 +308,12 @@ async function getCartWithProducts(userId: string): Promise<CartData> {
 function getSuccessMessage(action: string): string {
   switch (action) {
     case "add":
-      return "Товар додано до кошика";
+      return "Item added to cart";
     case "update":
-      return "Кількість товару оновлено";
+      return "Item quantity updated";
     case "remove":
-      return "Товар видалено з кошика";
+      return "Item removed from cart";
     default:
-      return "Кошик оновлено";
+      return "Cart updated";
   }
 }
