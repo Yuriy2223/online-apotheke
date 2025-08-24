@@ -19,10 +19,16 @@ export const PharmacieCard = ({ pharmacie }: PharmacieCardProps) => {
   };
 
   return (
-    <div className="bg-green-soft rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+    <div
+      className="bg-green-soft rounded-2xl p-6 shadow-sm hover:shadow-md 
+    transition-shadow duration-200"
+    >
       <div className="space-y-4">
         <div className="flex items-start justify-between gap-4">
-          <h3 className="text-lg font-semibold text-black-true overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
+          <h3
+            className="text-lg font-semibold text-black-true overflow-hidden 
+          text-ellipsis whitespace-nowrap min-w-0"
+          >
             {pharmacie.name}
           </h3>
 
@@ -35,17 +41,26 @@ export const PharmacieCard = ({ pharmacie }: PharmacieCardProps) => {
           />
         </div>
 
-        <div className="flex items-center gap-2 text-gray-dark overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
+        <div
+          className="flex items-center gap-2 text-gray-dark overflow-hidden
+         text-ellipsis whitespace-nowrap min-w-0"
+        >
           <Building2 className="w-4 h-4 flex-shrink-0 text-green-dark" />
           <span className="text-sm">{pharmacie.city}</span>
         </div>
 
-        <div className="flex items-center gap-2 text-gray-dark overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
+        <div
+          className="flex items-center gap-2 text-gray-dark overflow-hidden
+         text-ellipsis whitespace-nowrap min-w-0"
+        >
           <MapPin className="w-4 h-4 flex-shrink-0 text-green-dark" />
           <span className="text-sm">{pharmacie.address}</span>
         </div>
 
-        <div className="flex items-center gap-2 text-gray-dark overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
+        <div
+          className="flex items-center gap-2 text-gray-dark overflow-hidden
+         text-ellipsis whitespace-nowrap min-w-0"
+        >
           <Phone className="w-4 h-4 flex-shrink-0 text-green-dark" />
           <span className="text-sm">{pharmacie.phone}</span>
         </div>
@@ -53,7 +68,8 @@ export const PharmacieCard = ({ pharmacie }: PharmacieCardProps) => {
         <div className="flex items-center justify-between pt-2">
           <button
             onClick={handleVisitStore}
-            className="bg-green-light hover:bg-green-dark text-white-true px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+            className="bg-green-light hover:bg-green-dark text-white-true
+             px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
           >
             Visit Store
           </button>
@@ -66,7 +82,7 @@ export const PharmacieCard = ({ pharmacie }: PharmacieCardProps) => {
                   ? "bg-green-light text-white-true"
                   : status === "CLOSE"
                   ? "bg-red-light text-red-dark"
-                  : "bg-gray-200 text-gray-600"
+                  : "bg-gray-200 text-gray-dark"
               }`}
             >
               {status}

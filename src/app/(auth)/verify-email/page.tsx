@@ -57,24 +57,27 @@ export default function VerifyEmailPage() {
   }, [success, error, isLoading, router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4">
+    <div
+      className="min-h-screen flex items-center justify-center bg-gradient-to-br
+     from-blue-50 via-white to-purple-50 p-4"
+    >
       <div className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-md">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-800 mb-6">
-            Підтвердження Email
+          <h1 className="text-3xl font-bold text-black-true mb-6">
+            Email confirmation
           </h1>
 
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+            <Loader2 className="w-8 h-8 text-green-light animate-spin" />
           </div>
-          <p className="text-gray-600 text-lg">Перевіряємо ваш email...</p>
+          <p className="text-gray-dark text-lg">Checking your email...</p>
 
-          <div className="mt-6 pt-4 border-t border-gray-200">
+          <div className="mt-6 pt-4 border-t border-gray-soft">
             <Link
               href="/login"
-              className="text-blue-600 hover:text-blue-700 font-semibold text-sm transition-colors"
+              className="text-green-light hover:text-green-dark font-semibold text-sm transition-colors"
             >
-              Повернутися до входу
+              Return to login
             </Link>
           </div>
         </div>

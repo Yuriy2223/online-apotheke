@@ -35,11 +35,17 @@ export function MedicineProductDetailsCard({
   const mockReviewsCount = 12;
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+    <div
+      className="bg-white rounded-lg shadow-sm border border-gray-200
+     overflow-hidden hover:shadow-md transition-shadow"
+    >
       <div className="aspect-square bg-gray-50 overflow-hidden relative">
         {imageLoading && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-8 h-8 border-2 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+            <div
+              className="w-8 h-8 border-2 border-green-light border-t-transparent
+             rounded-full animate-spin"
+            ></div>
           </div>
         )}
         <Image
@@ -56,7 +62,8 @@ export function MedicineProductDetailsCard({
       <div className="p-4 space-y-3">
         <div>
           <h3
-            className="font-semibold text-lg text-gray-900 cursor-pointer hover:text-green-600 transition-colors"
+            className="font-semibold text-lg text-black-true cursor-pointer
+             hover:text-green-light transition-colors"
             onClick={handleDetailsClick}
           >
             {product.name}
@@ -78,7 +85,8 @@ export function MedicineProductDetailsCard({
             <button
               onClick={() => handleQuantityChange(quantity - 1)}
               disabled={quantity <= 1 || isUpdatingItem}
-              className="px-2 py-1 text-gray-600 hover:text-gray-800 disabled:text-gray-400 disabled:cursor-not-allowed"
+              className="px-2 py-1 text-gray-600 hover:text-gray-800
+               disabled:text-gray-400 disabled:cursor-not-allowed"
             >
               −
             </button>
@@ -88,7 +96,8 @@ export function MedicineProductDetailsCard({
             <button
               onClick={() => handleQuantityChange(quantity + 1)}
               disabled={isUpdatingItem}
-              className="px-2 py-1 text-gray-600 hover:text-gray-800 disabled:text-gray-400 disabled:cursor-not-allowed"
+              className="px-2 py-1 text-gray-600 hover:text-gray-800 disabled:text-gray-400 
+              disabled:cursor-not-allowed"
             >
               +
             </button>
@@ -99,11 +108,13 @@ export function MedicineProductDetailsCard({
           <button
             onClick={handleAddToCartClick}
             disabled={isUpdatingItem}
-            className="w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full bg-green-light text-white py-2 px-4 rounded-lg hover:bg-green-dark
+             transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed flex 
+             items-center justify-center gap-2"
           >
             {isUpdatingItem ? (
               <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-4 h-4 border-2 border-white-true border-t-transparent rounded-full animate-spin"></div>
                 Adding...
               </>
             ) : (
@@ -114,13 +125,15 @@ export function MedicineProductDetailsCard({
           <div className="flex gap-2">
             <button
               onClick={handleDetailsClick}
-              className="flex-1 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors text-sm"
+              className="flex-1 bg-green-light text-white py-2 px-4 rounded-lg
+               hover:bg-green-dark transition-colors text-sm"
             >
               Description
             </button>
             <button
               onClick={handleDetailsClick}
-              className="flex-1 bg-white text-green-500 border border-green-500 py-2 px-4 rounded-lg hover:bg-green-50 transition-colors text-sm"
+              className="flex-1 bg-white text-green-light border border-green-light py-2 px-4 
+              rounded-lg hover:bg-green-50 transition-colors text-sm"
             >
               Reviews
             </button>

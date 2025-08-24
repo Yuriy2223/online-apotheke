@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json(
       {
         success: true,
-        data: { message: "Успішний вихід" },
+        data: { message: "Successful exit" },
       },
       { status: 200 }
     );
@@ -44,13 +44,11 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-  } catch (error) {
-    console.error("Logout error:", error);
-
+  } catch {
     const response = NextResponse.json(
       {
         success: false,
-        error: "Помилка сервера",
+        error: "Server error",
       },
       { status: 500 }
     );

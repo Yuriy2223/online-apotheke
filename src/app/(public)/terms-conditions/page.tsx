@@ -13,6 +13,14 @@ import {
 } from "lucide-react";
 
 export default function TermsConditionsPage() {
+  const supportEmail = process.env.NEXT_PUBLIC_PHARMACY_EMAIL;
+  const supportPhone = process.env.NEXT_PUBLIC_PHARMACY_PHONE;
+  const supportAddress = process.env.NEXT_PUBLIC_PHARMACY_ADDRESS;
+  const phoneHref = supportPhone?.replace(/\D/g, "")
+    ? `tel:${supportPhone.replace(/\D/g, "")}`
+    : undefined;
+  const emailHref = supportEmail ? `mailto:${supportEmail}` : undefined;
+
   const sections = [
     {
       id: 1,
@@ -256,26 +264,38 @@ export default function TermsConditionsPage() {
             consultation, please contact our support service.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <div className="text-center">
-              <div className="text-sm text-gray-500">Email:</div>
-              <div className="font-medium text-gray-900">
-                legal@pharmacy-platform.ua
+            {supportEmail && (
+              <div className="text-center">
+                <div className="text-sm text-gray-500">Email:</div>
+                <a
+                  href={emailHref}
+                  className="font-medium text-gray-900 hover:text-blue-600 transition-colors"
+                >
+                  {supportEmail}
+                </a>
               </div>
-            </div>
+            )}
             <div className="hidden sm:block w-px h-8 bg-gray-300"></div>
-            <div className="text-center">
-              <div className="text-sm text-gray-500">Phone:</div>
-              <div className="font-medium text-gray-900">
-                +38 (044) 123-45-67
+            {supportPhone && (
+              <div className="text-center">
+                <div className="text-sm text-gray-500">Phone:</div>
+                <a
+                  href={phoneHref}
+                  className="font-medium text-gray-900 hover:text-blue-600 transition-colors"
+                >
+                  {supportPhone}
+                </a>
               </div>
-            </div>
+            )}
             <div className="hidden sm:block w-px h-8 bg-gray-300"></div>
-            <div className="text-center">
-              <div className="text-sm text-gray-500">Address:</div>
-              <div className="font-medium text-gray-900">
-                Kyiv, Khreshchatyk St., 1
+            {supportAddress && (
+              <div className="text-center">
+                <div className="text-sm text-gray-500">Address:</div>
+                <div className="font-medium text-gray-900">
+                  {supportAddress}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 

@@ -16,7 +16,10 @@ export const CartItemCard = ({
   onRemoveItem,
 }: CartItemCardProps) => {
   return (
-    <article className="flex flex-col tablet:flex-row tablet:justify-between tablet:space-x-3 p-4 border border-gray-light bg-gray-light rounded-lg">
+    <article
+      className="flex flex-col tablet:flex-row tablet:justify-between 
+    tablet:space-x-3 p-4 border border-gray-light bg-gray-light rounded-lg"
+    >
       <div className="flex flex-1 space-x-4">
         <div className="w-[130px] h-[130px] relative flex-shrink-0">
           <Image
@@ -40,7 +43,8 @@ export const CartItemCard = ({
 
           <div className="flex items-center justify-between mt-2">
             <div
-              className="flex items-center justify-between bg-green-soft rounded-full w-[120px] h-[40px] px-3 text-white-true"
+              className="flex items-center justify-between bg-green-soft rounded-full
+               w-[120px] h-[40px] px-3 text-white-true"
               role="group"
               aria-label="Quantity controls"
             >
@@ -71,11 +75,15 @@ export const CartItemCard = ({
         </div>
       </div>
 
-      <footer className="flex flex-col tablet:flex-col tablet:items-end tablet:justify-between mt-4 tablet:mt-0 max-tablet:flex-row max-tablet:justify-between max-tablet:items-center">
+      <footer
+        className="flex flex-col tablet:flex-col tablet:items-end tablet:justify-between 
+      mt-4 tablet:mt-0 max-tablet:flex-row max-tablet:justify-between max-tablet:items-center"
+      >
         <button
           onClick={() => onRemoveItem(item._id)}
           disabled={isUpdatingItem}
-          className="bg-red-light hover:bg-red-dark text-red-dark hover:text-white-true text-sm px-4 py-2 rounded-full transition-colors duration-300 ease-in-out"
+          className="bg-red-light hover:bg-red-dark text-red-dark hover:text-white-true 
+          text-sm px-4 py-2 rounded-full transition-colors duration-300 ease-in-out"
           aria-label={`Remove ${item.name} from cart`}
         >
           Remove

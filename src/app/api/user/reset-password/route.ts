@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
 
     if (!token || !password) {
       return NextResponse.json(
-        { success: false, error: "Токен і пароль обов'язкові" },
+        { success: false, error: "Token and password are required" },
         { status: 400 }
       );
     }
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       verify(token, JWT_SECRET);
     } catch {
       return NextResponse.json(
-        { success: false, error: "Недійсний або прострочений токен" },
+        { success: false, error: "Invalid or expired token" },
         { status: 400 }
       );
     }
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Користувача не знайдено або токен недійсний",
+          error: "User not found or token invalid",
         },
         { status: 404 }
       );
@@ -48,12 +48,11 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: "Пароль успішно змінено. Тепер ви можете увійти.",
+      message: "Password changed successfully. You can now log in.",
     });
-  } catch (error) {
-    console.error("Помилка при зміні пароля:", error);
+  } catch {
     return NextResponse.json(
-      { success: false, error: "Помилка сервера" },
+      { success: false, error: "Server Error" },
       { status: 500 }
     );
   }

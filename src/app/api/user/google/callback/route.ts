@@ -62,8 +62,7 @@ export async function GET(request: NextRequest) {
         )}`
       );
     }
-  } catch (error) {
-    console.error("Google OAuth callback error:", error);
+  } catch {
     return NextResponse.redirect(
       `${baseUrl}/login?error=server_error&message=${encodeURIComponent(
         "Server error"

@@ -32,8 +32,7 @@ export async function getUserId(request: NextRequest): Promise<string | null> {
   try {
     const user = getAuthenticatedUser(request);
     return user.userId;
-  } catch (error) {
-    console.error("Помилка при отриманні userId:", error);
+  } catch {
     return null;
   }
 }
@@ -42,14 +41,12 @@ export async function verifyToken(token: string): Promise<JWTPayload | null> {
   try {
     const JWT_SECRET = process.env.JWT_SECRET;
     if (!JWT_SECRET) {
-      console.error("JWT_SECRET не встановлено");
       return null;
     }
 
     const decoded = jwt.verify(token, JWT_SECRET) as JWTPayload;
     return decoded;
-  } catch (error) {
-    console.error("Помилка при верифікації токена:", error);
+  } catch {
     return null;
   }
 }
@@ -64,7 +61,7 @@ export function withAuth(
       return new Response(
         JSON.stringify({
           success: false,
-          error: "Користувач не авторизований",
+          error: "User is not authorized",
         }),
         {
           status: 401,
@@ -81,14 +78,14 @@ export function getAuthenticatedUser(request: NextRequest) {
   const accessToken = request.cookies.get("accessToken")?.value;
 
   if (!accessToken) {
-    throw new Error("Access token відсутній");
+    throw new Error("Access token missing");
   }
 
   try {
     const decoded = verifyAccessToken(accessToken);
     return decoded;
   } catch {
-    throw new Error("Недійсний access token");
+    throw new Error("Invalid access token");
   }
 }
 

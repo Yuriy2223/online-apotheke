@@ -61,7 +61,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       >
         <button
           onClick={onClose}
-          className="absolute top-10 right-6 desktop:hidden p-2 hover:scale-110 hover:rotate-360 rounded-lg transition-transform"
+          className="absolute top-10 right-6 desktop:hidden p-2 hover:scale-110 
+          hover:rotate-360 rounded-lg transition-transform"
           aria-label="Close sidebar"
         >
           <X size={40} className="text-white-true" />
@@ -87,7 +88,11 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 >
                   <Icon size={26} />
                 </div>
-                <div className="absolute left-[80%] ml-2 px-2 py-1 bg-white-true text-green-dark border text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                <div
+                  className="absolute left-[80%] ml-2 px-2 py-1 bg-white-true
+                 text-green-dark border text-xs rounded opacity-0 group-hover:opacity-100
+                  transition-opacity whitespace-nowrap z-10"
+                >
                   {label}
                 </div>
               </Link>

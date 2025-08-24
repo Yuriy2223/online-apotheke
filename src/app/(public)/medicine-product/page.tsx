@@ -109,13 +109,13 @@ export default function MedicineProductPage() {
                 onClick={handleRetry}
                 className="px-4 py-2 bg-green-light text-white-true rounded-lg hover:bg-green-light transition-colors"
               >
-                Спробувати знову
+                Try again
               </button>
               <button
                 onClick={() => router.push("/medicine")}
                 className="px-4 py-2 bg-gray-dark text-white-true rounded-lg hover:bg-gray-dark transition-colors"
               >
-                Повернутись до каталогу
+                Return to catalog
               </button>
             </div>
           </div>

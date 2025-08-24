@@ -47,7 +47,10 @@ export const MedicineProductCard: React.FC<ProductCardProps> = ({
           <button
             onClick={handleAddToCartClick}
             disabled={isUpdatingItem}
-            className="flex-1 bg-green-light text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-green-dark focus:outline-none focus:ring-2 focus:ring-green-dark focus:ring-offset-2 transition-colors disabled:bg-gray-dark disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="flex-1 bg-green-light text-white px-4 py-2.5 rounded-lg 
+            text-sm font-medium hover:bg-green-dark focus:outline-none focus:ring-2
+             focus:ring-green-dark focus:ring-offset-2 transition-colors
+              disabled:bg-gray-dark disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {isUpdatingItem ? (
               <>

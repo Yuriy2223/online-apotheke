@@ -13,6 +13,13 @@ import {
 } from "lucide-react";
 
 export default function PrivacyPolicyPage() {
+  const privacyEmail = process.env.NEXT_PUBLIC_PHARMACY_EMAIL;
+  const privacyPhone = process.env.NEXT_PUBLIC_PHARMACY_PHONE;
+
+  const phoneHref = privacyPhone
+    ? `tel:${privacyPhone.replace(/\D/g, "")}`
+    : undefined;
+  const emailHref = privacyEmail ? `mailto:${privacyEmail}` : undefined;
   const sections = [
     {
       id: 1,
@@ -185,19 +192,29 @@ export default function PrivacyPolicyPage() {
             exercise your rights, please contact our Data Protection Department.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <div className="text-center">
-              <div className="text-sm text-gray-500">Email:</div>
-              <div className="font-medium text-gray-900">
-                privacy@pharmacy-platform.ua
+            {privacyEmail && (
+              <div className="text-center">
+                <div className="text-sm text-gray-500">Email:</div>
+                <a
+                  href={emailHref}
+                  className="font-medium text-gray-900 hover:text-green-dark transition-colors"
+                >
+                  {privacyEmail}
+                </a>
               </div>
-            </div>
+            )}
             <div className="hidden sm:block w-px h-8 bg-gray-300"></div>
-            <div className="text-center">
-              <div className="text-sm text-gray-500">Phone:</div>
-              <div className="font-medium text-gray-900">
-                +38 (044) 123-45-67
+            {privacyPhone && (
+              <div className="text-center">
+                <div className="text-sm text-gray-500">Phone:</div>
+                <a
+                  href={phoneHref}
+                  className="font-medium text-gray-900 hover:text-green-dark transition-colors"
+                >
+                  {privacyPhone}
+                </a>
               </div>
-            </div>
+            )}
           </div>
         </div>
 

@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
 
     if (!email) {
       return NextResponse.json(
-        { success: false, error: "Email обов'язковий" },
+        { success: false, error: "Email required" },
         { status: 400 }
       );
     }
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { success: true, message: "Якщо email існує, лист буде надіслано" },
+        { success: true, message: "If email exists, the email will be sent" },
         { status: 200 }
       );
     }
@@ -39,24 +39,21 @@ export async function POST(request: NextRequest) {
       await sendResetPasswordEmail(email, resetToken);
 
       return NextResponse.json(
-        { success: true, message: "Лист з посиланням надіслано" },
+        { success: true, message: "Email with link sent" },
         { status: 200 }
       );
-    } catch (emailError) {
-      console.error("Email sending failed:", emailError);
-
+    } catch {
       user.resetPasswordToken = null;
       await user.save();
 
       return NextResponse.json(
-        { success: false, error: "Помилка при надсиланні листа" },
+        { success: false, error: "Error sending email" },
         { status: 500 }
       );
     }
-  } catch (error) {
-    console.error("Forgot password error:", error);
+  } catch {
     return NextResponse.json(
-      { success: false, error: "Помилка сервера" },
+      { success: false, error: "Server error" },
       { status: 500 }
     );
   }

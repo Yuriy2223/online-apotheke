@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { connectDB } from "@/database/MongoDB";
+import User, { UserDocument } from "@/models/User";
+import { JWTPayload, UserResponse } from "@/types/users";
 import {
   verifyAccessToken,
   verifyRefreshToken,
   generateAccessToken,
 } from "@/jwt/jwt";
-import { connectDB } from "@/database/MongoDB";
-import User, { UserDocument } from "@/models/User";
-import { JWTPayload, UserResponse } from "@/types/users";
 
 interface UpdateProfileData {
   name?: string;
@@ -26,7 +26,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Токени не знайдено",
+          error: "Tokens not found",
         },
         { status: 401 }
       );
@@ -39,7 +39,6 @@ export async function PUT(request: NextRequest) {
       try {
         decoded = verifyAccessToken(accessToken);
       } catch {
-        console.log("Access token expired or invalid");
         accessToken = undefined;
       }
     }
@@ -57,7 +56,7 @@ export async function PUT(request: NextRequest) {
           return NextResponse.json(
             {
               success: false,
-              error: "Недійсний refresh token",
+              error: "Invalid refresh token",
             },
             { status: 401 }
           );
@@ -74,7 +73,7 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: "Недійсний refresh token",
+            error: "Invalid refresh token",
           },
           { status: 401 }
         );
@@ -85,7 +84,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Недійсні токени",
+          error: "Invalid tokens",
         },
         { status: 401 }
       );
@@ -100,7 +99,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Ім'я повинно бути від 3 до 50 символів",
+          error: "Name must be between 3 and 50 characters",
         },
         { status: 400 }
       );
@@ -110,7 +109,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Некоректний формат телефону",
+          error: "Incorrect phone format",
         },
         { status: 400 }
       );
@@ -120,7 +119,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "URL аватара занадто довгий",
+          error: "avatar URL is too long",
         },
         { status: 400 }
       );
@@ -130,7 +129,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Адреса занадто довга",
+          error: "Address too long",
         },
         { status: 400 }
       );
@@ -156,7 +155,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Користувач не знайдений",
+          error: "User not found",
         },
         { status: 404 }
       );
@@ -168,9 +167,7 @@ export async function PUT(request: NextRequest) {
     delete userObject.emailVerificationToken;
     delete userObject.resetPasswordToken;
     userObject._id = userObject._id.toString();
-
     const userResponse = userObject as UserResponse;
-
     const response = NextResponse.json(
       {
         success: true,
@@ -193,13 +190,11 @@ export async function PUT(request: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error("Profile update error:", error);
-
     if (error instanceof Error && error.message.includes("validation failed")) {
       return NextResponse.json(
         {
           success: false,
-          error: "Помилка валідації даних",
+          error: "Data validation error",
         },
         { status: 400 }
       );
@@ -208,7 +203,7 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        error: "Помилка сервера",
+        error: "Server error",
       },
       { status: 500 }
     );

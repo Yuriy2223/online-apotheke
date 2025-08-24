@@ -51,10 +51,10 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     <>
       <div className="text-center mb-8">
         <h1 className="text-[32px] font-bold text-black-true mb-2">
-          Створити новий пароль
+          Create a new password
         </h1>
         <p className="text-gray-600 text-sm">
-          Введіть новий пароль для вашого акаунту
+          Enter a new password for your account.
         </p>
       </div>
 
@@ -86,7 +86,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                   "w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-green-light focus:border-transparent",
                   errors.password ? "border-red-dark" : "border-gray-dark"
                 )}
-                placeholder="Новий пароль"
+                placeholder="New password"
               />
               <button
                 type="button"
@@ -128,7 +128,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                     ? "border-red-dark"
                     : "border-gray-dark"
                 )}
-                placeholder="Повторіть пароль"
+                placeholder="Repeat password"
               />
               <button
                 type="button"
@@ -157,7 +157,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
             disabled={!isValid || isSubmitting}
             className="w-full max-w-[400px] bg-green-light text-white-true py-3 px-4 rounded-lg hover:bg-green-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
           >
-            {isSubmitting ? <>Збереження...</> : "Зберегти новий пароль"}
+            {isSubmitting ? <>Saving...</> : "Save new password"}
           </button>
         </div>
       </form>

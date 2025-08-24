@@ -61,8 +61,7 @@ export const getGoogleUserInfo = async (code: string): Promise<GoogleUser> => {
       name: payload.name,
       isEmailVerified: payload.email_verified || false,
     };
-  } catch (error) {
-    console.error("Google OAuth error:", error);
+  } catch {
     throw new Error("Failed to get user info from Google");
   }
 };

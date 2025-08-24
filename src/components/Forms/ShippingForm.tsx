@@ -30,9 +30,10 @@ export const ShippingForm = ({ register, errors }: ShippingFormProps) => {
             type="text"
             placeholder="Enter text"
             {...register("name")}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-light focus:border-green-light ${
-              errors.name ? "border-red-dark" : "border-gray-dark"
-            }`}
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2
+               focus:ring-green-light focus:border-green-light ${
+                 errors.name ? "border-red-dark" : "border-gray-dark"
+               }`}
           />
           <div className="h-2 mt-1">
             {errors.name && (
@@ -55,9 +56,10 @@ export const ShippingForm = ({ register, errors }: ShippingFormProps) => {
             type="email"
             placeholder="Enter text"
             {...register("email")}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-light focus:border-green-light ${
-              errors.email ? "border-red-dark" : "border-gray-dark"
-            }`}
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2
+               focus:ring-green-light focus:border-green-light ${
+                 errors.email ? "border-red-dark" : "border-gray-dark"
+               }`}
           />
           <div className="h-2 mt-1">
             {errors.email && (
@@ -80,9 +82,10 @@ export const ShippingForm = ({ register, errors }: ShippingFormProps) => {
             type="tel"
             placeholder="Enter text"
             {...register("phone")}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-light focus:border-green-light ${
-              errors.phone ? "border-red-dark" : "border-gray-dark"
-            }`}
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2
+               focus:ring-green-light focus:border-green-light ${
+                 errors.phone ? "border-red-dark" : "border-gray-dark"
+               }`}
           />
           <div className="h-2 mt-1">
             {errors.phone && (
@@ -105,9 +108,10 @@ export const ShippingForm = ({ register, errors }: ShippingFormProps) => {
             type="text"
             placeholder="Enter text"
             {...register("address")}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-light focus:border-green-light ${
-              errors.address ? "border-red-dark" : "border-gray-dark"
-            }`}
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2
+               focus:ring-green-light focus:border-green-light ${
+                 errors.address ? "border-red-dark" : "border-gray-dark"
+               }`}
           />
           <div className="h-2 mt-1">
             {errors.address && (

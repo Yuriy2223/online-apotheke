@@ -21,8 +21,8 @@ export function RecentCustomers() {
 
   if (loading) {
     return (
-      <div className="bg-white-true rounded-lg shadow border border-gray-300 p-2">
-        <header className="bg-green-soft px-4 py-3 border-b border-gray-300">
+      <div className="bg-white-true rounded-lg shadow border border-gray-soft p-2">
+        <header className="bg-green-soft px-4 py-3 border-b border-gray-soft">
           <h2 className="text-lg font-semibold text-black-true">
             Recent Customers
           </h2>
@@ -36,8 +36,8 @@ export function RecentCustomers() {
 
   if (error) {
     return (
-      <div className="bg-white-true rounded-lg shadow border border-gray-300 p-2">
-        <header className="bg-green-soft px-4 py-3 border-b border-gray-300">
+      <div className="bg-white-true rounded-lg shadow border border-gray-soft p-2">
+        <header className="bg-green-soft px-4 py-3 border-b border-gray-soft">
           <h2 className="text-lg font-semibold text-black-true">
             Recent Customers
           </h2>
@@ -51,8 +51,8 @@ export function RecentCustomers() {
 
   if (recentCustomers.length === 0) {
     return (
-      <div className="bg-white-true rounded-lg shadow border border-gray-300 p-2">
-        <header className="bg-green-soft px-4 py-3 border-b border-gray-300">
+      <div className="bg-white-true rounded-lg shadow border border-gray-soft p-2">
+        <header className="bg-green-soft px-4 py-3 border-b border-gray-soft">
           <h2 className="text-lg font-semibold text-black-true">
             Recent Customers
           </h2>
@@ -65,8 +65,8 @@ export function RecentCustomers() {
   }
 
   return (
-    <div className="bg-white-true rounded-lg shadow border border-gray-300 p-2">
-      <header className="bg-green-soft px-4 py-3 border-b border-gray-300">
+    <div className="bg-white-true rounded-lg shadow border border-gray-soft p-2">
+      <header className="bg-green-soft px-4 py-3 border-b border-gray-soft">
         <h2 className="text-lg font-semibold text-black-true">
           Recent Customers
         </h2>
@@ -74,7 +74,7 @@ export function RecentCustomers() {
       <div className="overflow-x-auto">
         <table className="w-[684px] desktop:w-full border-collapse">
           <thead>
-            <tr className="bg-gray-light divide-x divide-gray-300">
+            <tr className="bg-gray-light divide-x divide-gray-soft">
               <th
                 className="px-6 py-3 text-left text-base font-medium text-gray-dark"
                 scope="col"
@@ -95,9 +95,9 @@ export function RecentCustomers() {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-300">
+          <tbody className="divide-y divide-gray-soft">
             {recentCustomers.map((customer) => (
-              <tr key={customer._id} className="divide-x divide-gray-300">
+              <tr key={customer._id} className="divide-x divide-gray-soft">
                 <td className="px-6 py-3 flex items-center gap-3">
                   {customer.photo ? (
                     <img
@@ -114,7 +114,8 @@ export function RecentCustomers() {
                     />
                   ) : null}
                   <div
-                    className="w-9 h-9 rounded-full bg-gray-light flex items-center justify-center text-xs font-medium text-gray-dark"
+                    className="w-9 h-9 rounded-full bg-gray-light flex items-center 
+                    justify-center text-xs font-medium text-gray-dark"
                     style={{ display: customer.photo ? "none" : "flex" }}
                   >
                     {customer.name

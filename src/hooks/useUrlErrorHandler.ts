@@ -16,11 +16,11 @@ const defaultErrorConfig: ErrorConfig = {
     toastId: "email_exists_local",
   },
   google_auth_failed: {
-    message: "Помилка авторизації через Google",
+    message: "Google authentication failed",
     toastId: "google_auth_failed",
   },
   no_auth_code: {
-    message: "Не отримано код авторизації від Google",
+    message: "Google authentication code not received",
     toastId: "no_auth_code",
   },
   server_error: {
@@ -28,7 +28,7 @@ const defaultErrorConfig: ErrorConfig = {
   },
   default: {
     toastId: "default_error",
-    message: "Сталася помилка",
+    message: "An error occurred",
   },
 };
 

@@ -14,9 +14,15 @@ export const AddPharmacyPromo = () => {
   return (
     <section className="bg-gray-light">
       <Container className="p-10 max-tablet:p-5">
-        <div className="bg-green-light rounded-3xl p-8 tablet:p-12 desktop:flex desktop:items-center desktop:gap-12">
+        <div
+          className="bg-green-light rounded-3xl p-8 tablet:p-12 desktop:flex
+         desktop:items-center desktop:gap-12"
+        >
           <div className="desktop:flex-1">
-            <h2 className="text-white-true text-2xl tablet:text-3xl desktop:text-4xl font-bold mb-4 leading-tight">
+            <h2
+              className="text-white-true text-2xl tablet:text-3xl desktop:text-4xl
+             font-bold mb-4 leading-tight"
+            >
               Add your local pharmacy online now
             </h2>
 
@@ -28,7 +34,8 @@ export const AddPharmacyPromo = () => {
 
             <button
               onClick={handleBuyMedicineClick}
-              className="bg-white-true/20 hover:bg-white-true/30 text-white-true px-8 py-3 rounded-full font-medium
+              className="bg-white-true/20 hover:bg-white-true/30 text-white-true
+               px-8 py-3 rounded-full font-medium
                transition-colors border border-white-true/20"
             >
               Buy medicine
@@ -41,7 +48,8 @@ export const AddPharmacyPromo = () => {
               alt="Woman using pharmacy app on tablet"
               width={608}
               height={406}
-              className="object-cover h-[294px] w-[334px] rounded-[24px] tablet:rounded-[0_24px_24px_0] tablet:h-[406px]
+              className="object-cover h-[294px] w-[334px] rounded-[24px]
+               tablet:rounded-[0_24px_24px_0] tablet:h-[406px]
                tablet:w-full  desktop:w-[608px] desktop:h-[406px]"
             />
           </div>
