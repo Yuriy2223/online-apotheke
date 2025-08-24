@@ -4,8 +4,19 @@ import { Facebook, Instagram, Youtube } from "lucide-react";
 import { Container } from "@/shared/Container";
 import { NavBarFooter } from "../NavBar/NavBarFooter";
 import { Logo } from "../Logo/Logo";
+import { useRouter } from "next/navigation";
 
 export const Footer = () => {
+  const router = useRouter();
+
+  const handlePrivacyPolicyClick = () => {
+    router.push("/privacy-policy");
+  };
+
+  const handleTermsConditionsClick = () => {
+    router.push("/terms-conditions");
+  };
+
   return (
     <Container className="flex flex-col gap-[20px] text-white-true p-5">
       <div className="flex flex-col gap-[20px] tablet:flex-row tablet:justify-between ">
@@ -57,19 +68,19 @@ export const Footer = () => {
        tablet:flex-row-reverse tablet:items-center tablet:justify-center"
       >
         <div className="flex items-center justify-between">
-          <a
-            href="#"
-            className="text-white-true hover:text-blue-dark transition-colors"
+          <button
+            onClick={handlePrivacyPolicyClick}
+            className="text-white-true hover:underline hover:underline-offset-2 hover:scale-101 transition-all duration-200 cursor-pointer"
           >
             Privacy Policy
             <span className="hidden text-white-true tablet:inline mx-2">|</span>
-          </a>
-          <a
-            href="#"
-            className="text-white-true hover:text-blue-dark transition-colors"
+          </button>
+          <button
+            onClick={handleTermsConditionsClick}
+            className="text-white-true hover:underline hover:underline-offset-2 hover:scale-101 transition-all duration-200 cursor-pointer"
           >
             Terms & Conditions
-          </a>
+          </button>
         </div>
         <p className="flex items-center justify-center">
           © E-Pharmacy 2025. All Rights Reserved
