@@ -14,8 +14,7 @@ export async function GET() {
       },
       { status: 200 }
     );
-  } catch (error) {
-    console.error("Google auth URL generation error:", error);
+  } catch {
     return NextResponse.json(
       {
         success: false,

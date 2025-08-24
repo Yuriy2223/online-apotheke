@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-// import PharmacieNearestModel from "@/models/PharmacieNearest";
 import PharmacieModel from "@/models/Pharmacie";
 import { connectDB } from "@/database/MongoDB";
 
@@ -13,10 +12,6 @@ export async function GET(request: NextRequest) {
       Math.max(1, parseInt(searchParams.get("limit") || "6", 10))
     );
 
-    // const pharmacies = await PharmacieNearestModel.find({})
-    //   .sort({ rating: -1 })
-    //   .limit(limit)
-    //   .lean();
     const pharmacies = await PharmacieModel.aggregate([
       { $sample: { size: limit } },
     ]);
@@ -28,12 +23,10 @@ export async function GET(request: NextRequest) {
       },
       { status: 200 }
     );
-  } catch (error) {
-    console.error("Помилка при отриманні найближчих аптек:", error);
-
+  } catch {
     return NextResponse.json(
       {
-        error: "Помилка сервера при отриманні найближчих аптек",
+        error: "Server error while retrieving nearest pharmacies",
       },
       { status: 500 }
     );

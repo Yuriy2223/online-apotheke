@@ -1,17 +1,16 @@
 "use client";
 
-import { useEffect } from "react";
 import Link from "next/link";
 
 interface ErrorProps {
-  error: Error & { digest?: string };
   reset: () => void;
 }
 
-export default function Error({ error, reset }: ErrorProps) {
-  useEffect(() => {
-    console.error("Application error:", error);
-  }, [error]);
+export default function Error({ reset }: ErrorProps) {
+  const phone = process.env.NEXT_PUBLIC_PHARMACY_PHONE;
+  const email = process.env.NEXT_PUBLIC_PHARMACY_EMAIL;
+  const phoneHref = phone ? `tel:${phone.replace(/\D/g, "")}` : "#";
+  const emailHref = email ? `mailto:${email}` : "#";
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
@@ -44,24 +43,6 @@ export default function Error({ error, reset }: ErrorProps) {
             Sorry for the inconvenience. There was a technical error loading the
             page. Our team is already working on fixing it.
           </p>
-
-          {/* {process.env.NODE_ENV === "development" && (
-            <details className="mb-6 text-left">
-              <summary className="cursor-pointer text-sm text-slate-500 hover:text-slate-700 mb-2">
-                Технічні деталі
-              </summary>
-              <div className="bg-slate-100 p-3 rounded-lg text-xs text-slate-700 font-mono overflow-x-auto">
-                <p>
-                  <strong>Помилка:</strong> {error.message}
-                </p>
-                {error.digest && (
-                  <p>
-                    <strong>ID:</strong> {error.digest}
-                  </p>
-                )}
-              </div>
-            </details>
-          )} */}
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
@@ -108,18 +89,22 @@ export default function Error({ error, reset }: ErrorProps) {
 
         <div className="mt-8 text-sm text-slate-500">
           <div className="flex justify-center gap-4 mt-2">
-            <a
-              href="tel:+380123456789"
-              className="hover:text-green-600 transition-colors"
-            >
-              📞 +38 (012) 345-67-89
-            </a>
-            <a
-              href="mailto:support@e-pharmacy.com"
-              className="hover:text-green-600 transition-colors"
-            >
-              ✉️ support@e-pharmacy.com
-            </a>
+            {phone && (
+              <a
+                href={phoneHref}
+                className="hover:text-green-light transition-colors"
+              >
+                📞 {phone}
+              </a>
+            )}
+            {email && (
+              <a
+                href={emailHref}
+                className="hover:text-green-light transition-colors"
+              >
+                ✉️ {email}
+              </a>
+            )}
           </div>
         </div>
       </div>

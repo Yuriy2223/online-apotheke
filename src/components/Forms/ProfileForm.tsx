@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Edit3, Save, X as XIcon } from "lucide-react";
-// import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { ProfileFormData } from "@/types/users";
 import { updateProfile } from "@/redux/auth/operations";
@@ -76,7 +75,6 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
 
     dispatch(updateProfile(transformedData)).then((result) => {
       if (updateProfile.fulfilled.match(result)) {
-        // toast.success("Профіль успішно оновлено!");
         onEditToggle(false);
       }
     });
@@ -94,7 +92,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
             className="bg-green-light text-white-true px-6 py-2 rounded-lg hover:bg-green-dark transition-colors duration-200 flex items-center space-x-2"
           >
             <Edit3 className="w-4 h-4" />
-            <span>Редагувати</span>
+            <span>Edit</span>
           </button>
         )}
       </div>

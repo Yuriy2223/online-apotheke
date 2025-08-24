@@ -31,18 +31,18 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      toast.error("Будь ласка, виберіть зображення");
+      toast.error("Please select an image");
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("Розмір файлу не повинен перевищувати 5MB");
+      toast.error("File size must not exceed 5MB");
       return;
     }
 
     dispatch(uploadAvatar(file)).then((result) => {
       if (uploadAvatar.fulfilled.match(result)) {
-        toast.success("Аватар успішно оновлено!");
+        toast.success("Avatar successfully updated!");
       }
     });
   };
@@ -51,7 +51,7 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
     if (user?.avatar) {
       dispatch(removeAvatar()).then((result) => {
         if (removeAvatar.fulfilled.match(result)) {
-          toast.success("Аватар успішно видалено!");
+          toast.success("Avatar successfully deleted!");
         }
       });
     }
@@ -59,7 +59,10 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
 
   return (
     <div className="relative">
-      <div className="w-24 h-24 rounded-full bg-white-true flex items-center justify-center overflow-hidden ring-4 ring-white-true/20">
+      <div
+        className="w-24 h-24 rounded-full bg-white-true flex items-center 
+      justify-center overflow-hidden ring-4 ring-white-true/20"
+      >
         {!showFallback ? (
           <img
             src={avatarUrl}
@@ -82,10 +85,14 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={uploadLoading}
-          className="bg-green-light text-white-true p-2 rounded-full hover:bg-green-dark disabled:opacity-50 shadow-lg transition-all duration-200 hover:scale-105"
+          className="bg-green-light text-white-true p-2 rounded-full hover:bg-green-dark 
+          disabled:opacity-50 shadow-lg transition-all duration-200 hover:scale-105"
         >
           {uploadLoading ? (
-            <div className="animate-spin w-4 h-4 border-2 border-white-true border-t-transparent rounded-full"></div>
+            <div
+              className="animate-spin w-4 h-4 border-2 border-white-true 
+            border-t-transparent rounded-full"
+            ></div>
           ) : (
             <Camera className="w-4 h-4" />
           )}
@@ -95,7 +102,9 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
             type="button"
             onClick={handleRemoveAvatar}
             disabled={uploadLoading}
-            className="bg-red-light text-green-light hover:text-white-true p-2 rounded-full hover:bg-red-dark disabled:opacity-50 shadow-lg transition-all duration-200 hover:scale-105"
+            className="bg-red-light text-green-light hover:text-white-true p-2 
+            rounded-full hover:bg-red-dark disabled:opacity-50 shadow-lg transition-all
+             duration-200 hover:scale-105"
           >
             <X className="w-4 h-4" />
           </button>

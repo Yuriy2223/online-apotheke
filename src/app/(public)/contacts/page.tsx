@@ -1,13 +1,13 @@
 "use client";
 
-import * as yup from "yup";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Mail, Phone, MapPin, Clock, Send, Calendar } from "lucide-react";
 import { Container } from "@/shared/Container";
+import { contactSchema } from "@/validation/contacts";
 
-interface ContactFormData {
+export interface ContactFormData {
   name: string;
   email: string;
   phone?: string;
@@ -17,31 +17,6 @@ interface ContactFormData {
   requestType: "demo" | "support" | "sales" | "partnership" | "other";
 }
 
-const validationSchema = yup.object().shape({
-  name: yup
-    .string()
-    .required("Name is required")
-    .min(3, "Name must contain at least 3 characters"),
-  email: yup.string().required("Email required").email("Enter a valid email"),
-  phone: yup
-    .string()
-    .optional()
-    .test("phone-format", "Enter a valid phone number", function (value) {
-      if (!value) return true;
-      return /^[\+]?[1-9][\d]{0,15}$/.test(value);
-    }),
-  company: yup.string().optional(),
-  subject: yup.string().optional(),
-  message: yup
-    .string()
-    .required("Notification required")
-    .min(10, "Message must contain at least 10 characters"),
-  requestType: yup
-    .string()
-    .required("Select request type")
-    .oneOf(["demo", "support", "sales", "partnership", "other"] as const),
-}) as yup.ObjectSchema<ContactFormData>;
-
 export default function ContactPage() {
   const {
     register,
@@ -49,7 +24,7 @@ export default function ContactPage() {
     formState: { errors, isSubmitting },
     reset,
   } = useForm<ContactFormData>({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(contactSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -60,6 +35,10 @@ export default function ContactPage() {
       requestType: "demo",
     },
   });
+  const phone = process.env.NEXT_PUBLIC_PHARMACY_PHONE;
+  const email = process.env.NEXT_PUBLIC_PHARMACY_EMAIL;
+  const address = process.env.NEXT_PUBLIC_PHARMACY_ADDRESS;
+  const hours = process.env.NEXT_PUBLIC_PHARMACY_HOURS;
 
   const onSubmit = async (data: ContactFormData) => {
     try {
@@ -80,25 +59,27 @@ export default function ContactPage() {
     {
       icon: Mail,
       title: "Email Us",
-      info: "support@pharmacy-platform.com",
+      info: email,
       description: "Send us an email anytime",
+      link: email ? `mailto:${email}` : undefined,
     },
     {
       icon: Phone,
       title: "Call Us",
-      info: "+1 (555) 123-4567",
+      info: phone,
       description: "Monday to Friday, 9 AM - 6 PM",
+      link: phone ? `tel:${phone.replace(/\D/g, "")}` : undefined,
     },
     {
       icon: MapPin,
       title: "Visit Us",
-      info: "123 Healthcare Ave, Medical District",
+      info: address,
       description: "Suite 500, City, State 12345",
     },
     {
       icon: Clock,
       title: "Business Hours",
-      info: "Mon - Fri: 9:00 AM - 6:00 PM",
+      info: hours,
       description: "Weekend support available",
     },
   ];
@@ -134,9 +115,12 @@ export default function ContactPage() {
                 </label>
                 <select
                   {...register("requestType")}
-                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-dark focus:border-transparent ${
-                    errors.requestType ? "border-red-500" : "border-gray-light"
-                  }`}
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2
+                     focus:ring-green-dark focus:border-transparent ${
+                       errors.requestType
+                         ? "border-red-500"
+                         : "border-gray-light"
+                     }`}
                 >
                   <option value="demo">Schedule a Demo</option>
                   <option value="support">Technical Support</option>
@@ -159,9 +143,10 @@ export default function ContactPage() {
                   <input
                     type="text"
                     {...register("name")}
-                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-dark focus:border-transparent ${
-                      errors.name ? "border-red-500" : "border-gray-light"
-                    }`}
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2
+                       focus:ring-green-dark focus:border-transparent ${
+                         errors.name ? "border-red-500" : "border-gray-light"
+                       }`}
                     placeholder="Your full name"
                   />
                   {errors.name && (

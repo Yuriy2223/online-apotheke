@@ -104,8 +104,6 @@ export async function POST(request: NextRequest) {
       try {
         await sendVerificationEmail(email, emailVerificationToken);
       } catch {
-        // (emailError)
-        // console.error("Error sending email:", emailError);
         throw new Error("Failed to send email verification");
       }
     });
@@ -122,8 +120,6 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    // console.error("Registration error:", error);
-
     const errorMessage =
       error instanceof Error && error.message.includes("email")
         ? "Error sending email verification"

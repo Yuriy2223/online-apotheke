@@ -40,13 +40,19 @@ export const Pagination: React.FC<PaginationProps> = ({
       <div className="order-1 sm:order-2">
         <ReactPaginate
           previousLabel={
-            <div className="flex items-center gap-2 px-3 py-2 text-gray-dark hover:text-green-light transition-colors">
+            <div
+              className="flex items-center gap-2 px-3 py-2 text-gray-dark
+             hover:text-green-light transition-colors"
+            >
               <ChevronLeft size={16} />
               <span className="hidden sm:inline">Previous</span>
             </div>
           }
           nextLabel={
-            <div className="flex items-center gap-2 px-3 py-2 text-gray-dark hover:text-green-light transition-colors">
+            <div
+              className="flex items-center gap-2 px-3 py-2 text-gray-dark
+             hover:text-green-light transition-colors"
+            >
               <span className="hidden sm:inline">Next</span>
               <ChevronRight size={16} />
             </div>

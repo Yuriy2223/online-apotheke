@@ -71,9 +71,7 @@ export const getPharmacyStatus = (
         ? "OPEN"
         : "CLOSE";
     }
-  } catch (error) {
-    console.error("Error calculating pharmacy status:", error);
-
+  } catch {
     return "CLOSE";
   }
 };

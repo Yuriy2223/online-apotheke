@@ -44,9 +44,10 @@ export const BurgerMenu: React.FC<BurgerMenuProps> = ({ onClose }) => {
       />
 
       <div
-        className={`absolute right-0 top-0 h-full w-[80%] max-w-sm bg-green-light transition-transform duration-300 ease-in-out flex flex-col ${
-          isVisible && !isAnimat ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`absolute right-0 top-0 h-full w-[80%] max-w-sm bg-green-light 
+          transition-transform duration-300 ease-in-out flex flex-col ${
+            isVisible && !isAnimat ? "translate-x-0" : "translate-x-full"
+          }`}
         role="dialog"
         aria-modal="true"
       >
@@ -54,7 +55,8 @@ export const BurgerMenu: React.FC<BurgerMenuProps> = ({ onClose }) => {
           <Logo variant="white" />
           <button
             onClick={handleClose}
-            className="p-2 text-white transition-transform duration-300 ease-in-out hover:rotate-360 hover:scale-110 active:scale-95"
+            className="p-2 text-white transition-transform duration-300 
+            ease-in-out hover:rotate-360 hover:scale-110 active:scale-95"
             aria-label="Close menu"
           >
             <X className="w-9 h-9" />

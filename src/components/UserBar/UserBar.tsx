@@ -28,7 +28,8 @@ export const UserBar: React.FC<UserBarProps> = ({
         <div className="w-full space-y-4 px-10">
           <button
             onClick={handleLogout}
-            className="block w-full px-8 py-3 text-center text-green-dark bg-white rounded-full hover:bg-gray-100 transition-colors"
+            className="block w-full px-8 py-3 text-center text-green-dark
+             bg-white rounded-full hover:bg-gray-100 transition-colors"
           >
             Logout
           </button>
@@ -41,15 +42,16 @@ export const UserBar: React.FC<UserBarProps> = ({
         <Link
           href="/register"
           onClick={onItemClick}
-          // className="block w-full px-8 py-3 text-center text-green-light bg-white rounded-full hover:bg-gray-100 transition-colors"
-          className="block w-full px-8 py-3 text-center text-white border border-white rounded-full hover:bg-white/20 transition-colors"
+          className="block w-full px-8 py-3 text-center text-white border
+           border-white rounded-full hover:bg-white/20 transition-colors"
         >
           Register
         </Link>
         <Link
           href="/login"
           onClick={onItemClick}
-          className="block w-full px-8 py-3 text-center text-white border border-white rounded-full hover:bg-white/20 transition-colors"
+          className="block w-full px-8 py-3 text-center text-white border
+           border-white rounded-full hover:bg-white/20 transition-colors"
         >
           Login
         </Link>
@@ -75,9 +77,7 @@ export const UserBar: React.FC<UserBarProps> = ({
     <div className="hidden tablet:flex items-center space-x-4">
       <Link
         href="/register"
-        // className="px-6 py-2 text-green-light bg-white border border-white rounded-full hover:bg-gray-100 transition-colors"
         className="px-6 py-2 text-white border border-white rounded-full hover:bg-white/20 transition-colors underline"
-        // className="px-4 py-2 text-white border border-white rounded-md hover:bg-white/20 transition-colors underline"
       >
         Register
       </Link>

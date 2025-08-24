@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Refresh token не знайдено",
+          error: "Refresh token not found",
         },
         { status: 401 }
       );
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Недійсний refresh token",
+          error: "Invalid refresh token",
         },
         { status: 401 }
       );
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Користувач не знайдений",
+          error: "User not found",
         },
         { status: 401 }
       );
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Недійсний refresh token. Увійдіть знову",
+          error: "Invalid refresh token. Please log in again",
         },
         { status: 401 }
       );
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json(
       {
         success: true,
-        data: { message: "Token оновлено" },
+        data: { message: "Token updated" },
       },
       { status: 200 }
     );
@@ -85,12 +85,11 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-  } catch (error) {
-    console.error("Refresh token error:", error);
+  } catch {
     return NextResponse.json(
       {
         success: false,
-        error: "Помилка сервера",
+        error: "Server error",
       },
       { status: 500 }
     );

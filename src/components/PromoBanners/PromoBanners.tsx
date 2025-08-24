@@ -45,7 +45,8 @@ export const PromoBanners = () => {
           {banners.map((banner) => (
             <li
               key={banner.id}
-              className="bg-white-true rounded-xl p-6 shadow-sm border border-gray-light hover:shadow-lg transition-shadow list-none"
+              className="bg-white-true rounded-xl p-6 shadow-sm border
+               border-gray-light hover:shadow-lg transition-shadow list-none"
             >
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-8 h-8 rounded-full bg-green-soft flex items-center justify-center">

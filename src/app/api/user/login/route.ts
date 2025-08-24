@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: "Помилка валідації",
+            error: "Validation error",
             details: validationError.errors,
           },
           { status: 400 }
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Невідома помилка валідації",
+          error: "Unknown validation error",
         },
         { status: 400 }
       );
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Невірні дані для входу",
+          error: "Invalid login details",
         },
         { status: 401 }
       );
@@ -58,9 +58,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Цей акаунт зареєстрований через Google",
+          error: "This account is registered through Google",
           details: [
-            "Будь ласка, використайте кнопку 'Увійти через Google' для входу в акаунт.",
+            "Please use the 'Sign in with Google' button to sign in to your account.",
           ],
         },
         { status: 401 }
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Невірні дані для входу",
+          error: "Invalid login details",
         },
         { status: 401 }
       );
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Невірні дані для входу",
+          error: "Invalid login details",
         },
         { status: 401 }
       );
@@ -92,9 +92,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Підтвердіть email перед входом",
+          error: "Confirm email before logging in",
           details: [
-            "Перевірте вашу електронну пошту та перейдіть за посиланням для підтвердження акаунту.",
+            "Check your email and follow the link to verify your account.",
           ],
         },
         { status: 403 }
@@ -131,7 +131,7 @@ export async function POST(request: NextRequest) {
       {
         success: true,
         data: {
-          message: "Ласкаво просимо!",
+          message: "Welcome!",
           user: userResponse,
         },
       },
@@ -155,12 +155,11 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-  } catch (error) {
-    console.error("Login error:", error);
+  } catch {
     return NextResponse.json(
       {
         success: false,
-        error: "Помилка сервера",
+        error: "Server error",
       },
       { status: 500 }
     );

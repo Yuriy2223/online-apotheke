@@ -18,10 +18,14 @@ export const PharmacieNearestCard = ({ nearest, onClick }: StoreCardProps) => {
   return (
     <div
       onClick={handleClick}
-      className="bg-green-soft rounded-xl p-6 shadow-sm border border-green-soft hover:shadow-lg transition-shadow cursor-pointer"
+      className="bg-green-soft rounded-xl p-6 shadow-sm border
+       border-green-soft hover:shadow-lg transition-shadow cursor-pointer"
     >
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-black-true overflow-hidden text-ellipsis whitespace-nowrap flex-1 min-w-0">
+        <h3
+          className="text-lg font-semibold text-black-true overflow-hidden
+         text-ellipsis whitespace-nowrap flex-1 min-w-0"
+        >
           {nearest.name}
         </h3>
         <div className="flex items-center gap-1">
@@ -48,7 +52,10 @@ export const PharmacieNearestCard = ({ nearest, onClick }: StoreCardProps) => {
 
       <div className="flex items-start gap-3 mb-3">
         <MapPin className="w-4 h-4 text-green-light mt-0.5" />
-        <span className="text-gray-dark text-sm overflow:hidden text-overflow:ellipsis white-space: nowrap">
+        <span
+          className="text-gray-dark text-sm overflow:hidden 
+        text-overflow:ellipsis white-space: nowrap"
+        >
           {nearest.address}
         </span>
       </div>

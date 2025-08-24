@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { ShippingInfo } from "@/types/cart";
 import { Container } from "@/shared/Container";
-import { ShippingForm } from "@/components/Cart/ShippingForm";
+import { ShippingForm } from "@/components/Forms/ShippingForm";
 import { PaymentMethod } from "@/components/Cart/PaymentMethod";
 import { OrderSummary } from "@/components/Cart/OrderSummary";
 import { OrderSidebar } from "@/components/Cart/OrderSidebar";

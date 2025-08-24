@@ -96,8 +96,7 @@ export async function processGoogleAuth(
       },
       statusCode: 200,
     };
-  } catch (error) {
-    console.error("Google OAuth processing error:", error);
+  } catch {
     return {
       success: false,
       error: "Google login error",

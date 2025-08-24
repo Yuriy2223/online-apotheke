@@ -77,7 +77,7 @@ export const DiscountProductCard: React.FC<DiscountProductCardProps> = ({
                 ${originalPrice.toFixed(2)}
               </p>
               <span className="text-xs text-green-light">
-                Заощадь ${(originalPrice - discountedPrice).toFixed(2)}
+                Save ${(originalPrice - discountedPrice).toFixed(2)}
               </span>
             </div>
           ) : (

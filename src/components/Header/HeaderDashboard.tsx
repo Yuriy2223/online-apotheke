@@ -29,7 +29,8 @@ export const HeaderDashboard = () => {
         <div className="hidden desktop:block">
           <button
             onClick={handleLogout}
-            className="px-6 py-2 text-green-dark bg-white-true border border-white rounded-full hover:bg-gray-100 transition-colors"
+            className="px-6 py-2 text-green-dark bg-white-true border
+             border-white rounded-full hover:bg-gray-100 transition-colors"
           >
             Logout
           </button>
@@ -40,7 +41,10 @@ export const HeaderDashboard = () => {
             className="desktop:hidden transition-transform duration-200 hover:scale-110 "
             aria-label="Open menu"
           >
-            <Menu className="w-8 h-8 text-white-true transition-transform duration-300 ease-in-out hover:rotate-360 hover:scale-110 active:scale-95" />
+            <Menu
+              className="w-8 h-8 text-white-true transition-transform duration-300
+             ease-in-out hover:rotate-360 hover:scale-110 active:scale-95"
+            />
           </button>
         </div>
       </Container>

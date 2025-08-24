@@ -27,7 +27,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Токени не знайдено",
+          error: "Tokens not found",
         },
         { status: 401 }
       );
@@ -40,7 +40,6 @@ export async function PUT(request: NextRequest) {
       try {
         decoded = verifyAccessToken(accessToken);
       } catch {
-        console.log("Access token expired or invalid");
         accessToken = undefined;
       }
     }
@@ -58,7 +57,7 @@ export async function PUT(request: NextRequest) {
           return NextResponse.json(
             {
               success: false,
-              error: "Недійсний refresh token",
+              error: "Invalid refresh token",
             },
             { status: 401 }
           );
@@ -75,7 +74,7 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: "Недійсний refresh token",
+            error: "Invalid refresh token",
           },
           { status: 401 }
         );
@@ -86,7 +85,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Недійсні токени",
+          error: "Invalid tokens",
         },
         { status: 401 }
       );
@@ -100,7 +99,7 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: "Користувач не знайдений",
+            error: "User not found",
           },
           { status: 404 }
         );
@@ -111,9 +110,7 @@ export async function PUT(request: NextRequest) {
         if (publicId) {
           try {
             await deleteFromCloudinary(publicId);
-          } catch (error) {
-            console.error("Error deleting old avatar:", error);
-          }
+          } catch {}
         }
       }
 
@@ -130,7 +127,7 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: "Не вдалося оновити аватар",
+            error: "Failed to update avatar",
           },
           { status: 500 }
         );
@@ -163,7 +160,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Недійсний URL аватара",
+          error: "Invalid avatar URL",
         },
         { status: 400 }
       );
@@ -174,7 +171,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Користувач не знайдений",
+          error: "User not found",
         },
         { status: 404 }
       );
@@ -185,9 +182,7 @@ export async function PUT(request: NextRequest) {
       if (publicId) {
         try {
           await deleteFromCloudinary(publicId);
-        } catch (error) {
-          console.error("Error deleting old avatar:", error);
-        }
+        } catch {}
       }
     }
 
@@ -204,7 +199,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Не вдалося оновити аватар",
+          error: "Failed to update avatar",
         },
         { status: 500 }
       );
@@ -231,12 +226,11 @@ export async function PUT(request: NextRequest) {
     }
 
     return response;
-  } catch (error) {
-    console.error("Avatar update error:", error);
+  } catch {
     return NextResponse.json(
       {
         success: false,
-        error: "Помилка сервера",
+        error: "Server error",
       },
       { status: 500 }
     );

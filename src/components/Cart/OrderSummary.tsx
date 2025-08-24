@@ -27,7 +27,9 @@ export const OrderSummary = ({
       <button
         type="submit"
         disabled={isPlacingOrder || isCartEmpty}
-        className="w-full bg-green-light text-white-true py-3 px-4 rounded-lg hover:bg-green-dark disabled:bg-gray-dark disabled:cursor-not-allowed transition-colors font-medium"
+        className="w-full bg-green-light text-white-true py-3 px-4 rounded-lg
+         hover:bg-green-dark disabled:bg-gray-dark disabled:cursor-not-allowed 
+         transition-colors font-medium"
       >
         {isPlacingOrder ? "Placing Order..." : "Place order"}
       </button>

@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: "Помилка валідації",
+            error: "Validation error",
             details: validationError.errors,
           },
           { status: 400 }
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Невідома помилка валідації",
+          error: "Unknown validation error",
         },
         { status: 400 }
       );
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Недійсний або застарілий токен",
+          error: "Invalid or outdated token",
         },
         { status: 400 }
       );
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Токен недійсний або email вже підтверджено",
+          error: "Token is invalid or email has already been confirmed",
         },
         { status: 404 }
       );
@@ -74,16 +74,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        message: "Email успішно підтверджено. Тепер ви можете увійти.",
+        message: "Email successfully verified. You can now log in.",
       },
       { status: 200 }
     );
-  } catch (error) {
-    console.error("Email verification error:", error);
+  } catch {
     return NextResponse.json(
       {
         success: false,
-        error: "Помилка сервера",
+        error: "Server error",
       },
       { status: 500 }
     );

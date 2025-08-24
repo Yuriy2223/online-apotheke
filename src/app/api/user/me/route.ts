@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { connectDB } from "@/database/MongoDB";
+import User, { UserDocument } from "@/models/User";
+import { JWTPayload, UserResponse } from "@/types/users";
 import {
   verifyAccessToken,
   verifyRefreshToken,
   generateAccessToken,
 } from "@/jwt/jwt";
-import { connectDB } from "@/database/MongoDB";
-import User, { UserDocument } from "@/models/User";
-import { JWTPayload, UserResponse } from "@/types/users";
 
 export async function GET(request: NextRequest) {
   try {
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Токени не знайдено",
+          error: "Tokens not found",
         },
         { status: 401 }
       );
@@ -32,7 +32,6 @@ export async function GET(request: NextRequest) {
       try {
         decoded = verifyAccessToken(accessToken);
       } catch {
-        console.log("Access token expired or invalid");
         accessToken = undefined;
       }
     }
@@ -50,7 +49,7 @@ export async function GET(request: NextRequest) {
           return NextResponse.json(
             {
               success: false,
-              error: "Недійсний refresh token",
+              error: "Invalid refresh token",
             },
             { status: 401 }
           );
@@ -67,7 +66,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: "Недійсний refresh token",
+            error: "Invalid refresh token",
           },
           { status: 401 }
         );
@@ -78,7 +77,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Недійсні токени",
+          error: "Invalid tokens",
         },
         { status: 401 }
       );
@@ -90,7 +89,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Користувач не знайдений",
+          error: "User not found",
         },
         { status: 401 }
       );
@@ -125,12 +124,11 @@ export async function GET(request: NextRequest) {
     }
 
     return response;
-  } catch (error) {
-    console.error("Me endpoint error:", error);
+  } catch {
     return NextResponse.json(
       {
         success: false,
-        error: "Помилка сервера",
+        error: "Server error",
       },
       { status: 500 }
     );

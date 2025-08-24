@@ -35,12 +35,6 @@ export async function GET(request: NextRequest) {
       filter.city = { $regex: city, $options: "i" };
     }
 
-    // if (minRating) {
-    //   const rating = parseFloat(minRating);
-    //   if (!isNaN(rating)) {
-    //     filter.rating = { $gte: rating.toString() };
-    //   }
-    // }
     if (minRating !== null) {
       const rating = parseFloat(minRating);
       if (!isNaN(rating)) {
@@ -89,12 +83,10 @@ export async function GET(request: NextRequest) {
       },
       { status: 200 }
     );
-  } catch (error) {
-    console.error("Помилка при отриманні списку аптек:", error);
-
+  } catch {
     return NextResponse.json(
       {
-        error: "Помилка сервера при отриманні списку аптек",
+        error: "Server error while retrieving the list of pharmacies",
       },
       { status: 500 }
     );
