@@ -73,7 +73,7 @@ export default function ForgotPasswordPage() {
                     href="/login"
                     className="text-green-light hover:text-green-dark font-semibold text-sm transition-colors"
                   >
-                    Повернутися до входу? Так!
+                    Return to login?
                   </Link>
                 </div>
               </>

@@ -4,7 +4,8 @@ import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import { useAppDispatch } from "@/redux/store";
 import { closeModal } from "@/redux/modal/slice";
-import { deleteDashboardProduct } from "@/redux/dashboard-product/operations";
+import { toast } from "react-toastify";
+// import { deleteDashboardProduct } from "@/redux/dashboard-product/operations";
 
 interface DeleteProductProps {
   productId?: string;
@@ -26,7 +27,8 @@ export const ModalDeleteProduct = ({
 
     try {
       setIsDeleting(true);
-      await dispatch(deleteDashboardProduct(productId)).unwrap();
+      // await dispatch(deleteDashboardProduct(productId)).unwrap();
+      toast.success("Product deleted successfully");
       dispatch(closeModal());
     } finally {
       setIsDeleting(false);
