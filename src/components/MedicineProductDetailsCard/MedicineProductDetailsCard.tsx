@@ -2,7 +2,7 @@ import { MedicineProduct } from "@/types/medicine-products";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useState } from "react";
-import { StarRating } from "./StarRating";
+import { StarRating } from "../Medicine/StarRating";
 import { useAddToCart } from "@/hooks/useAddToCart";
 
 interface MedicineProductCardProps {

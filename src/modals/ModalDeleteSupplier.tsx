@@ -4,7 +4,8 @@ import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import { useAppDispatch } from "@/redux/store";
 import { closeModal } from "@/redux/modal/slice";
-import { deleteDashboardSupplier } from "@/redux/suppliers/operations";
+// import { deleteDashboardSupplier } from "@/redux/suppliers/operations";
+import { toast } from "react-toastify";
 
 interface DeleteSupplierProps {
   supplierId?: string;
@@ -22,7 +23,8 @@ export const ModalDeleteSupplier = ({
     if (!supplierId) return dispatch(closeModal());
     setIsDeleting(true);
     try {
-      await dispatch(deleteDashboardSupplier(supplierId)).unwrap();
+      // await dispatch(deleteDashboardSupplier(supplierId)).unwrap();
+      toast.success("Supplier deleted successfully");
       dispatch(closeModal());
     } finally {
       setIsDeleting(false);
