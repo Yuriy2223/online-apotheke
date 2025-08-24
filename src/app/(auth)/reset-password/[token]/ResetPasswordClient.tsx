@@ -43,13 +43,14 @@ export default function ResetPasswordClient({ token }: ResetPasswordProps) {
       <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
         <CheckCircle className="w-8 h-8 text-green-600" />
       </div>
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Пароль змінено</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">
+        Password changed
+      </h2>
       <p className="text-gray-600 mb-6">
-        Ваш пароль успішно змінено. Можете увійти з новим паролем.
+        Your password has been changed successfully. You can log in with your
+        new password.
       </p>
-      <p className="text-sm text-gray-500">
-        Перенаправлення через 2 секунди...
-      </p>
+      <p className="text-sm text-gray-500">Redirecting in 2 seconds...</p>
     </div>
   );
 
@@ -58,17 +59,15 @@ export default function ResetPasswordClient({ token }: ResetPasswordProps) {
       <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
         <AlertCircle className="w-8 h-8 text-red-dark" />
       </div>
-      <h2 className="text-2xl font-bold text-black-true mb-4">
-        Недійсне посилання
-      </h2>
+      <h2 className="text-2xl font-bold text-black-true mb-4">Invalid link</h2>
       <p className="text-gray-dark mb-6">
-        Посилання для скидання пароля недійсне або прострочене.
+        The password reset link is invalid or expired.
       </p>
       <Link
         href="/forgot-password"
         className="inline-block text-green-light hover:text-green-dark font-semibold transition-colors"
       >
-        Запросити новий лист
+        Invite a new letter
       </Link>
     </div>
   );
@@ -112,7 +111,7 @@ export default function ResetPasswordClient({ token }: ResetPasswordProps) {
                 href="/login"
                 className="text-green-light hover:text-green-dark font-semibold text-sm transition-colors"
               >
-                Повернутися до входу
+                Return to login
               </Link>
             </div>
           </div>
