@@ -123,7 +123,7 @@ export function RegisterForm() {
               "w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-green-light focus:border-transparent",
               errors.password ? "border-red-dark" : "border-gray-dark"
             )}
-            placeholder="Введіть пароль"
+            placeholder="Enter password"
           />
           <button
             type="button"
@@ -160,7 +160,7 @@ export function RegisterForm() {
               "w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-green-light focus:border-transparent",
               errors.confirmPassword ? "border-red-dark" : "border-gray-dark"
             )}
-            placeholder="Повторіть пароль"
+            placeholder="Repeat password"
           />
           <button
             type="button"
@@ -186,9 +186,10 @@ export function RegisterForm() {
         <button
           type="submit"
           disabled={loading || isSubmitting}
-          className="w-full max-w-[400px] bg-green-light text-white-true py-3 px-4 rounded-lg hover:bg-green-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+          className="w-full max-w-[400px] bg-green-light text-white-true py-3 px-4 rounded-lg
+           hover:bg-green-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
         >
-          {loading || isSubmitting ? "Реєстрація..." : "Зареєструватися"}
+          {loading || isSubmitting ? "Registration..." : "Register"}
         </button>
       </div>
     </form>
