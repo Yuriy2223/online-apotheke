@@ -61,7 +61,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       >
         <button
           onClick={onClose}
-          className="absolute top-10 right-6 desktop:hidden p-2 hover:scale-110 
+          className="absolute top-10 right-6 desktop:hidden p-2 hover:scale-110
           hover:rotate-360 rounded-lg transition-transform"
           aria-label="Close sidebar"
         >
