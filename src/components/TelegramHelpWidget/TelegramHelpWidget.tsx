@@ -29,7 +29,7 @@ export default function TelegramHelpWidget() {
       setIsExpanded(true);
       setTimeout(() => {
         setIsExpanded(false);
-      }, 3000);
+      }, 4000);
     }
   };
 
