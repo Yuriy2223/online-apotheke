@@ -93,7 +93,7 @@ export function ForgotPasswordForm({
               Sending...
             </>
           ) : (
-            "Надіслати лист"
+            "Send a letter"
           )}
         </button>
       </form>
