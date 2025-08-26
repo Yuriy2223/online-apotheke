@@ -36,12 +36,11 @@ export const Loader = () => (
   <>
     <style>{dotFadeKeyframes}</style>
 
-    <div className="h-screen w-screen bg-neutral-950 flex justify-center items-center">
+    <div className="h-screen w-screen bg-green-500/25 backdrop-blur-sm flex justify-center items-center">
       <div className="flex flex-col items-center">
         <div
           className={clsx(
-            "relative flex items-center text-[22px] font-normal text-transparent bg-clip-text",
-            "bg-gradient-to-r from-gray-400 via-white to-gray-400 bg-[length:200%_auto]"
+            "relative flex items-center text-[22px] font-semibold text-green-800"
           )}
           style={sweepStyle}
         >
@@ -50,7 +49,7 @@ export const Loader = () => (
             {[0, 0.3, 0.6].map((delay, i) => (
               <span
                 key={i}
-                className="text-white text-[26px]"
+                className="text-green-800 text-[26px]"
                 style={{
                   animation: "dotFade 1.5s ease-in-out infinite",
                   animationDelay: `${delay}s`,
