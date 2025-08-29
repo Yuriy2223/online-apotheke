@@ -24,7 +24,7 @@ export const ModalDeleteSupplier = ({
     setIsDeleting(true);
     try {
       // await dispatch(deleteDashboardSupplier(supplierId)).unwrap();
-      toast.success("Supplier deleted successfully");
+      toast.error("You do not have permission to delete this supplier");
       dispatch(closeModal());
     } finally {
       setIsDeleting(false);
