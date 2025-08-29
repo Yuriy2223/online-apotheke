@@ -28,7 +28,7 @@ export const ModalDeleteProduct = ({
     try {
       setIsDeleting(true);
       // await dispatch(deleteDashboardProduct(productId)).unwrap();
-      toast.success("Product deleted successfully");
+      toast.error("You do not have permission to delete this product");
       dispatch(closeModal());
     } finally {
       setIsDeleting(false);
