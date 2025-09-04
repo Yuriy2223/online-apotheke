@@ -89,8 +89,7 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
 
       toast.success("You have logged out");
       return;
-    } catch (error) {
-      console.warn("Logout error:", error);
+    } catch {
       toast.success("You have logged out");
       return rejectWithValue("Error during logout");
     }
