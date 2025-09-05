@@ -41,14 +41,6 @@ export interface MedicineProductDetails extends MedicineProduct {
   discount?: number;
   hasDiscount?: boolean;
   savings?: number;
-  // medicalUses?: {
-  //   antioxidant?: string;
-  //   antiDiabetic?: string;
-  //   heartHealth?: string;
-  //   antiCancer?: string;
-  //   immuneSupport?: string;
-  //   digestiveAid?: string;
-  // };
 }
 export interface MedicineProductDetailsReview {
   _id: string;
